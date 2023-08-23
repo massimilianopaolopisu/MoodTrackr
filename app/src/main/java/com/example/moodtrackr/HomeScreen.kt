@@ -15,8 +15,13 @@ import androidx.navigation.NavController
 @Composable
 fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+    val sharedPreferences = context.getSharedPreferences(SharedPreferencesKeys.PROFILE, Context.MODE_PRIVATE)
     val savedName = sharedPreferences.getString("name", "")
+
+    var name by remember { mutableStateOf(savedName ?: "") }
+
+    if (name.isBlank())
+        name = "user"
 
     Column(
         modifier = Modifier
@@ -24,7 +29,7 @@ fun HomeScreen(navController: NavController) {
             .padding(16.dp)
     ) {
         Text(
-            text = "Hello $savedName",
+            text = "Hello $name",
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,

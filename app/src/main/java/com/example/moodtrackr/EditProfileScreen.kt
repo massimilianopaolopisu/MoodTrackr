@@ -27,7 +27,7 @@ import androidx.navigation.NavController
 @Composable
 fun EditProfileScreen(navController: NavController) {
     val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+    val sharedPreferences = context.getSharedPreferences(SharedPreferencesKeys.PROFILE, Context.MODE_PRIVATE)
     val savedName = sharedPreferences.getString("name", "")
     val savedSurname = sharedPreferences.getString("surname", "")
     val savedSex = sharedPreferences.getString("sex", "")
@@ -37,9 +37,6 @@ fun EditProfileScreen(navController: NavController) {
     var surnameState by remember { mutableStateOf(savedSurname ?: "") }
     var sexState by remember { mutableStateOf(savedSex ?: "") }
     var birthdayState by remember { mutableStateOf(savedBirthday ?: "") }
-
-    if (nameState.isBlank())
-        nameState = "user"
 
     if (sexState.isBlank())
         sexState = "M"
