@@ -24,11 +24,20 @@ jobs:
         distribution: 'adopt'
         java-version: '17'
 
+    - name: Get version from build.gradle
+      run: echo "VERSION_NAME=$(grep -oP 'versionName\s+"[^"]+"' app/build.gradle | awk -F '"' '{print $2}')" >> $GITHUB_ENV
+      shell: bash
+
     - name: Build APK
       run: ./gradlew assembleRelease
+
+    - name: Move APK to artifact folder
+      run: mv app/build/outputs/apk/release/app-release.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
+      env:
+        VERSION_NAME: ${{ steps.GetVersion.outputs.VERSION_NAME }}
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v2
       with:
-        name: release-apk
-        path: app/build/outputs/apk/release/app-release.apk
+        name: release-apk-${{ env.VERSION_NAME }}
+        path: artifacts/app-release-${{ env.VERSION_NAME }}.apk
