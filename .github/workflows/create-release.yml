@@ -25,14 +25,14 @@ jobs:
         java-version: '17'
 
     - name: Get version from build.gradle
-      run: echo "VERSION_NAME=$(grep -oP 'versionName\s+"[^"]+"' app/build.gradle | awk -F '"' '{print $2}')" >> $GITHUB_ENV
+      run: echo "VERSION_NAME=$(grep -oP 'versionName\s+\"[^\"]+\"' app/build.gradle.kts | awk -F '\"' '{print $2}')" >> $GITHUB_ENV
       shell: bash
 
     - name: Build APK
       run: ./gradlew assembleRelease
 
     - name: Move APK to artifact folder
-      run: mv app/build/outputs/apk/release/app-release.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
+      run: mv app/build/outputs/apk/release/app-release-unsigned.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
       env:
         VERSION_NAME: ${{ steps.GetVersion.outputs.VERSION_NAME }}
 
