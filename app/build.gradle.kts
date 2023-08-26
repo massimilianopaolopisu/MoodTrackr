@@ -22,16 +22,27 @@ android {
         }
     }
 
-    val keystoreProperties = Properties()
-    val keystorePropertiesFile = rootProject.file("keystore.properties")
-    keystoreProperties.load(keystorePropertiesFile.inputStream())
-
     signingConfigs {
         create("release") {
-            storeFile = file(keystoreProperties.getProperty("storeFile"))
-            storePassword = keystoreProperties.getProperty("storePassword")
-            keyAlias = keystoreProperties.getProperty("keyAlias")
-            keyPassword = keystoreProperties.getProperty("keyPassword")
+            val isGitHubActions = System.getenv("GITHUB_ACTIONS") == "true"
+
+            if (isGitHubActions) {
+                // Use secrets from GitHub Actions
+                storeFile = file(System.getenv("RELEASE_KEYSTORE"))
+                storePassword = System.getenv("RELEASE_STORE_PASSWORD")
+                keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+            } else {
+                // Use local properties file for signing
+                val keystoreProperties = Properties()
+                val keystorePropertiesFile = rootProject.file("keystore.properties")
+                keystoreProperties.load(keystorePropertiesFile.inputStream())
+
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
         }
     }
 
