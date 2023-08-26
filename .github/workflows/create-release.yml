@@ -9,6 +9,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+      RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+      RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+      RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -30,13 +36,27 @@ jobs:
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
         shell: bash
 
-      - name: Build APK
-        run: ./gradlew assembleRelease
+      - name: Build AAB
+        run: ./gradlew bundleRelease
 
-      - name: Move APK to artifact folder
-        run: mv app/build/outputs/apk/release/app-release-unsigned.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
+      - name: Sign APK
+        run: |
+          ./gradlew signingReport
+          ./gradlew bundleRelease
+
+      - name: Move AAB to artifact folder
+        run: mv app/build/outputs/bundle/release/app-release.aab artifacts/app-release-${{ env.VERSION_NAME }}.aab
         env:
           VERSION_NAME: ${{ env.VERSION_NAME }}
+
+      - name: Convert AAB to APK
+        run: bundletool build-apks --bundle=artifacts/app-release-${{ env.VERSION_NAME }}.aab --output=artifacts/app-release-${{ env.VERSION_NAME }}.apks --mode=universal
+
+      - name: Extract Universal APK
+        run: bundletool extract-apks --apks=artifacts/app-release-${{ env.VERSION_NAME }}.apks --output-dir=artifacts/
+
+      - name: Move APK to artifact folder
+        run: mv artifacts/splits/universal.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v2
