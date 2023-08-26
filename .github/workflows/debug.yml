@@ -1,0 +1,19 @@
+name: Debug
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - name: Debug
+        run: |
+          echo "RELEASE_KEYSTORE: $RELEASE_KEYSTORE"
+          echo "RELEASE_KEY_PASSWORD: $RELEASE_KEY_PASSWORD"
+          echo "RELEASE_STORE_PASSWORD: $RELEASE_STORE_PASSWORD"
+          echo "RELEASE_KEY_ALIAS: $RELEASE_KEY_ALIAS"
