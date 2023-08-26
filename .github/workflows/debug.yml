@@ -11,12 +11,12 @@ jobs:
 
     steps:
     
-      - name: Debug
+      - name: Print Keystore Variables
         run: |
-          echo "RELEASE_KEYSTORE: $RELEASE_KEYSTORE"
-          echo "RELEASE_KEY_PASSWORD: $RELEASE_KEY_PASSWORD"
-          echo "RELEASE_STORE_PASSWORD: $RELEASE_STORE_PASSWORD"
-          echo "RELEASE_KEY_ALIAS: $RELEASE_KEY_ALIAS"
-          
+          echo "RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}"
+          echo "RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}"
+          echo "RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}"
+          echo "RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}"
+        
       - name: Print environment variables
         run: env
