@@ -8,7 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: UAT
+    env:
+      ENVIRONMENT: UAT
     
     steps:
       - name: Checkout code
