@@ -8,7 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env: UAT
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -33,6 +34,11 @@ jobs:
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
       - name: Move APK to artifact folder
         run: mv app/build/outputs/apk/debug/app-debug.apk artifacts/app-debug-${{ env.DEBUG_VERSION_NAME }}.apk
