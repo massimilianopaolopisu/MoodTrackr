@@ -32,12 +32,7 @@ jobs:
         shell: bash
 
       - name: Build Debug APK
-        run: |
-          echo "RELEASE_KEYSTORE=$RELEASE_KEYSTORE" >> $GITHUB_ENV
-          echo "RELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD" >> $GITHUB_ENV
-          echo "RELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD" >> $GITHUB_ENV
-          echo "RELEASE_KEY_ALIAS=$RELEASE_KEY_ALIAS" >> $GITHUB_ENV
-          ./gradlew assembleDebug
+        run: ./gradlew assembleDebug
         env:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}

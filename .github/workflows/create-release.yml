@@ -9,12 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
-      RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-      RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
-      RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -38,6 +32,11 @@ jobs:
 
       - name: Build AAB
         run: ./gradlew bundleRelease
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
       - name: Sign APK
         run: |
