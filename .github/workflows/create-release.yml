@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: PRD
+    environment: PRD
 
     steps:
       - name: Checkout code
