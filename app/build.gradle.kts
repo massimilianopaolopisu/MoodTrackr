@@ -27,13 +27,14 @@ android {
             val isGitHubActions = System.getenv("GITHUB_ACTIONS") == "true"
 
             if (isGitHubActions) {
-                // Use secrets from GitHub Actions
-                storeFile = file(System.getenv("RELEASE_KEYSTORE"))
+                val keystoreContent = System.getenv("RELEASE_KEYSTORE")
+                val storeFilePath = rootProject.file("release.keystore")
+                storeFilePath.writeText(keystoreContent)
+                storeFile = storeFilePath
                 storePassword = System.getenv("RELEASE_STORE_PASSWORD")
                 keyAlias = System.getenv("RELEASE_KEY_ALIAS")
                 keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
             } else {
-                // Use local properties file for signing
                 val keystoreProperties = Properties()
                 val keystorePropertiesFile = rootProject.file("keystore.properties")
                 keystoreProperties.load(keystorePropertiesFile.inputStream())
@@ -81,7 +82,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics:1.5.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
     implementation("androidx.compose.material3:material3:1.1.1")
-    implementation("androidx.compose.material3:material3:1.2.0-alpha05")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha06")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.1")
     implementation("androidx.navigation:navigation-compose:2.7.1")
     testImplementation("junit:junit:4.13.2")
