@@ -19,6 +19,13 @@ jobs:
         with:
           node-version: '16.x'
 
+      - name: Install bundletool
+        run: |
+          wget https://github.com/google/bundletool/releases/download/1.15.4/bundletool-all-1.15.4.jar
+          mv bundletool-all-1.15.4.jar bundletool.jar
+          chmod +x bundletool.jar
+          sudo mv bundletool.jar /usr/local/bin/bundletool
+
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
