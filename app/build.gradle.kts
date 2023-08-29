@@ -27,9 +27,10 @@ android {
             val isGitHubActions = System.getenv("GITHUB_ACTIONS") == "true"
 
             if (isGitHubActions) {
-                val keystoreContent = System.getenv("RELEASE_KEYSTORE")
+                val base64Keystore = System.getenv("RELEASE_KEYSTORE")
                 val storeFilePath = rootProject.file("release.keystore")
-                storeFilePath.writeText(keystoreContent)
+                storeFilePath.writeBytes(Base64.getDecoder().decode(base64Keystore))
+
                 storeFile = storeFilePath
                 storePassword = System.getenv("RELEASE_STORE_PASSWORD")
                 keyAlias = System.getenv("RELEASE_KEY_ALIAS")
