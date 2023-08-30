@@ -52,7 +52,6 @@ jobs:
 
   build_apk:
     runs-on: ubuntu-latest
-    environment: PRD
 
     steps:
     - name: Checkout code
