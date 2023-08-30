@@ -6,21 +6,6 @@ on:
       - workitem-46
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
-
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '17'
-
   build_aab:
     runs-on: ubuntu-latest
     needs: setup
@@ -34,6 +19,17 @@ jobs:
           VERSION_NAME=$(grep -oP "versionName = \"[^\"]+\"" app/build.gradle.kts | awk -F '"' '{print $2}')
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
         shell: bash
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
 
       - name: Build AAB
         run: ./gradlew bundleRelease
@@ -73,6 +69,17 @@ jobs:
         VERSION_NAME=$(grep -oP "versionName = \"[^\"]+\"" app/build.gradle.kts | awk -F '"' '{print $2}')
         echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
       shell: bash
+
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '17'
 
     - name: Build APK
       run: ./gradlew assembleRelease
