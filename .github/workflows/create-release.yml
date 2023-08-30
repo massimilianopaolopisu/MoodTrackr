@@ -41,7 +41,7 @@ jobs:
   release_aab:
     runs-on: ubuntu-latest
     needs: build_aab
-    environment: PRD
+    environment: test
 
     steps:
       - name: Move AAB to artifact folder
@@ -90,7 +90,7 @@ jobs:
   release_apk:
     runs-on: ubuntu-latest
     needs: build_apk
-    environment: PRD
+    environment: test
 
     steps:
     - name: Move APK to artifact folder
