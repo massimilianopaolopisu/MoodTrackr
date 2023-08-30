@@ -5,15 +5,6 @@ on:
     branches:
       - workitem-46
 
-defaults:
-  run:
-    shell: /usr/bin/bash -e {0}
-    env:
-      RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
-      RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-      RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
-      RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
-
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -46,6 +37,11 @@ jobs:
     steps:
       - name: Build AAB
         run: ./gradlew bundleRelease
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
   release_aab:
     runs-on: ubuntu-latest
@@ -71,6 +67,11 @@ jobs:
     steps:
     - name: Build APK
       run: ./gradlew assembleRelease
+      env:
+        RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+        RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+        RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
   release_apk:
     runs-on: ubuntu-latest
