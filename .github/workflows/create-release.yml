@@ -8,6 +8,7 @@ on:
 jobs:
   build_aab:
     runs-on: ubuntu-latest
+    environment: test
 
     steps:
       - name: Checkout code
@@ -38,12 +39,6 @@ jobs:
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
-  release_aab:
-    runs-on: ubuntu-latest
-    needs: build_aab
-    environment: test
-
-    steps:
       - name: Move AAB to artifact folder
         run: mv app/build/outputs/bundle/release/app-release.aab artifacts/app-release-${{ env.VERSION_NAME }}.aab
         env:
@@ -57,6 +52,7 @@ jobs:
 
   build_apk:
     runs-on: ubuntu-latest
+    environment: test
 
     steps:
     - name: Checkout code
@@ -87,12 +83,6 @@ jobs:
         RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
         RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
-  release_apk:
-    runs-on: ubuntu-latest
-    needs: build_apk
-    environment: test
-
-    steps:
     - name: Move APK to artifact folder
       run: mv app/build/outputs/bundle/release/app-release.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
       env:
