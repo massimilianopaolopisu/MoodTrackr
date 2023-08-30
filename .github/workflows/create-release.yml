@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
@@ -35,6 +32,9 @@ jobs:
     needs: setup
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Build AAB
         run: ./gradlew bundleRelease
         env:
@@ -65,6 +65,9 @@ jobs:
     needs: setup
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Build APK
       run: ./gradlew assembleRelease
       env:
