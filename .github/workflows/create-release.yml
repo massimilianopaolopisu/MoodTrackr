@@ -1,14 +1,13 @@
-name: Create Release APK
+name: Create Release
 
 on:
   push:
     branches:
-      - main
+      - workitem-46
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
-    environment: PRD
 
     steps:
       - name: Checkout code
@@ -31,6 +30,11 @@ jobs:
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
         shell: bash
 
+  build_aab:
+    runs-on: ubuntu-latest
+    needs: setup
+
+    steps:
       - name: Build AAB
         run: ./gradlew bundleRelease
         env:
@@ -39,8 +43,44 @@ jobs:
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
+  release_aab:
+    runs-on: ubuntu-latest
+    needs: build_aab
+    environment: PRD
+
+    steps:
       - name: Move AAB to artifact folder
         run: mv app/build/outputs/bundle/release/app-release.aab artifacts/app-release-${{ env.VERSION_NAME }}.aab
+        env:
+          VERSION_NAME: ${{ env.VERSION_NAME }}
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-aab-${{ env.VERSION_NAME }}
+          path: artifacts/app-release-${{ env.VERSION_NAME }}.aab
+
+    build_apk:
+      runs-on: ubuntu-latest
+      needs: setup
+
+      steps:
+      - name: Build APK
+        run: ./gradlew assembleRelease
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+
+    release_apk:
+      runs-on: ubuntu-latest
+      needs: build_apk
+      environment: PRD
+
+      steps:
+      - name: Move APK to artifact folder
+        run: mv app/build/outputs/bundle/release/app-release.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
         env:
           VERSION_NAME: ${{ env.VERSION_NAME }}
 
@@ -48,4 +88,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: release-apk-${{ env.VERSION_NAME }}
-          path: artifacts/app-release-${{ env.VERSION_NAME }}.aab
+          path: artifacts/app-release-${{ env.VERSION_NAME }}.apk
