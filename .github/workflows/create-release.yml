@@ -3,12 +3,12 @@ name: Create Release
 on:
   push:
     branches:
-      - workitem-46
+      - main
 
 jobs:
   build_aab:
     runs-on: ubuntu-latest
-    environment: test
+    environment: PRD
 
     steps:
       - name: Checkout code
@@ -52,7 +52,7 @@ jobs:
 
   build_apk:
     runs-on: ubuntu-latest
-    environment: test
+    environment: PRD
 
     steps:
     - name: Checkout code
@@ -84,7 +84,7 @@ jobs:
         RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
     - name: Move APK to artifact folder
-      run: mv app/build/outputs/bundle/release/app-release.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
+      run: mv app/build/outputs/apk/release/app-release.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
       env:
         VERSION_NAME: ${{ env.VERSION_NAME }}
 
