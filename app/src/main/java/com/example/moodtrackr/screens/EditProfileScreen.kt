@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -137,18 +138,17 @@ fun EditProfileScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     RadioButton(
                         selected = newSex == "M",
                         onClick = { newSex = "M" }
                     )
-                    Text("M", modifier = Modifier.alignByBaseline())
+                    Text("M")
                     RadioButton(
                         selected = newSex == "F",
                         onClick = { newSex = "F" }
                     )
-                    Text("F", modifier = Modifier.alignByBaseline())
+                    Text("F")
                 }
 
                 Text(
@@ -164,7 +164,12 @@ fun EditProfileScreen(navController: NavController) {
                 DatePicker(
                     state = datePicker,
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    showModeToggle = false,
+                    colors = DatePickerDefaults
+                        .colors(titleContentColor = Color.Black,
+                            navigationContentColor = Color.Black,
+                            headlineContentColor = Color.Black)
                 )
             }
         }
