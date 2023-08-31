@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -45,7 +46,9 @@ fun EditProfileScreen(navController: NavController) {
         birthdayState = "01/01/1990"
 
     val selectedDate = LocalDate.parse(birthdayState, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-    val datePicker = rememberDatePickerState(selectedDate.toEpochDay() * (24 * 60 * 60 * 1000))
+    val datePicker = rememberDatePickerState(
+        initialSelectedDateMillis = selectedDate.toEpochDay() * (24 * 60 * 60 * 1000)
+        )
 
     val focusRequester = FocusRequester()
     val focusManager = LocalFocusManager.current
@@ -148,19 +151,18 @@ fun EditProfileScreen(navController: NavController) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         RadioButton(
                             selected = sexState == "M",
                             onClick = { sexState = "M" }
                         )
-                        Text("M", modifier = Modifier.alignByBaseline())
+                        Text("M")
                         RadioButton(
                             selected = sexState == "F",
                             onClick = { sexState = "F" }
                         )
-                        Text("F", modifier = Modifier.alignByBaseline())
+                        Text("F")
                     }
 
                     Text(
@@ -176,13 +178,17 @@ fun EditProfileScreen(navController: NavController) {
                     DatePicker(
                         state = datePicker,
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        showModeToggle = false,
+                        colors = DatePickerDefaults
+                            .colors(titleContentColor = Color.Black,
+                                navigationContentColor = Color.Black,
+                                headlineContentColor = Color.Black)
                     )
                 }
             }
         }
 
-            //Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier
                 .fillMaxWidth()
