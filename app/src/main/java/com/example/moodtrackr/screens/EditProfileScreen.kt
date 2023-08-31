@@ -21,8 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.repositories.ProfilePreferenceManager
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import com.example.moodtrackr.utilities.DateUtilities
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,8 +35,7 @@ fun EditProfileScreen(navController: NavController) {
     var newSex by remember { mutableStateOf(profile.sex) }
     var newBirthday by remember { mutableStateOf(profile.birthday) }
 
-    val selectedDate = LocalDate.parse(newBirthday, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-    val datePicker = rememberDatePickerState(selectedDate.toEpochDay() * (24 * 60 * 60 * 1000))
+    val datePicker = rememberDatePickerState(DateUtilities.getMillisFromStringDate(newBirthday))
 
     val focusRequester = FocusRequester()
     val focusManager = LocalFocusManager.current
@@ -195,6 +193,7 @@ fun EditProfileScreen(navController: NavController) {
 
                 Button(
                     onClick = {
+                        newBirthday = DateUtilities.getStringDateFromMillis(datePicker.selectedDateMillis?: 0)
                         profilePreferenceManager.save(Profile(newName, newSurname, newSex, newBirthday))
                         navController.navigate("home")
                     },
