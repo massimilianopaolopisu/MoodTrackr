@@ -21,15 +21,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.models.Profile
-import com.example.moodtrackr.repositories.ProfilePreferenceManager
+import com.example.moodtrackr.repositories.ProfilePreferencesRepository
 import com.example.moodtrackr.utilities.DateUtilities
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(navController: NavController) {
     val context = LocalContext.current
-    val profilePreferenceManager = ProfilePreferenceManager(context)
-    val profile = profilePreferenceManager.load()
+    val profilePreferencesRepository = ProfilePreferencesRepository(context)
+    val profile = profilePreferencesRepository.load()
 
     var newName by remember { mutableStateOf(profile.name) }
     var newSurname by remember { mutableStateOf(profile.surname) }
@@ -198,7 +198,7 @@ fun EditProfileScreen(navController: NavController) {
                 Button(
                     onClick = {
                         newBirthday = DateUtilities.getStringDateFromMillis(datePicker.selectedDateMillis?: 0)
-                        profilePreferenceManager.save(Profile(newName, newSurname, newSex, newBirthday))
+                        profilePreferencesRepository.save(Profile(newName, newSurname, newSex, newBirthday))
                         navController.navigate("home")
                     },
                     modifier = Modifier

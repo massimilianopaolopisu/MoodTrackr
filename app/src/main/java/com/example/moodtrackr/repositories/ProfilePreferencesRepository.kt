@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.models.SharedPreferencesKeys
 
-class ProfilePreferenceManager(private val context: Context) : IProfilePreferenceManager
+class ProfilePreferencesRepository(private val context: Context) : IProfilePreferencesRepository
 {
     override fun load() : Profile {
         val sharedPreferences = loadPreferences()

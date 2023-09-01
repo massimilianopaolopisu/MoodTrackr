@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -25,14 +26,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.ThemeMode
+import com.example.moodtrackr.models.ThemePreferences
+import com.example.moodtrackr.repositories.ThemePreferencesRepository
 
 @Composable
 fun SettingsScreen(navController: NavController) {
-    var selectedTheme by remember { mutableStateOf(ThemeMode.System) }
-    var dynamicColorsEnabled by remember { mutableStateOf(true) }
+    val context = LocalContext.current
+    val themePreferencesRepository = ThemePreferencesRepository(context)
+    val themePreferences = themePreferencesRepository.load()
+
+    var selectedTheme by remember { mutableStateOf(themePreferences.themeMode) }
+    var dynamicColorsEnabled by remember { mutableStateOf(themePreferences.dynamicColorsEnabled) }
 
     Column(
         modifier = Modifier
@@ -130,7 +138,42 @@ fun SettingsScreen(navController: NavController) {
                 }
             }
         }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Button(
+                    onClick = {
+                        navController.navigate("home")
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    Text("Back")
+                }
+
+                Button(
+                    onClick = {
+                        themePreferencesRepository.save(ThemePreferences(selectedTheme, dynamicColorsEnabled))
+                        navController.navigate("home")
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    Text("Save")
+                }
+            }
+        }
     }
+
 }
 
 @Composable

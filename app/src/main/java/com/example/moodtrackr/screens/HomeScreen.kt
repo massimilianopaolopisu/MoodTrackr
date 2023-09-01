@@ -1,7 +1,6 @@
 package com.example.moodtrackr.screens
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,13 +17,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moodtrackr.models.SharedPreferencesKeys
+import com.example.moodtrackr.repositories.ProfilePreferencesRepository
 
 @Composable
 fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences(SharedPreferencesKeys.PROFILE, Context.MODE_PRIVATE)
-    val name = getName(sharedPreferences)
+    val name = getName(context)
 
     Column(
         modifier = Modifier
@@ -52,11 +50,12 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
-fun getName(sharedPreferences: SharedPreferences): String {
-    val savedName = sharedPreferences.getString("name", "")
-    var name = savedName
+fun getName(context: Context): String {
+    val profilePreferencesRepository = ProfilePreferencesRepository(context)
+    val profile = profilePreferencesRepository.load()
+    var name = profile.name
 
-    if (name?.isBlank() == true || name?.isBlank() == null)
+    if (name.isBlank() == true)
         name = "user"
 
     return name
