@@ -174,7 +174,6 @@ fun EditProfileScreen(navController: NavController) {
             }
         }
 
-            //Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier
                 .fillMaxWidth()

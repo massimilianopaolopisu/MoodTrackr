@@ -1,18 +1,19 @@
 package com.example.moodtrackr
 
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.foundation.layout.*
-import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.HomeScreen
+import com.example.moodtrackr.screens.SettingsScreen
+import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 
 // MainActivity.kt
 class MainActivity : ComponentActivity() {
@@ -43,6 +44,9 @@ fun Content() {
         }
         composable("editProfile") {
             EditProfileScreen(navController)
+        }
+        composable("settings") {
+            SettingsScreen(navController)
         }
     }
 }
