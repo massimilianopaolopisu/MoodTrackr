@@ -1,6 +1,7 @@
 package com.example.moodtrackr.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.ThemePreferences
 import com.example.moodtrackr.repositories.ISave
 import com.example.moodtrackr.repositories.ThemePreferencesRepository
+import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 
 @Composable
 fun SettingsScreen(navController: NavController) {
@@ -43,6 +45,8 @@ fun SettingsScreen(navController: NavController) {
 
     var selectedTheme by remember { mutableStateOf(themePreferences.themeMode) }
     var dynamicColorsEnabled by remember { mutableStateOf(themePreferences.dynamicColorsEnabled) }
+    val isSystemInDarkMode = isSystemInDarkTheme()
+    var darkMode by remember { mutableStateOf(isSystemInDarkMode) }
 
     Box(
         modifier = Modifier
@@ -109,17 +113,17 @@ fun SettingsScreen(navController: NavController) {
                     onOptionSelected = { themeMode ->
                         selectedTheme = themeMode
 
-                        when (themeMode) {
+                        darkMode = when (themeMode) {
                             ThemeMode.System -> {
-                                //TODO
+                                isSystemInDarkMode
                             }
 
                             ThemeMode.Light -> {
-                                //TODO
+                                false
                             }
 
                             ThemeMode.Dark -> {
-                                //TODO
+                                true
                             }
                         }
                     }
@@ -143,12 +147,6 @@ fun SettingsScreen(navController: NavController) {
                         checked = dynamicColorsEnabled,
                         onCheckedChange = { enabled ->
                             dynamicColorsEnabled = enabled
-
-                            if (enabled) {
-                                //TODO
-                            } else {
-                                //TODO
-                            }
                         }
                     )
                 }
@@ -166,5 +164,9 @@ fun SettingsScreen(navController: NavController) {
 
             SaveBottomBar(navController, saveHandlerAndObjectPairList)
         }
+    }
+
+    MoodTrackrTheme(darkTheme = darkMode, dynamicColor = dynamicColorsEnabled){
+
     }
 }
