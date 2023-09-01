@@ -1,24 +1,28 @@
 package com.example.moodtrackr.screens
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moodtrackr.models.SharedPreferencesKeys
+import com.example.moodtrackr.repositories.ProfilePreferencesRepository
 
 @Composable
 fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences(SharedPreferencesKeys.PROFILE, Context.MODE_PRIVATE)
-    val name = getName(sharedPreferences)
+    val name = getName(context)
 
     Column(
         modifier = Modifier
@@ -36,21 +40,22 @@ fun HomeScreen(navController: NavController) {
         )
 
         Button(
-            onClick = { navController.navigate("editProfile") },
+            onClick = { navController.navigate("settings") },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
         ) {
-            Text("Edit Profile")
+            Text("Settings")
         }
     }
 }
 
-fun getName(sharedPreferences: SharedPreferences): String {
-    val savedName = sharedPreferences.getString("name", "")
-    var name = savedName
+fun getName(context: Context): String {
+    val profilePreferencesRepository = ProfilePreferencesRepository(context)
+    val profile = profilePreferencesRepository.load()
+    var name = profile.name
 
-    if (name?.isBlank() == true || name?.isBlank() == null)
+    if (name.isBlank())
         name = "user"
 
     return name

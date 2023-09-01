@@ -2,7 +2,6 @@ package com.example.moodtrackr.repositories
 
 import com.example.moodtrackr.models.Profile
 
-interface IProfilePreferenceManager {
+interface IProfilePreferencesRepository: ISave<Profile> {
     fun load() : Profile
-    fun save(profile : Profile)
 }
