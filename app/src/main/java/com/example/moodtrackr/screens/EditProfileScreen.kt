@@ -52,13 +52,9 @@ fun EditProfileScreen(navController: NavController) {
                 .align(Alignment.TopCenter)
         ) {
             Text(
-                text = "Please enter your details:",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(vertical = 8.dp)
+                text = "Profile",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
         }
 
@@ -67,7 +63,7 @@ fun EditProfileScreen(navController: NavController) {
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .align(Alignment.TopCenter)
-                .padding(top = 50.dp)
+                .padding(top = 25.dp)
         ) {
             item {
                 Text(

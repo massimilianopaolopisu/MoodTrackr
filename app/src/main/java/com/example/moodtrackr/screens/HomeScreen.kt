@@ -55,7 +55,7 @@ fun getName(context: Context): String {
     val profile = profilePreferencesRepository.load()
     var name = profile.name
 
-    if (name.isBlank() == true)
+    if (name.isBlank())
         name = "user"
 
     return name
