@@ -2,9 +2,11 @@ package com.example.moodtrackr.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,18 +44,30 @@ fun SettingsScreen(navController: NavController) {
     var selectedTheme by remember { mutableStateOf(themePreferences.themeMode) }
     var dynamicColorsEnabled by remember { mutableStateOf(themePreferences.dynamicColorsEnabled) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "Settings",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+        ) {
+            Text(
+                text = "Settings",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
 
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .align(Alignment.TopCenter)
+                .padding(top = 25.dp)
+        ) {
             item {
                 Row(
                     modifier = Modifier
@@ -99,9 +113,11 @@ fun SettingsScreen(navController: NavController) {
                             ThemeMode.System -> {
                                 //TODO
                             }
+
                             ThemeMode.Light -> {
                                 //TODO
                             }
+
                             ThemeMode.Dark -> {
                                 //TODO
                             }
@@ -142,6 +158,7 @@ fun SettingsScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .align(Alignment.BottomCenter)
         ) {
             Row(
                 modifier = Modifier
@@ -161,7 +178,12 @@ fun SettingsScreen(navController: NavController) {
 
                 Button(
                     onClick = {
-                        themePreferencesRepository.save(ThemePreferences(selectedTheme, dynamicColorsEnabled))
+                        themePreferencesRepository.save(
+                            ThemePreferences(
+                                selectedTheme,
+                                dynamicColorsEnabled
+                            )
+                        )
                         navController.navigate("home")
                     },
                     modifier = Modifier
@@ -173,7 +195,6 @@ fun SettingsScreen(navController: NavController) {
             }
         }
     }
-
 }
 
 @Composable
