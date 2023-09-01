@@ -11,14 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,8 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.moodtrackr.components.SaveBottomBar
+import com.example.moodtrackr.components.ThemeOptionsRadioButtons
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.ThemePreferences
+import com.example.moodtrackr.repositories.ISave
 import com.example.moodtrackr.repositories.ThemePreferencesRepository
 
 @Composable
@@ -99,7 +99,7 @@ fun SettingsScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                ThemeOptionRadioButton(
+                ThemeOptionsRadioButtons(
                     options = listOf(
                         "System Default" to ThemeMode.System,
                         "Light" to ThemeMode.Light,
@@ -154,75 +154,17 @@ fun SettingsScreen(navController: NavController) {
                 }
             }
         }
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Button(
-                    onClick = {
-                        navController.navigate("home")
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                ) {
-                    Text("Back")
-                }
-
-                Button(
-                    onClick = {
-                        themePreferencesRepository.save(
-                            ThemePreferences(
-                                selectedTheme,
-                                dynamicColorsEnabled
-                            )
-                        )
-                        navController.navigate("home")
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                ) {
-                    Text("Save")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ThemeOptionRadioButton(
-    options: List<Pair<String, ThemeMode>>,
-    selectedOption: ThemeMode,
-    onOptionSelected: (ThemeMode) -> Unit
-) {
-    options.forEach { (label, themeMode) ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onOptionSelected(themeMode)
-                }
-                .padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = selectedOption == themeMode,
-                onClick = { onOptionSelected(themeMode) }
+            @Suppress("UNCHECKED_CAST")
+            val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf<Pair<ISave<Any>, Any>>(
+                themePreferencesRepository as ISave<Any> to ThemePreferences(selectedTheme, dynamicColorsEnabled) as Any
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1f)
-            )
+
+            SaveBottomBar(navController, saveHandlerAndObjectPairList)
         }
     }
 }

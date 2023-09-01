@@ -2,7 +2,6 @@ package com.example.moodtrackr.repositories
 
 import com.example.moodtrackr.models.ThemePreferences
 
-interface IThemePreferencesRepository {
+interface IThemePreferencesRepository: ISave<ThemePreferences> {
     fun load() : ThemePreferences
-    fun save(themePreferences : ThemePreferences)
 }

@@ -20,7 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.models.Profile
+import com.example.moodtrackr.repositories.ISave
 import com.example.moodtrackr.repositories.ProfilePreferencesRepository
 import com.example.moodtrackr.utilities.DateUtilities
 
@@ -175,35 +177,13 @@ fun EditProfileScreen(navController: NavController) {
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Button(
-                    onClick = {
-                        navController.navigate("home")
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                ) {
-                    Text("Back")
-                }
+            newBirthday = DateUtilities.getStringDateFromMillis(datePicker.selectedDateMillis?: 0)
+            @Suppress("UNCHECKED_CAST")
+            val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf<Pair<ISave<Any>, Any>>(
+                profilePreferencesRepository as ISave<Any> to Profile(newName, newSurname, newSex, newBirthday) as Any
+            )
 
-                Button(
-                    onClick = {
-                        newBirthday = DateUtilities.getStringDateFromMillis(datePicker.selectedDateMillis?: 0)
-                        profilePreferencesRepository.save(Profile(newName, newSurname, newSex, newBirthday))
-                        navController.navigate("home")
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                ) {
-                    Text("Save")
-                }
-            }
+            SaveBottomBar(navController, saveHandlerAndObjectPairList)
         }
     }
 }
