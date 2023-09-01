@@ -20,16 +20,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.models.Profile
-import com.example.moodtrackr.repositories.ProfilePreferenceManager
+import com.example.moodtrackr.repositories.ISave
+import com.example.moodtrackr.repositories.ProfilePreferencesRepository
 import com.example.moodtrackr.utilities.DateUtilities
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(navController: NavController) {
     val context = LocalContext.current
-    val profilePreferenceManager = ProfilePreferenceManager(context)
-    val profile = profilePreferenceManager.load()
+    val profilePreferencesRepository = ProfilePreferencesRepository(context)
+    val profile = profilePreferencesRepository.load()
 
     var newName by remember { mutableStateOf(profile.name) }
     var newSurname by remember { mutableStateOf(profile.surname) }
@@ -52,13 +54,9 @@ fun EditProfileScreen(navController: NavController) {
                 .align(Alignment.TopCenter)
         ) {
             Text(
-                text = "Please enter your details:",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(vertical = 8.dp)
+                text = "Profile",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
         }
 
@@ -67,7 +65,7 @@ fun EditProfileScreen(navController: NavController) {
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .align(Alignment.TopCenter)
-                .padding(top = 50.dp)
+                .padding(top = 25.dp)
         ) {
             item {
                 Text(
@@ -174,41 +172,18 @@ fun EditProfileScreen(navController: NavController) {
             }
         }
 
-            //Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Button(
-                    onClick = {
-                        navController.navigate("home")
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                ) {
-                    Text("Back")
-                }
+            newBirthday = DateUtilities.getStringDateFromMillis(datePicker.selectedDateMillis?: 0)
+            @Suppress("UNCHECKED_CAST")
+            val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf<Pair<ISave<Any>, Any>>(
+                profilePreferencesRepository as ISave<Any> to Profile(newName, newSurname, newSex, newBirthday) as Any
+            )
 
-                Button(
-                    onClick = {
-                        newBirthday = DateUtilities.getStringDateFromMillis(datePicker.selectedDateMillis?: 0)
-                        profilePreferenceManager.save(Profile(newName, newSurname, newSex, newBirthday))
-                        navController.navigate("home")
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                ) {
-                    Text("Save")
-                }
-            }
+            SaveBottomBar(navController, saveHandlerAndObjectPairList)
         }
     }
 }
