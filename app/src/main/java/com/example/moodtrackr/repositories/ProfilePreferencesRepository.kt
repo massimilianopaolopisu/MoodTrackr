@@ -1,6 +1,7 @@
 package com.example.moodtrackr.repositories
 
 import android.content.Context
+import android.util.Log
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.models.SharedPreferencesKeys
 
@@ -28,7 +29,7 @@ class ProfilePreferencesRepository(context: Context) : SharedPreferencesReposito
 
             return Profile(savedName, savedSurname, sex, birthday)
         } catch(ex: Exception) {
-            // TODO _logger.error(ex)
+            Log.e("ProfilePreferencesRepository", ex.stackTraceToString())
             return profile
         }
     }
@@ -44,7 +45,7 @@ class ProfilePreferencesRepository(context: Context) : SharedPreferencesReposito
             editor.putString("birthday", t.birthday)
             editor.apply()
         } catch (ex: Exception) {
-            // TODO _logger.error(ex)
+            Log.e("ProfilePreferencesRepository", ex.stackTraceToString())
         }
     }
 }

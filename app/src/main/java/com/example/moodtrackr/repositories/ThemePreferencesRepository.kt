@@ -1,6 +1,7 @@
 package com.example.moodtrackr.repositories
 
 import android.content.Context
+import android.util.Log
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.SharedPreferencesKeys
 import com.example.moodtrackr.models.ThemePreferences
@@ -20,21 +21,21 @@ class ThemePreferencesRepository(context: Context) : SharedPreferencesRepository
             return ThemePreferences(themeMode, dynamicColorsEnabled)
         } catch(ex: Exception)
         {
-            // TODO _logger.error(ex)
+            Log.e("ThemePreferencesRepository", ex.stackTraceToString())
             return themePreferences
         }
     }
 
-    override fun save(themePreferences: ThemePreferences) {
+    override fun save(t: ThemePreferences) {
         try{
             val sharedPreferences = loadPreferences(SharedPreferencesKeys.THEME) ?: return
             val editor = sharedPreferences.edit()
 
-            editor.putBoolean("dynamicColorsEnabled", themePreferences.dynamicColorsEnabled)
-            editor.putString("themeMode", themePreferences.themeMode.toString())
+            editor.putBoolean("dynamicColorsEnabled", t.dynamicColorsEnabled)
+            editor.putString("themeMode", t.themeMode.toString())
             editor.apply()
         } catch(ex: Exception) {
-            // TODO _logger.error(ex)
+            Log.e("ThemePreferencesRepository", ex.stackTraceToString())
         }
     }
 }

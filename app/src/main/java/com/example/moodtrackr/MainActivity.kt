@@ -18,6 +18,7 @@ import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.HomeScreen
 import com.example.moodtrackr.screens.SettingsScreen
 import com.example.moodtrackr.ui.theme.MoodTrackrTheme
+import com.example.moodtrackr.utilities.DateUtilities
 
 // MainActivity.kt
 class MainActivity : ComponentActivity() {
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MoodTrackrApp() {
     val context = LocalContext.current
+    DateUtilities.initialize(context)
 
     val themePreferencesRepository = ThemePreferencesRepository(context)
     val themePreferences = themePreferencesRepository.load()
