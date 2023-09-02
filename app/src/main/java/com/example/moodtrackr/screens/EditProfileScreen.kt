@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.SaveBottomBar
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.repositories.ISave
 import com.example.moodtrackr.repositories.ProfilePreferencesRepository
@@ -183,7 +184,7 @@ fun EditProfileScreen(navController: NavController) {
                 profilePreferencesRepository as ISave<Any> to Profile(newName, newSurname, newSex, newBirthday) as Any
             )
 
-            SaveBottomBar(navController, saveHandlerAndObjectPairList)
+            SaveBottomBar(navController, saveHandlerAndObjectPairList, afterBackRoute = Routes.Settings)
         }
     }
 }
