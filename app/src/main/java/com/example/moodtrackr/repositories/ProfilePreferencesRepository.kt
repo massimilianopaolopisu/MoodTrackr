@@ -4,11 +4,13 @@ import android.content.Context
 import android.util.Log
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.models.SharedPreferencesKeys
+import com.example.moodtrackr.utilities.DateUtilities
+import java.time.LocalDate
 
 class ProfilePreferencesRepository(context: Context) : SharedPreferencesRepository(context), IProfilePreferencesRepository
 {
     override fun load() : Profile {
-        val profile = Profile("User","","M","1990-01-01")
+        val profile = Profile("User","","M", LocalDate.MIN)
 
         try {
             val sharedPreferences = loadPreferences(SharedPreferencesKeys.PROFILE) ?: return profile
@@ -19,7 +21,7 @@ class ProfilePreferencesRepository(context: Context) : SharedPreferencesReposito
             val savedBirthday = sharedPreferences.getString("birthday", "") ?: ""
 
             var sex = savedSex
-            var birthday = savedBirthday
+            var birthday = DateUtilities.getLocalDateFromStringDate(savedBirthday)
 
             if (savedSex.isBlank())
                 sex = profile.sex
@@ -42,7 +44,7 @@ class ProfilePreferencesRepository(context: Context) : SharedPreferencesReposito
             editor.putString("name", t.name)
             editor.putString("surname", t.surname)
             editor.putString("sex", t.sex)
-            editor.putString("birthday", t.birthday)
+            editor.putString("birthday", DateUtilities.getStringDateFromLocalDate(t.birthday))
             editor.apply()
         } catch (ex: Exception) {
             Log.e("ProfilePreferencesRepository", ex.stackTraceToString())

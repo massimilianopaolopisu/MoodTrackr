@@ -39,7 +39,7 @@ fun EditProfileScreen(navController: NavController) {
     var newSex by remember { mutableStateOf(profile.sex) }
     var newBirthday by remember { mutableStateOf(profile.birthday) }
 
-    val datePicker = rememberDatePickerState(DateUtilities.getMillisFromStringDate(newBirthday))
+    val datePicker = rememberDatePickerState(DateUtilities.getMillisFromLocalDate(newBirthday))
 
     val focusRequester = FocusRequester()
     val focusManager = LocalFocusManager.current
@@ -178,7 +178,7 @@ fun EditProfileScreen(navController: NavController) {
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            newBirthday = DateUtilities.getStringDateFromMillis(datePicker.selectedDateMillis?: 0)
+            newBirthday = DateUtilities.getLocalDateFromMillis(datePicker.selectedDateMillis?: 0)
             @Suppress("UNCHECKED_CAST")
             val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf<Pair<ISave<Any>, Any>>(
                 profilePreferencesRepository as ISave<Any> to Profile(newName, newSurname, newSex, newBirthday) as Any

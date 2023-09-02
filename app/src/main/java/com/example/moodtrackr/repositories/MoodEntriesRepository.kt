@@ -1,20 +1,29 @@
 package com.example.moodtrackr.repositories
 
 import android.content.Context
+import android.util.Log
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.models.SharedPreferencesKeys
+import com.example.moodtrackr.utilities.DateUtilities
 import java.time.LocalDate
 
 class MoodEntriesRepository(context: Context) : SharedPreferencesRepository(context), IMoodEntriesRepository {
-    override fun save(moodEntry: MoodEntry) {
-        TODO("Not yet implemented")
-    }
+    override fun save(t: MoodEntry) {
+        try{
+            val sharedPreferences = loadPreferences(SharedPreferencesKeys.MOOD_ENTRY) ?: return
+            val editor = sharedPreferences.edit()
 
-    override fun load(): MoodEntry? {
-        TODO("Not yet implemented")
-    }
+            editor.putString("date", DateUtilities.getStringDateFromLocalDate(t.date))
+            editor.putInt("happiness", t.happiness)
+            editor.putInt("love", t.love)
+            editor.putInt("energy", t.energy)
+            editor.putInt("health", t.energy)
+            editor.apply()
+        } catch (ex: Exception) {
+            Log.e("MoodEntriesRepository", ex.stackTraceToString())
+        }    }
 
-    fun loadAll(): List<MoodEntry>{
+    override fun load(): List<MoodEntry> {
         TODO("Not yet implemented")
     }
 
@@ -22,16 +31,23 @@ class MoodEntriesRepository(context: Context) : SharedPreferencesRepository(cont
         TODO("Not yet implemented")
     }
 
-    private fun loadPreferences(date: LocalDate): MoodEntry? {
-        val key = String.format(SharedPreferencesKeys.PROFILE, date.toString())
-        val moodEntryPreferences = loadPreferences(key) ?: return null
+    private fun loadMoodEntry(date: LocalDate): MoodEntry? {
+        val key = String.format(SharedPreferencesKeys.MOOD_ENTRY, date.toString())
 
-        val happiness = moodEntryPreferences.getInt("happiness", 0)
-        val love = moodEntryPreferences.getInt("love", 0)
-        val energy = moodEntryPreferences.getInt("energy", 0)
-        val health = moodEntryPreferences.getInt("health", 0)
-        val notes = moodEntryPreferences.getString("notes", "") ?: ""
+        try{
+            val moodEntryPreferences = loadPreferences(key) ?: return null
 
-        return MoodEntry(date, happiness, love, energy, health, notes)
+            val happiness = moodEntryPreferences.getInt("happiness", 0)
+            val love = moodEntryPreferences.getInt("love", 0)
+            val energy = moodEntryPreferences.getInt("energy", 0)
+            val health = moodEntryPreferences.getInt("health", 0)
+            val notes = moodEntryPreferences.getString("notes", "") ?: ""
+
+            return MoodEntry(date, happiness, love, energy, health, notes)
+        } catch (ex: Exception)
+        {
+            Log.e("MoodEntriesRepository", ex.stackTraceToString())
+            return null
+        }
     }
 }
