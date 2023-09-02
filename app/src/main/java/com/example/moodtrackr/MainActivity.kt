@@ -1,5 +1,6 @@
 package com.example.moodtrackr
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,12 +13,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
+import com.example.moodtrackr.helpers.SqlDatabaseHelper
+import com.example.moodtrackr.repositories.ApplicationPreferencesRepository
 import com.example.moodtrackr.repositories.ThemePreferencesRepository
 import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.HomeScreen
 import com.example.moodtrackr.screens.SettingsScreen
 import com.example.moodtrackr.ui.theme.MoodTrackrTheme
+import com.example.moodtrackr.utilities.DateUtilities
 
 // MainActivity.kt
 class MainActivity : ComponentActivity() {
@@ -33,6 +38,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MoodTrackrApp() {
     val context = LocalContext.current
+
+    init(context)
 
     val themePreferencesRepository = ThemePreferencesRepository(context)
     val themePreferences = themePreferencesRepository.load()
@@ -61,15 +68,26 @@ fun MoodTrackrApp() {
 fun Content() {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = "home") {
-        composable("home") {
+    NavHost(navController, startDestination = Routes.Home.toString()) {
+        composable(Routes.Home.toString()) {
             HomeScreen(navController)
         }
-        composable("editProfile") {
+        composable(Routes.EditProfile.toString()) {
             EditProfileScreen(navController)
         }
-        composable("settings") {
+        composable(Routes.Settings.toString()) {
             SettingsScreen(navController)
         }
+    }
+}
+
+private fun init(context: Context){
+    DateUtilities.initialize(context)
+    val applicationPreferencesRepository = ApplicationPreferencesRepository(context)
+    val applicationPreferences = applicationPreferencesRepository.load()
+
+    if(!applicationPreferences.sqlDatabaseExists) {
+        val sqlDatabaseHelper = SqlDatabaseHelper(context)
+        sqlDatabaseHelper.writableDatabase
     }
 }

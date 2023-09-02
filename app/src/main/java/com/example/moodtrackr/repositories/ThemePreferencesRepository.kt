@@ -1,32 +1,42 @@
 package com.example.moodtrackr.repositories
 
 import android.content.Context
-import android.content.SharedPreferences
+import android.util.Log
+import com.example.moodtrackr.dataAccess.SharedPreferencesConnector
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.SharedPreferencesKeys
 import com.example.moodtrackr.models.ThemePreferences
 
-class ThemePreferencesRepository(private val context: Context) : IThemePreferencesRepository
+class ThemePreferencesRepository(context: Context) : SharedPreferencesConnector(context), IThemePreferencesRepository
 {
     override fun load() : ThemePreferences {
-        val sharedPreferences = loadPreferences()
-        val dynamicColorsEnabled = sharedPreferences.getBoolean("dynamicColorsEnabled", true)
-        val themeModeString = sharedPreferences.getString("themeMode", "System") ?: "System"
-        val themeMode = ThemeMode.valueOf(themeModeString)
+        val themePreferences = ThemePreferences(ThemeMode.System, true)
 
-        return ThemePreferences(themeMode, dynamicColorsEnabled)
+        try{
+            val sharedPreferences = loadPreferences(SharedPreferencesKeys.THEME) ?: return themePreferences
+
+            val dynamicColorsEnabled = sharedPreferences.getBoolean("dynamicColorsEnabled", true)
+            val themeModeString = sharedPreferences.getString("themeMode", "System") ?: "System"
+            val themeMode = ThemeMode.valueOf(themeModeString)
+
+            return ThemePreferences(themeMode, dynamicColorsEnabled)
+        } catch(ex: Exception)
+        {
+            Log.e("ThemePreferencesRepository", ex.stackTraceToString())
+            return themePreferences
+        }
     }
 
-    override fun save(themePreferences: ThemePreferences) {
-        val sharedPreferences = loadPreferences()
-        val editor = sharedPreferences.edit()
+    override fun save(t: ThemePreferences) {
+        try{
+            val sharedPreferences = loadPreferences(SharedPreferencesKeys.THEME) ?: return
+            val editor = sharedPreferences.edit()
 
-        editor.putBoolean("dynamicColorsEnabled", themePreferences.dynamicColorsEnabled)
-        editor.putString("themeMode", themePreferences.themeMode.toString())
-        editor.apply()
-    }
-
-    private fun loadPreferences(): SharedPreferences {
-        return context.getSharedPreferences(SharedPreferencesKeys.THEME, Context.MODE_PRIVATE)
+            editor.putBoolean("dynamicColorsEnabled", t.dynamicColorsEnabled)
+            editor.putString("themeMode", t.themeMode.toString())
+            editor.apply()
+        } catch(ex: Exception) {
+            Log.e("ThemePreferencesRepository", ex.stackTraceToString())
+        }
     }
 }

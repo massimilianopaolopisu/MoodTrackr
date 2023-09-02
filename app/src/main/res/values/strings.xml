@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MoodTrackr</string>
+    <string name="date_format">yyyy-MM-dd</string>
+    <string name="date_locale">en_US</string>
 </resources>

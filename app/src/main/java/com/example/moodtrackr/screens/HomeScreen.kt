@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.ProfilePreferencesRepository
 
 @Composable
@@ -40,7 +41,7 @@ fun HomeScreen(navController: NavController) {
         )
 
         Button(
-            onClick = { navController.navigate("settings") },
+            onClick = { navController.navigate(Routes.Settings.toString()) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
