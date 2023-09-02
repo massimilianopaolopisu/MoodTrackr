@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.components.ThemeOptionsRadioButtons
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.ThemePreferences
 import com.example.moodtrackr.repositories.ISave
@@ -77,7 +78,7 @@ fun SettingsScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate("editProfile")
+                            navController.navigate(Routes.EditProfile.toString())
                         }
                         .padding(vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically

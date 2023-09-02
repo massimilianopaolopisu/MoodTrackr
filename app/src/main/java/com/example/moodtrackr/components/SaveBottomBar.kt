@@ -9,12 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.ISave
 
 @Composable
 fun SaveBottomBar(
     navController: NavController,
-    saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>>
+    saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>>,
+    saveLabel: String = "Save",
+    backLabel: String = "Back",
+    afterSaveRoute: Routes? = Routes.Home,
+    afterBackRoute: Routes = Routes.Home
 ) {
     Row(
         modifier = Modifier
@@ -23,27 +28,29 @@ fun SaveBottomBar(
     ) {
         Button(
             onClick = {
-                navController.navigate("home")
+                navController.navigate(afterBackRoute.toString())
             },
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            Text("Back")
+            Text(backLabel)
         }
 
         Button(
             onClick = {
                 saveHandlerAndObjectPairList.forEach{ (saveHandler, obj) ->
                     saveHandler.save(obj)
-                    navController.navigate("home")
+                    if(afterSaveRoute != null){
+                        navController.navigate(afterSaveRoute.toString())
+                    }
                 }
             },
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            Text("Save")
+            Text(saveLabel)
         }
     }
 }
