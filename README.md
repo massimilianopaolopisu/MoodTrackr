@@ -14,14 +14,16 @@ MoodTrackr is an app designed to help you monitor and manage your daily moods. W
 
 To get started with MoodTrackr, follow these steps:
 
-1. Clone this repository to your local machine:
+1. Ask project owner to join as contributor
+   
+2. Clone this repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/MoodTrackr.git
+git clone https://github.com/massimilianopaolopisu/MoodTrackr.git
 ```
 
-2. Open the project in Android Studio.
-3. Build and run the app on an Android emulator or physical device.
+3. Open the project in Android Studio.
+4. Build and run the app on an Android emulator or physical device.
 
 ## Usage
 
