@@ -2,11 +2,12 @@ package com.example.moodtrackr.repositories
 
 import android.content.Context
 import android.util.Log
+import com.example.moodtrackr.dataAccess.SharedPreferencesConnector
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.SharedPreferencesKeys
 import com.example.moodtrackr.models.ThemePreferences
 
-class ThemePreferencesRepository(context: Context) : SharedPreferencesRepository(context), IThemePreferencesRepository
+class ThemePreferencesRepository(context: Context) : SharedPreferencesConnector(context), IThemePreferencesRepository
 {
     override fun load() : ThemePreferences {
         val themePreferences = ThemePreferences(ThemeMode.System, true)

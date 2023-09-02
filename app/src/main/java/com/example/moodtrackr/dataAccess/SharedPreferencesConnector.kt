@@ -1,10 +1,10 @@
-package com.example.moodtrackr.repositories
+package com.example.moodtrackr.dataAccess
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 
-open class SharedPreferencesRepository(val context: Context) {
+open class SharedPreferencesConnector(val context: Context) {
     fun loadPreferences(key: String): SharedPreferences? {
         return try{
             context.getSharedPreferences(key, Context.MODE_PRIVATE)
