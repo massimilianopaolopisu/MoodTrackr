@@ -1,43 +1,50 @@
 package com.example.moodtrackr.repositories
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.models.SharedPreferencesKeys
 
-class ProfilePreferencesRepository(private val context: Context) : IProfilePreferencesRepository
+class ProfilePreferencesRepository(context: Context) : SharedPreferencesRepository(context), IProfilePreferencesRepository
 {
     override fun load() : Profile {
-        val sharedPreferences = loadPreferences()
-        val savedName = sharedPreferences.getString("name", "") ?: ""
-        val savedSurname = sharedPreferences.getString("surname", "") ?: ""
-        val savedSex = sharedPreferences.getString("sex", "") ?: ""
-        val savedBirthday = sharedPreferences.getString("birthday", "") ?: ""
+        val profile = Profile("User","","M","1990-01-01")
 
-        var sex = savedSex
-        var birthday = savedBirthday
+        try {
+            val sharedPreferences = loadPreferences(SharedPreferencesKeys.PROFILE) ?: return profile
 
-        if (savedSex.isBlank())
-            sex = "M"
+            val savedName = sharedPreferences.getString("name", "") ?: ""
+            val savedSurname = sharedPreferences.getString("surname", "") ?: ""
+            val savedSex = sharedPreferences.getString("sex", "") ?: ""
+            val savedBirthday = sharedPreferences.getString("birthday", "") ?: ""
 
-        if (savedBirthday.isBlank())
-            birthday = "01/01/1990"
+            var sex = savedSex
+            var birthday = savedBirthday
 
-        return Profile(savedName, savedSurname, sex, birthday)
+            if (savedSex.isBlank())
+                sex = profile.sex
+
+            if (savedBirthday.isBlank())
+                birthday = profile.birthday
+
+            return Profile(savedName, savedSurname, sex, birthday)
+        } catch(ex: Exception) {
+            // TODO _logger.error(ex)
+            return profile
+        }
     }
 
-    override fun save(profile: Profile) {
-        val sharedPreferences = loadPreferences()
-        val editor = sharedPreferences.edit()
+    override fun save(t: Profile) {
+        try{
+            val sharedPreferences = loadPreferences(SharedPreferencesKeys.PROFILE) ?: return
+            val editor = sharedPreferences.edit()
 
-        editor.putString("name", profile.name)
-        editor.putString("surname", profile.surname)
-        editor.putString("sex", profile.sex)
-        editor.putString("birthday", profile.birthday)
-        editor.apply()
-    }
-
-    private fun loadPreferences(): SharedPreferences {
-        return context.getSharedPreferences(SharedPreferencesKeys.PROFILE, Context.MODE_PRIVATE)
+            editor.putString("name", t.name)
+            editor.putString("surname", t.surname)
+            editor.putString("sex", t.sex)
+            editor.putString("birthday", t.birthday)
+            editor.apply()
+        } catch (ex: Exception) {
+            // TODO _logger.error(ex)
+        }
     }
 }
