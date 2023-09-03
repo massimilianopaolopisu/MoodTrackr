@@ -7,8 +7,9 @@ import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.models.SharedPreferencesKeys
 import com.example.moodtrackr.utilities.DateUtilities
 import java.time.LocalDate
+import javax.inject.Inject
 
-class ProfilePreferencesRepository(context: Context) : SharedPreferencesConnector(context), IProfilePreferencesRepository
+class ProfilePreferencesRepository @Inject constructor(context: Context) : SharedPreferencesConnector(context), IProfilePreferencesRepository
 {
     override fun load() : Profile {
         val profile = Profile("User","","M", LocalDate.MIN)

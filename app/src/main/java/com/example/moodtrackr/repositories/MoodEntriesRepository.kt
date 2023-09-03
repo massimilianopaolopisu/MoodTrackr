@@ -9,8 +9,9 @@ import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.models.MoodEntryContract
 import com.example.moodtrackr.utilities.DateUtilities
 import java.time.LocalDate
+import javax.inject.Inject
 
-class MoodEntriesRepository(context: Context) : IMoodEntriesRepository {
+class MoodEntriesRepository @Inject constructor(context: Context) : IMoodEntriesRepository {
     private val _sqlDatabaseHelper = SqlDatabaseHelper(context)
 
     override fun insertMoodEntry(moodEntry: MoodEntry) {
