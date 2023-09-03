@@ -5,8 +5,9 @@ import android.util.Log
 import com.example.moodtrackr.dataAccess.SharedPreferencesConnector
 import com.example.moodtrackr.models.ApplicationPreferences
 import com.example.moodtrackr.models.SharedPreferencesKeys
+import javax.inject.Inject
 
-class ApplicationPreferencesRepository(context: Context) : SharedPreferencesConnector(context),
+class ApplicationPreferencesRepository @Inject constructor(context: Context) : SharedPreferencesConnector(context),
     IApplicationPreferencesRepository {
     override fun load(): ApplicationPreferences {
         val applicationPreferences = ApplicationPreferences()

@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.SaveBottomBar
@@ -35,13 +34,14 @@ import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.ThemePreferences
 import com.example.moodtrackr.repositories.ISave
-import com.example.moodtrackr.repositories.ThemePreferencesRepository
+import com.example.moodtrackr.repositories.IThemePreferencesRepository
 import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 
 @Composable
-fun SettingsScreen(navController: NavController) {
-    val context = LocalContext.current
-    val themePreferencesRepository = ThemePreferencesRepository(context)
+fun SettingsScreen(
+    navController: NavController,
+    themePreferencesRepository: IThemePreferencesRepository
+) {
     val themePreferences = themePreferencesRepository.load()
 
     var selectedTheme by remember { mutableStateOf(themePreferences.themeMode) }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.ULocale
+import android.util.Log
 import com.example.moodtrackr.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -11,6 +12,8 @@ import java.time.format.DateTimeFormatter
 object DateUtilities {
     private lateinit var _locale: ULocale
     private lateinit var _format: String
+    private val _defaultDate = LocalDate.EPOCH
+    private val _defaultMillis = _defaultDate.toEpochDay() * (24 * 60 * 60 * 1000)
 
     fun initialize(context: Context) {
         _locale = ULocale.forLanguageTag(context.getString(R.string.date_locale))
@@ -32,31 +35,60 @@ object DateUtilities {
         if(date.isBlank() || !isDateWellFormatted(date, pattern))
             return LocalDate.MIN
 
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern))
+        return try{
+            LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern))
+        } catch (ex: Exception) {
+            Log.e("DateUtilities", ex.stackTraceToString())
+            _defaultDate
+        }
     }
 
     fun getMillisFromLocalDate(date: LocalDate): Long {
-        return date.toEpochDay() * (24 * 60 * 60 * 1000)
+        return try{
+            date.toEpochDay() * (24 * 60 * 60 * 1000)
+        } catch (ex: Exception) {
+            Log.e("DateUtilities", ex.stackTraceToString())
+            _defaultMillis
+        }
     }
 
     fun getStringDateFromLocalDate(date: LocalDate, pattern: String = _format): String {
-        return date.format(DateTimeFormatter.ofPattern(pattern))
+        return try{
+            date.format(DateTimeFormatter.ofPattern(pattern))
+        } catch (ex: Exception) {
+            Log.e("DateUtilities", ex.stackTraceToString())
+            getDefaultStringDate(pattern)
+        }
     }
 
     fun getLocalDateFromMillis(millis: Long): LocalDate {
-        return LocalDate.ofEpochDay(millis / (24 * 60 * 60 * 1000))
+        return try{
+            LocalDate.ofEpochDay(millis / (24 * 60 * 60 * 1000))
+        } catch (ex: Exception) {
+            Log.e("DateUtilities", ex.stackTraceToString())
+            _defaultDate
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
     private fun isDateWellFormatted(date: String, format: String): Boolean{
-        val sdf = SimpleDateFormat(format, _locale)
-        sdf.isLenient = false
-
         return try {
+            val sdf = SimpleDateFormat(format, _locale)
+            sdf.isLenient = false
             sdf.parse(date)
             true
         } catch (ex: Exception) {
             false
+        }
+    }
+
+    private fun getDefaultStringDate(pattern: String = _format): String
+    {
+        return try{
+            _defaultDate.format(DateTimeFormatter.ofPattern(pattern))
+        } catch (ex: Exception) {
+            Log.e("DateUtilities", ex.stackTraceToString())
+            _defaultDate.format(DateTimeFormatter.ofPattern(_format))
         }
     }
 }

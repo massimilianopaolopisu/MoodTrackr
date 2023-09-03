@@ -4,6 +4,8 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -12,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.moodtrackr"
-        minSdk = 26
+        minSdk = 34
         targetSdk = 34
         versionCode = 5
         versionName = "0.5"
@@ -87,12 +89,26 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.0-alpha06")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.1")
     implementation("androidx.navigation:navigation-compose:2.7.1")
-    implementation("com.google.dagger:dagger:2.28.3")
-    annotationProcessor("com.google.dagger:dagger-compiler:2.28.3")
+    implementation("com.google.dagger:hilt-android:2.44")
+    implementation("com.google.dagger:dagger:2.44")
+    kapt("com.google.dagger:hilt-compiler:2.44")
+    kapt("com.google.dagger:dagger-compiler:2.44")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.0")
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.0")
+}
+
+kapt {
+    correctErrorTypes = true
+}
+
+allprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_1_8.toString()
+        }
+    }
 }

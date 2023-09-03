@@ -1,6 +1,5 @@
 package com.example.moodtrackr.screens
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,19 +10,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
-import com.example.moodtrackr.repositories.ProfilePreferencesRepository
+import com.example.moodtrackr.repositories.IProfilePreferencesRepository
 
 @Composable
-fun HomeScreen(navController: NavController) {
-    val context = LocalContext.current
-    val name = getName(context)
+fun HomeScreen(
+    navController: NavController,
+    profilePreferencesRepository: IProfilePreferencesRepository
+) {
+    val name = getName(profilePreferencesRepository)
 
     Column(
         modifier = Modifier
@@ -51,8 +51,7 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
-fun getName(context: Context): String {
-    val profilePreferencesRepository = ProfilePreferencesRepository(context)
+fun getName(profilePreferencesRepository: IProfilePreferencesRepository): String {
     val profile = profilePreferencesRepository.load()
     var name = profile.name
 
