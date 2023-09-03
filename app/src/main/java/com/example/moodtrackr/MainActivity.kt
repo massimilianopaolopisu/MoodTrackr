@@ -4,11 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,33 +14,36 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
-import com.example.moodtrackr.repositories.ApplicationPreferencesRepository
-import com.example.moodtrackr.repositories.ThemePreferencesRepository
+import com.example.moodtrackr.repositories.IApplicationPreferencesRepository
 import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.HomeScreen
 import com.example.moodtrackr.screens.SettingsScreen
 import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 import com.example.moodtrackr.utilities.DateUtilities
+import com.example.moodtrackr.viewModels.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-// MainActivity.kt
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint
+class MainActivity @Inject constructor() : ComponentActivity() {
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MoodTrackrApp()
+            MoodTrackrApp(LocalContext.current, viewModel)
         }
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MoodTrackrApp() {
-    val context = LocalContext.current
+fun MoodTrackrApp(
+    context: Context,
+    viewModel: MainViewModel
+) {
+    init(context, viewModel.applicationPreferencesRepository)
 
-    init(context)
-
-    val themePreferencesRepository = ThemePreferencesRepository(context)
-    val themePreferences = themePreferencesRepository.load()
+    val themePreferences = viewModel.themePreferencesRepository.load()
 
     val darkMode = when (themePreferences.themeMode) {
         ThemeMode.System -> {
@@ -59,31 +60,32 @@ fun MoodTrackrApp() {
     }
 
     MoodTrackrTheme(darkMode, themePreferences.dynamicColorsEnabled) {
-        Content()
+        Content(viewModel)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Content() {
+fun Content(viewModel: MainViewModel) {
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = Routes.Home.toString()) {
         composable(Routes.Home.toString()) {
-            HomeScreen(navController)
+            HomeScreen(navController, viewModel.profilePreferencesRepository)
         }
         composable(Routes.EditProfile.toString()) {
-            EditProfileScreen(navController)
+            EditProfileScreen(navController, viewModel.profilePreferencesRepository)
         }
         composable(Routes.Settings.toString()) {
-            SettingsScreen(navController)
+            SettingsScreen(navController, viewModel.themePreferencesRepository)
         }
     }
 }
 
-private fun init(context: Context){
+private fun init(
+    context: Context,
+    applicationPreferencesRepository: IApplicationPreferencesRepository
+){
     DateUtilities.initialize(context)
-    val applicationPreferencesRepository = ApplicationPreferencesRepository(context)
     val applicationPreferences = applicationPreferencesRepository.load()
 
     if(!applicationPreferences.sqlDatabaseExists) {
