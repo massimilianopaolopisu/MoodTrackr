@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter
 object DateUtilities {
     private lateinit var _locale: ULocale
     private lateinit var _format: String
-    private val _defaultDate = LocalDate.EPOCH
+    private val _defaultDate = LocalDate.of(1970,1,1)
     private val _defaultMillis = _defaultDate.toEpochDay() * (24 * 60 * 60 * 1000)
 
     fun initialize(context: Context) {
