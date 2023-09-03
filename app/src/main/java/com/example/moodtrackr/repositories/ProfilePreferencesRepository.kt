@@ -11,7 +11,7 @@ import java.time.LocalDate
 class ProfilePreferencesRepository(context: Context) : SharedPreferencesConnector(context), IProfilePreferencesRepository
 {
     override fun load() : Profile {
-        val profile = Profile("User","","M", LocalDate.MIN)
+        val profile = Profile("User","","M", LocalDate.now())
 
         try {
             val sharedPreferences = loadPreferences(SharedPreferencesKeys.PROFILE) ?: return profile
