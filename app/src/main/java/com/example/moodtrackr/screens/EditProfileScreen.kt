@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -23,15 +22,16 @@ import androidx.navigation.NavController
 import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.Profile
+import com.example.moodtrackr.repositories.IProfilePreferencesRepository
 import com.example.moodtrackr.repositories.ISave
-import com.example.moodtrackr.repositories.ProfilePreferencesRepository
 import com.example.moodtrackr.utilities.DateUtilities
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfileScreen(navController: NavController) {
-    val context = LocalContext.current
-    val profilePreferencesRepository = ProfilePreferencesRepository(context)
+fun EditProfileScreen(
+    navController: NavController,
+    profilePreferencesRepository: IProfilePreferencesRepository
+) {
     val profile = profilePreferencesRepository.load()
 
     var newName by remember { mutableStateOf(profile.name) }

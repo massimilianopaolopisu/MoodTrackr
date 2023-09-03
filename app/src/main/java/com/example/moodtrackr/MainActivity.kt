@@ -14,8 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
-import com.example.moodtrackr.repositories.ApplicationPreferencesRepository
-import com.example.moodtrackr.repositories.IThemePreferencesRepository
+import com.example.moodtrackr.repositories.IApplicationPreferencesRepository
 import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.HomeScreen
 import com.example.moodtrackr.screens.SettingsScreen
@@ -32,10 +31,7 @@ class MainActivity @Inject constructor() : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MoodTrackrApp(
-                LocalContext.current,
-                viewModel.themePreferencesRepository
-            )
+            MoodTrackrApp(LocalContext.current, viewModel)
         }
     }
 }
@@ -43,11 +39,11 @@ class MainActivity @Inject constructor() : ComponentActivity() {
 @Composable
 fun MoodTrackrApp(
     context: Context,
-    themePreferencesRepository: IThemePreferencesRepository
+    viewModel: MainViewModel
 ) {
-    init(context)
+    init(context, viewModel.applicationPreferencesRepository)
 
-    val themePreferences = themePreferencesRepository.load()
+    val themePreferences = viewModel.themePreferencesRepository.load()
 
     val darkMode = when (themePreferences.themeMode) {
         ThemeMode.System -> {
@@ -64,30 +60,32 @@ fun MoodTrackrApp(
     }
 
     MoodTrackrTheme(darkMode, themePreferences.dynamicColorsEnabled) {
-        Content()
+        Content(viewModel)
     }
 }
 
 @Composable
-fun Content() {
+fun Content(viewModel: MainViewModel) {
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = Routes.Home.toString()) {
         composable(Routes.Home.toString()) {
-            HomeScreen(navController)
+            HomeScreen(navController, viewModel.profilePreferencesRepository)
         }
         composable(Routes.EditProfile.toString()) {
-            EditProfileScreen(navController)
+            EditProfileScreen(navController, viewModel.profilePreferencesRepository)
         }
         composable(Routes.Settings.toString()) {
-            SettingsScreen(navController)
+            SettingsScreen(navController, viewModel.themePreferencesRepository)
         }
     }
 }
 
-private fun init(context: Context){
+private fun init(
+    context: Context,
+    applicationPreferencesRepository: IApplicationPreferencesRepository
+){
     DateUtilities.initialize(context)
-    val applicationPreferencesRepository = ApplicationPreferencesRepository(context)
     val applicationPreferences = applicationPreferencesRepository.load()
 
     if(!applicationPreferences.sqlDatabaseExists) {
