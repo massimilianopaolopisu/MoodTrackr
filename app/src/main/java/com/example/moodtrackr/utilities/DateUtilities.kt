@@ -19,7 +19,7 @@ object DateUtilities {
 
     fun getMillisFromStringDate(date: String, pattern: String = _format): Long {
         if(date.isBlank() || !isDateWellFormatted(date, pattern))
-            return 0
+            return getMillisFromLocalDate(LocalDate.now())
 
         return getMillisFromLocalDate(getLocalDateFromStringDate(date, pattern))
     }
