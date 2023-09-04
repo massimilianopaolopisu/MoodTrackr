@@ -14,8 +14,8 @@ import javax.inject.Inject
 class MoodEntriesRepository @Inject constructor(context: Context) : IMoodEntriesRepository {
     private val _sqlDatabaseHelper = SqlDatabaseHelper(context)
 
-    override fun insertMoodEntry(moodEntry: MoodEntry) {
-        try {
+    override fun insertMoodEntry(moodEntry: MoodEntry): MoodEntry? {
+        return try {
             val db = _sqlDatabaseHelper.writableDatabase
 
             val values = ContentValues().apply {
@@ -31,10 +31,19 @@ class MoodEntriesRepository @Inject constructor(context: Context) : IMoodEntries
                 put(MoodEntryContract.MoodEntry.COLUMN_NOTES, moodEntry.Notes)
             }
 
-            db.insert(MoodEntryContract.MoodEntry.TABLE_NAME, null, values)
-            db.close()
+            val newRowId = db.insert(MoodEntryContract.MoodEntry.TABLE_NAME, null, values)
+
+            if (newRowId != -1L) {
+                val insertedRecord = getMoodEntry(moodEntry.Date)
+                db.close()
+                insertedRecord
+            } else {
+                db.close()
+                null
+            }
         } catch (ex: Exception) {
             Log.e("MoodEntriesRepository", ex.stackTraceToString())
+            null
         }
     }
 
@@ -180,62 +189,132 @@ class MoodEntriesRepository @Inject constructor(context: Context) : IMoodEntries
     }
 
     override fun getMoodEntry(date: LocalDate): MoodEntry? {
-        val db = _sqlDatabaseHelper.readableDatabase
+        return try {
+            val db = _sqlDatabaseHelper.readableDatabase
 
-        val projection = arrayOf(
-            MoodEntryContract.MoodEntry.COLUMN_DATE,
-            MoodEntryContract.MoodEntry.COLUMN_HAPPINESS,
-            MoodEntryContract.MoodEntry.COLUMN_ANGER,
-            MoodEntryContract.MoodEntry.COLUMN_LOVE,
-            MoodEntryContract.MoodEntry.COLUMN_STRESS,
-            MoodEntryContract.MoodEntry.COLUMN_ENERGY,
-            MoodEntryContract.MoodEntry.COLUMN_SLEEP,
-            MoodEntryContract.MoodEntry.COLUMN_HEALTH,
-            MoodEntryContract.MoodEntry.COLUMN_DEPRESSION,
-            MoodEntryContract.MoodEntry.COLUMN_NOTES
-        )
+            val projection = arrayOf(
+                MoodEntryContract.MoodEntry.COLUMN_DATE,
+                MoodEntryContract.MoodEntry.COLUMN_HAPPINESS,
+                MoodEntryContract.MoodEntry.COLUMN_ANGER,
+                MoodEntryContract.MoodEntry.COLUMN_LOVE,
+                MoodEntryContract.MoodEntry.COLUMN_STRESS,
+                MoodEntryContract.MoodEntry.COLUMN_ENERGY,
+                MoodEntryContract.MoodEntry.COLUMN_SLEEP,
+                MoodEntryContract.MoodEntry.COLUMN_HEALTH,
+                MoodEntryContract.MoodEntry.COLUMN_DEPRESSION,
+                MoodEntryContract.MoodEntry.COLUMN_NOTES
+            )
 
-        val selection = "${MoodEntryContract.MoodEntry.COLUMN_DATE} = ?"
-        val selectionArgs = arrayOf(DateUtilities.getStringDateFromLocalDate(date))
+            val selection = "${MoodEntryContract.MoodEntry.COLUMN_DATE} = ?"
+            val selectionArgs = arrayOf(DateUtilities.getStringDateFromLocalDate(date))
 
-        val cursor = db.query(
-            MoodEntryContract.MoodEntry.TABLE_NAME,
-            projection,
-            selection,
-            selectionArgs,
-            null,
-            null,
+            val cursor = db.query(
+                MoodEntryContract.MoodEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+            )
+
+            return cursor.use { c ->
+                if (c.moveToFirst()) {
+                    val dateIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_DATE)
+                    val happinessIndex =
+                        c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS)
+                    val angerIndex =
+                        c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_ANGER)
+                    val loveIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_LOVE)
+                    val stressIndex =
+                        c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_STRESS)
+                    val energyIndex =
+                        c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_ENERGY)
+                    val sleepIndex =
+                        c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_SLEEP)
+                    val healthIndex =
+                        c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_HEALTH)
+                    val depressionIndex =
+                        c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_DEPRESSION)
+                    val notesIndex =
+                        c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_NOTES)
+
+                    MoodEntry(
+                        date = DateUtilities.getLocalDateFromStringDate(c.getString(dateIndex)),
+                        happiness = c.getInt(happinessIndex),
+                        anger = c.getInt(angerIndex),
+                        love = c.getInt(loveIndex),
+                        stress = c.getInt(stressIndex),
+                        energy = c.getInt(energyIndex),
+                        sleep = c.getInt(sleepIndex),
+                        health = c.getInt(healthIndex),
+                        depression = c.getInt(depressionIndex),
+                        notes = c.getString(notesIndex)
+                    )
+                } else {
+                    null
+                }
+            }
+        } catch(ex: Exception) {
+            Log.e("MoodEntriesRepository", ex.stackTraceToString())
             null
-        )
+        }
+    }
 
-        return cursor.use { c ->
-            if (c.moveToFirst()) {
-                val dateIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_DATE)
-                val happinessIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS)
-                val angerIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_ANGER)
-                val loveIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_LOVE)
-                val stressIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_STRESS)
-                val energyIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_ENERGY)
-                val sleepIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_SLEEP)
-                val healthIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_HEALTH)
-                val depressionIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_DEPRESSION)
-                val notesIndex = c.getColumnIndexOrThrow(MoodEntryContract.MoodEntry.COLUMN_NOTES)
+    override fun deleteMoodEntry(date: LocalDate): Boolean {
+        return try {
+            val db = _sqlDatabaseHelper.writableDatabase
 
-                MoodEntry(
-                    date = DateUtilities.getLocalDateFromStringDate(c.getString(dateIndex)),
-                    happiness = c.getInt(happinessIndex),
-                    anger = c.getInt(angerIndex),
-                    love = c.getInt(loveIndex),
-                    stress = c.getInt(stressIndex),
-                    energy = c.getInt(energyIndex),
-                    sleep = c.getInt(sleepIndex),
-                    health = c.getInt(healthIndex),
-                    depression = c.getInt(depressionIndex),
-                    notes = c.getString(notesIndex)
-                )
+            val selection = "${MoodEntryContract.MoodEntry.COLUMN_DATE} = ?"
+            val selectionArgs = arrayOf(DateUtilities.getStringDateFromLocalDate(date))
+
+            val rowsDeleted = db.delete(MoodEntryContract.MoodEntry.TABLE_NAME, selection, selectionArgs)
+            db.close()
+
+            rowsDeleted > 0
+        } catch (ex: Exception) {
+            Log.e("MoodEntriesRepository", ex.stackTraceToString())
+            false
+        }
+    }
+
+    override fun updateMoodEntry(moodEntry: MoodEntry): MoodEntry? {
+        return try {
+            val db = _sqlDatabaseHelper.writableDatabase
+
+            val values = ContentValues().apply {
+                put(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS, moodEntry.Happiness)
+                put(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS, moodEntry.Happiness)
+                put(MoodEntryContract.MoodEntry.COLUMN_ANGER, moodEntry.Anger)
+                put(MoodEntryContract.MoodEntry.COLUMN_LOVE, moodEntry.Love)
+                put(MoodEntryContract.MoodEntry.COLUMN_STRESS, moodEntry.Stress)
+                put(MoodEntryContract.MoodEntry.COLUMN_ENERGY, moodEntry.Energy)
+                put(MoodEntryContract.MoodEntry.COLUMN_SLEEP, moodEntry.Sleep)
+                put(MoodEntryContract.MoodEntry.COLUMN_HEALTH, moodEntry.Health)
+                put(MoodEntryContract.MoodEntry.COLUMN_DEPRESSION, moodEntry.Depression)
+                put(MoodEntryContract.MoodEntry.COLUMN_NOTES, moodEntry.Notes)            }
+
+            val selection = "${MoodEntryContract.MoodEntry.COLUMN_DATE} = ?"
+            val selectionArgs = arrayOf(DateUtilities.getStringDateFromLocalDate(moodEntry.Date))
+
+            val updatedRows = db.update(
+                MoodEntryContract.MoodEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs
+            )
+
+            if (updatedRows > 0) {
+                val updatedRecord = getMoodEntry(moodEntry.Date)
+                db.close()
+                updatedRecord
             } else {
+                db.close()
                 null
             }
+        } catch (ex: Exception) {
+            Log.e("MoodEntriesRepository", ex.stackTraceToString())
+            null
         }
     }
 }
