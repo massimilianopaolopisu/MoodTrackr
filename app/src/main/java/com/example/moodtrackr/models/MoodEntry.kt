@@ -69,10 +69,10 @@ class MoodEntry(
             depression = clampValue(value)
         }
 
-    var Notes: String?
-        get() = notes
+    var Notes: String
+        get() = notes?: ""
         set(value) {
-            notes = value ?: ""
+            notes = value
         }
 
     fun getAverage(): Int {
