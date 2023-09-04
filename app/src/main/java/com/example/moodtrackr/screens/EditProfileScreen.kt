@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.SaveBottomBar
-import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.repositories.IProfilePreferencesRepository
 import com.example.moodtrackr.repositories.ISave
@@ -55,9 +54,12 @@ fun EditProfileScreen(
                 .align(Alignment.TopCenter)
         ) {
             Text(
-                text = "Profile",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                text = "Edit Profile",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = Color.Black
+                )
             )
         }
 
@@ -67,6 +69,7 @@ fun EditProfileScreen(
                 .fillMaxHeight()
                 .align(Alignment.TopCenter)
                 .padding(top = 25.dp)
+                .padding(bottom = 45.dp)
         ) {
             item {
                 Text(
@@ -180,11 +183,11 @@ fun EditProfileScreen(
         ) {
             newBirthday = DateUtilities.getLocalDateFromMillis(datePicker.selectedDateMillis?: 0)
             @Suppress("UNCHECKED_CAST")
-            val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf<Pair<ISave<Any>, Any>>(
+            val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf(
                 profilePreferencesRepository as ISave<Any> to Profile(newName, newSurname, newSex, newBirthday) as Any
             )
 
-            SaveBottomBar(navController, saveHandlerAndObjectPairList, afterBackRoute = Routes.Settings)
+            SaveBottomBar(navController, saveHandlerAndObjectPairList)
         }
     }
 }

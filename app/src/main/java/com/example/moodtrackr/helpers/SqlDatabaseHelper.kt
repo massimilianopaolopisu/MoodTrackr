@@ -25,18 +25,21 @@ class SqlDatabaseHelper(val context: Context) : SQLiteOpenHelper(context, DATABA
         }
     }
 
-
     companion object {
         const val DATABASE_NAME = "mood_trackr.db"
         const val DATABASE_VERSION = 1
 
         private const val SQL_CREATE_MOOD_ENTRIES_TABLE =
             "CREATE TABLE ${MoodEntryContract.MoodEntry.TABLE_NAME} (" +
-                         "${MoodEntryContract.MoodEntry.COLUMN_DATE} TEXT PRIMARY KEY," +
-                         "${MoodEntryContract.MoodEntry.COLUMN_HAPPINESS} INTEGER," +
-                         "${MoodEntryContract.MoodEntry.COLUMN_LOVE} INTEGER," +
-                         "${MoodEntryContract.MoodEntry.COLUMN_ENERGY} INTEGER," +
-                         "${MoodEntryContract.MoodEntry.COLUMN_HEALTH} INTEGER," +
-                         "${MoodEntryContract.MoodEntry.COLUMN_NOTES} TEXT)"
+                    "${MoodEntryContract.MoodEntry.COLUMN_DATE} TEXT PRIMARY KEY," +
+                    "${MoodEntryContract.MoodEntry.COLUMN_HAPPINESS} INTEGER," +
+                    "${MoodEntryContract.MoodEntry.COLUMN_ANGER} INTEGER," +
+                    "${MoodEntryContract.MoodEntry.COLUMN_LOVE} INTEGER," +
+                    "${MoodEntryContract.MoodEntry.COLUMN_STRESS} INTEGER," +
+                    "${MoodEntryContract.MoodEntry.COLUMN_ENERGY} INTEGER," +
+                    "${MoodEntryContract.MoodEntry.COLUMN_SLEEP} INTEGER," +
+                    "${MoodEntryContract.MoodEntry.COLUMN_HEALTH} INTEGER," +
+                    "${MoodEntryContract.MoodEntry.COLUMN_DEPRESSION} INTEGER," +
+                    "${MoodEntryContract.MoodEntry.COLUMN_NOTES} TEXT)"
     }
 }

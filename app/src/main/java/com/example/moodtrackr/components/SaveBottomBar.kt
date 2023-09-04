@@ -19,7 +19,7 @@ fun SaveBottomBar(
     saveLabel: String = "Save",
     backLabel: String = "Back",
     afterSaveRoute: Routes? = Routes.Home,
-    afterBackRoute: Routes = Routes.Home
+    afterBackRoute: Routes? = Routes.Home
 ) {
     Row(
         modifier = Modifier
@@ -28,7 +28,12 @@ fun SaveBottomBar(
     ) {
         Button(
             onClick = {
-                navController.navigate(afterBackRoute.toString())
+                if(afterSaveRoute != null){
+                    navController.navigate(afterBackRoute.toString())
+                }
+                else {
+                    navController.popBackStack()
+                }
             },
             modifier = Modifier
                 .weight(1f)

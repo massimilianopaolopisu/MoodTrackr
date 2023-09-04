@@ -8,13 +8,16 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
 import com.example.moodtrackr.repositories.IApplicationPreferencesRepository
+import com.example.moodtrackr.screens.EditMoodEntryScreen
 import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.HomeScreen
 import com.example.moodtrackr.screens.SettingsScreen
@@ -22,6 +25,7 @@ import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -70,13 +74,23 @@ fun Content(viewModel: MainViewModel) {
 
     NavHost(navController, startDestination = Routes.Home.toString()) {
         composable(Routes.Home.toString()) {
-            HomeScreen(navController, viewModel.profilePreferencesRepository)
+            HomeScreen(navController, viewModel.profilePreferencesRepository, viewModel.moodEntriesRepository)
         }
         composable(Routes.EditProfile.toString()) {
             EditProfileScreen(navController, viewModel.profilePreferencesRepository)
         }
         composable(Routes.Settings.toString()) {
             SettingsScreen(navController, viewModel.themePreferencesRepository)
+        }
+        composable(
+            route = "${Routes.EditMoodEntry}/{date}",
+            arguments = listOf(navArgument("date") { type = NavType.StringType })
+        ) {
+            backStackEntry ->
+            EditMoodEntryScreen(
+                navController,
+                viewModel.moodEntriesRepository,
+                backStackEntry.arguments?.getString("date")?: DateUtilities.getStringDateFromLocalDate(LocalDate.now()))
         }
     }
 }
