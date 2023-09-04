@@ -2,81 +2,105 @@ package com.example.moodtrackr.models
 
 import java.time.LocalDate
 
-class MoodEntry(
-    private var date: LocalDate,
-    private var happiness: Int?,
-    private var anger: Int?,
-    private var love: Int?,
-    private var stress: Int?,
-    private var energy: Int?,
-    private var sleep: Int?,
-    private var health: Int?,
-    private var depression: Int?,
-    private var notes: String?
-) {
+class MoodEntry() {
+    private val _defaultValue = 50
+    private var _date: LocalDate = LocalDate.now()
+    private var _happiness: Int? = _defaultValue
+    private var _anger: Int? = _defaultValue
+    private var _love: Int? = _defaultValue
+    private var _stress: Int? = _defaultValue
+    private var _energy: Int? = _defaultValue
+    private var _sleep: Int? = _defaultValue
+    private var _health: Int? = _defaultValue
+    private var _depression: Int? = _defaultValue
+    private var _notes: String? = ""
 
-    var Date: LocalDate
-        get() = date
+    constructor(
+        date: LocalDate,
+        happiness: Int,
+        anger: Int,
+        love: Int,
+        stress: Int,
+        energy: Int,
+        sleep: Int,
+        health: Int,
+        depression: Int,
+        notes: String
+    ) : this() {
+        _date = date
+        _happiness = happiness
+        _anger = anger
+        _love = love
+        _stress = stress
+        _energy = energy
+        _sleep = sleep
+        _health = health
+        _depression = depression
+        _notes = notes
+    }
+
+    var date: LocalDate
+        get() = _date
         set(value) {
-            date = value
+            _date = value
         }
 
-    var Happiness: Int
-        get() = clampValue(happiness)
+    var happiness: Int
+        get() = clampValue(_happiness)
         set(value) {
-            happiness = clampValue(value)
+            _happiness = clampValue(value)
         }
 
-    var Anger: Int
-        get() = clampValue(anger)
+    var anger: Int
+        get() = clampValue(_anger)
         set(value) {
-            anger = clampValue(value)
+            _anger = clampValue(value)
         }
 
-    var Love: Int
-        get() = clampValue(love)
+    var love: Int
+        get() = clampValue(_love)
         set(value) {
-            love = clampValue(value)
+            _love = clampValue(value)
         }
 
-    var Stress: Int
-        get() = clampValue(stress)
+    var stress: Int
+        get() = clampValue(_stress)
         set(value) {
-            stress = clampValue(value)
+            _stress = clampValue(value)
         }
 
-    var Energy: Int
-        get() = clampValue(energy)
+    var energy: Int
+        get() = clampValue(_energy)
         set(value) {
-            energy = clampValue(value)
+            _energy = clampValue(value)
         }
 
-    var Sleep: Int
-        get() = clampValue(sleep)
+    var sleep: Int
+        get() = clampValue(_sleep)
         set(value) {
-            sleep = clampValue(value)
+            _sleep = clampValue(value)
         }
 
-    var Health: Int
-        get() = clampValue(health)
+    var health: Int
+        get() = clampValue(_health)
         set(value) {
-            health = clampValue(value)
+            _health = clampValue(value)
         }
 
-    var Depression: Int
-        get() = clampValue(depression)
+    var depression: Int
+        get() = clampValue(_depression)
         set(value) {
-            depression = clampValue(value)
+            _depression = clampValue(value)
         }
 
-    var Notes: String
-        get() = notes?: ""
+    var notes: String
+        get() = _notes?: ""
         set(value) {
-            notes = value
+            _notes = value
         }
 
     fun getAverage(): Int {
-        val values = listOf(Happiness, Anger, Love, Stress, Energy, Sleep, Health, Depression)
+        val values = listOf(happiness, anger, love, stress, energy, sleep, health, depression)
         return values.sum() / values.size
     }
 

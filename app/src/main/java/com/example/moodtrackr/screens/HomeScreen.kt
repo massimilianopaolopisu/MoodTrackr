@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
@@ -74,8 +75,12 @@ fun HomeScreen(
             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp)
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+
         MoodEntrySummary(
-            moodEntry = moodEntry
+            navController,
+            moodEntry
         )
 
         Spacer(modifier = Modifier.weight(1f))

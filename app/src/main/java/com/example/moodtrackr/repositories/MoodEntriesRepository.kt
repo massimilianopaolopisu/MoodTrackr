@@ -14,27 +14,31 @@ import javax.inject.Inject
 class MoodEntriesRepository @Inject constructor(context: Context) : IMoodEntriesRepository {
     private val _sqlDatabaseHelper = SqlDatabaseHelper(context)
 
+    override fun save(t: MoodEntry) {
+        insertMoodEntry(t)
+    }
+
     override fun insertMoodEntry(moodEntry: MoodEntry): MoodEntry? {
         return try {
             val db = _sqlDatabaseHelper.writableDatabase
 
             val values = ContentValues().apply {
-                put(MoodEntryContract.MoodEntry.COLUMN_DATE, DateUtilities.getStringDateFromLocalDate(moodEntry.Date))
-                put(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS, moodEntry.Happiness)
-                put(MoodEntryContract.MoodEntry.COLUMN_ANGER, moodEntry.Anger)
-                put(MoodEntryContract.MoodEntry.COLUMN_LOVE, moodEntry.Love)
-                put(MoodEntryContract.MoodEntry.COLUMN_STRESS, moodEntry.Stress)
-                put(MoodEntryContract.MoodEntry.COLUMN_ENERGY, moodEntry.Energy)
-                put(MoodEntryContract.MoodEntry.COLUMN_SLEEP, moodEntry.Sleep)
-                put(MoodEntryContract.MoodEntry.COLUMN_HEALTH, moodEntry.Health)
-                put(MoodEntryContract.MoodEntry.COLUMN_DEPRESSION, moodEntry.Depression)
-                put(MoodEntryContract.MoodEntry.COLUMN_NOTES, moodEntry.Notes)
+                put(MoodEntryContract.MoodEntry.COLUMN_DATE, DateUtilities.getStringDateFromLocalDate(moodEntry.date))
+                put(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS, moodEntry.happiness)
+                put(MoodEntryContract.MoodEntry.COLUMN_ANGER, moodEntry.anger)
+                put(MoodEntryContract.MoodEntry.COLUMN_LOVE, moodEntry.love)
+                put(MoodEntryContract.MoodEntry.COLUMN_STRESS, moodEntry.stress)
+                put(MoodEntryContract.MoodEntry.COLUMN_ENERGY, moodEntry.energy)
+                put(MoodEntryContract.MoodEntry.COLUMN_SLEEP, moodEntry.sleep)
+                put(MoodEntryContract.MoodEntry.COLUMN_HEALTH, moodEntry.health)
+                put(MoodEntryContract.MoodEntry.COLUMN_DEPRESSION, moodEntry.depression)
+                put(MoodEntryContract.MoodEntry.COLUMN_NOTES, moodEntry.notes)
             }
 
             val newRowId = db.insert(MoodEntryContract.MoodEntry.TABLE_NAME, null, values)
 
             if (newRowId != -1L) {
-                val insertedRecord = getMoodEntry(moodEntry.Date)
+                val insertedRecord = getMoodEntry(moodEntry.date)
                 db.close()
                 insertedRecord
             } else {
@@ -283,19 +287,19 @@ class MoodEntriesRepository @Inject constructor(context: Context) : IMoodEntries
             val db = _sqlDatabaseHelper.writableDatabase
 
             val values = ContentValues().apply {
-                put(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS, moodEntry.Happiness)
-                put(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS, moodEntry.Happiness)
-                put(MoodEntryContract.MoodEntry.COLUMN_ANGER, moodEntry.Anger)
-                put(MoodEntryContract.MoodEntry.COLUMN_LOVE, moodEntry.Love)
-                put(MoodEntryContract.MoodEntry.COLUMN_STRESS, moodEntry.Stress)
-                put(MoodEntryContract.MoodEntry.COLUMN_ENERGY, moodEntry.Energy)
-                put(MoodEntryContract.MoodEntry.COLUMN_SLEEP, moodEntry.Sleep)
-                put(MoodEntryContract.MoodEntry.COLUMN_HEALTH, moodEntry.Health)
-                put(MoodEntryContract.MoodEntry.COLUMN_DEPRESSION, moodEntry.Depression)
-                put(MoodEntryContract.MoodEntry.COLUMN_NOTES, moodEntry.Notes)            }
+                put(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS, moodEntry.happiness)
+                put(MoodEntryContract.MoodEntry.COLUMN_HAPPINESS, moodEntry.happiness)
+                put(MoodEntryContract.MoodEntry.COLUMN_ANGER, moodEntry.anger)
+                put(MoodEntryContract.MoodEntry.COLUMN_LOVE, moodEntry.love)
+                put(MoodEntryContract.MoodEntry.COLUMN_STRESS, moodEntry.stress)
+                put(MoodEntryContract.MoodEntry.COLUMN_ENERGY, moodEntry.energy)
+                put(MoodEntryContract.MoodEntry.COLUMN_SLEEP, moodEntry.sleep)
+                put(MoodEntryContract.MoodEntry.COLUMN_HEALTH, moodEntry.health)
+                put(MoodEntryContract.MoodEntry.COLUMN_DEPRESSION, moodEntry.depression)
+                put(MoodEntryContract.MoodEntry.COLUMN_NOTES, moodEntry.notes)            }
 
             val selection = "${MoodEntryContract.MoodEntry.COLUMN_DATE} = ?"
-            val selectionArgs = arrayOf(DateUtilities.getStringDateFromLocalDate(moodEntry.Date))
+            val selectionArgs = arrayOf(DateUtilities.getStringDateFromLocalDate(moodEntry.date))
 
             val updatedRows = db.update(
                 MoodEntryContract.MoodEntry.TABLE_NAME,
@@ -305,7 +309,7 @@ class MoodEntriesRepository @Inject constructor(context: Context) : IMoodEntries
             )
 
             if (updatedRows > 0) {
-                val updatedRecord = getMoodEntry(moodEntry.Date)
+                val updatedRecord = getMoodEntry(moodEntry.date)
                 db.close()
                 updatedRecord
             } else {
