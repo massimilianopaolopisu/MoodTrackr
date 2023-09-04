@@ -3,6 +3,7 @@ package com.example.moodtrackr.repositories
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
 import com.example.moodtrackr.models.MoodEntry
@@ -35,7 +36,12 @@ class MoodEntriesRepository @Inject constructor(context: Context) : IMoodEntries
                 put(MoodEntryContract.MoodEntry.COLUMN_NOTES, moodEntry.notes)
             }
 
-            val newRowId = db.insert(MoodEntryContract.MoodEntry.TABLE_NAME, null, values)
+            val newRowId = db.insertWithOnConflict(
+                MoodEntryContract.MoodEntry.TABLE_NAME,
+                null,
+                values,
+                SQLiteDatabase.CONFLICT_REPLACE
+            )
 
             if (newRowId != -1L) {
                 val insertedRecord = getMoodEntry(moodEntry.date)
