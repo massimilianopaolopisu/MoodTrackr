@@ -53,58 +53,16 @@ fun MoodEntrySummary(
             ) {
                 Text("Edit Mood Entry")
             }
-            MoodIndicator(
-                label = "Happiness",
-                progress = moodEntry.happiness.toFloat() / 100,
-                value = moodEntry.happiness.toString()
-            )
 
-            MoodIndicator(
-                label = "Anger",
-                progress = moodEntry.anger.toFloat() / 100,
-                value = moodEntry.anger.toString()
-            )
-
-            MoodIndicator(
-                label = "Love",
-                progress = moodEntry.love.toFloat() / 100,
-                value = moodEntry.love.toString()
-            )
-
-            MoodIndicator(
-                label = "Stress",
-                progress = moodEntry.stress.toFloat() / 100,
-                value = moodEntry.stress.toString()
-            )
-
-            MoodIndicator(
-                label = "Energy",
-                progress = moodEntry.energy.toFloat() / 100,
-                value = moodEntry.energy.toString()
-            )
-
-            MoodIndicator(
-                label = "Sleep",
-                progress = moodEntry.sleep.toFloat() / 100,
-                value = moodEntry.sleep.toString()
-            )
-
-            MoodIndicator(
-                label = "Health",
-                progress = moodEntry.health.toFloat() / 100,
-                value = moodEntry.health.toString()
-            )
-
-            MoodIndicator(
-                label = "Depression",
-                progress = moodEntry.depression.toFloat() / 100,
-                value = moodEntry.depression.toString()
-            )
-
-            MoodTextIndicator(
-                label = "Notes",
-                text = moodEntry.notes
-            )
+            MoodIndicatorRow("Happiness", moodEntry.happiness)
+            MoodIndicatorRow("Anger", moodEntry.anger)
+            MoodIndicatorRow("Love", moodEntry.love)
+            MoodIndicatorRow("Stress", moodEntry.stress)
+            MoodIndicatorRow("Energy", moodEntry.energy)
+            MoodIndicatorRow("Sleep", moodEntry.sleep)
+            MoodIndicatorRow("Health", moodEntry.health)
+            MoodIndicatorRow("Depression", moodEntry.depression)
+            MoodTextIndicator("Notes", moodEntry.notes)
         }
     }
 }

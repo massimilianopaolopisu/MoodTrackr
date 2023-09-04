@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moodtrackr.components.MoodEntryInput
 import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.IMoodEntriesRepository
@@ -66,6 +66,17 @@ fun EditMoodEntryScreen(
                     color = Color.Black
                 )
             )
+
+            Text(
+                text = LocalDate.now().toString(),
+                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 15.dp)
+                    .padding(bottom = 15.dp)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
         }
 
         LazyColumn(
@@ -73,7 +84,7 @@ fun EditMoodEntryScreen(
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .align(Alignment.TopCenter)
-                .padding(top = 25.dp)
+                .padding(top = 80.dp)
                 .padding(bottom = 45.dp)
         ) {
             item {
@@ -165,30 +176,5 @@ fun EditMoodEntryScreen(
                 saveHandlerAndObjectPairList = saveHandlerAndObjectPairList
             )
         }
-    }
-}
-
-@Composable
-fun MoodEntryInput(
-    label: String,
-    value: Int,
-    onValueChange: (Int) -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = label)
-        Text(text = value.toString(), fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        Slider(
-            value = value.toFloat(),
-            onValueChange = { newValue ->
-                onValueChange(newValue.toInt())
-            },
-            valueRange = 0f..100f,
-            steps = 100
-        )
     }
 }
