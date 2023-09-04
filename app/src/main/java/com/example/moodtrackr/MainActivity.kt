@@ -70,7 +70,7 @@ fun Content(viewModel: MainViewModel) {
 
     NavHost(navController, startDestination = Routes.Home.toString()) {
         composable(Routes.Home.toString()) {
-            HomeScreen(navController, viewModel.profilePreferencesRepository)
+            HomeScreen(navController, viewModel.profilePreferencesRepository, viewModel.moodEntriesRepository)
         }
         composable(Routes.EditProfile.toString()) {
             EditProfileScreen(navController, viewModel.profilePreferencesRepository)
