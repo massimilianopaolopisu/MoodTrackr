@@ -1,6 +1,7 @@
 package com.example.moodtrackr.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,42 +35,48 @@ fun HomeScreen(
     val name = getName(profilePreferencesRepository)
     val moodEntry = moodEntriesRepository.getMoodEntry(LocalDate.now())
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(16.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
+                .padding(20.dp)
         ) {
-            Text(
-                text = "Hello $name, how do you feel today?",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = Color.Black),
+            Row(
                 modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.CenterVertically)
-                    .weight(1f)
-            )
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Hello $name, how do you feel today?",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.Black),
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .align(Alignment.CenterVertically)
+                        .weight(1f)
+                )
 
-            Icon(
-                imageVector = Icons.Default.Settings,
-                contentDescription = "Settings",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .clickable {
-                    navController.navigate(Routes.Settings.toString())
-                }
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Settings",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .clickable {
+                        navController.navigate(Routes.Settings.toString())
+                    }
+                )
+            }
+
+            MoodEntrySummary(
+                navController,
+                moodEntry
             )
         }
-
-        MoodEntrySummary(
-            navController,
-            moodEntry
-        )
     }
 }
 
