@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.MoodEntrySummary
 import com.example.moodtrackr.enums.Routes
-import com.example.moodtrackr.repositories.IMoodEntriesRepository
-import com.example.moodtrackr.repositories.IProfilePreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
+import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
 import java.time.LocalDate
 
 @Composable

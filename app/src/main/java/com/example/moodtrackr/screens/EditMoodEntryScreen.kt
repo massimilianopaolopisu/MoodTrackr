@@ -23,8 +23,8 @@ import androidx.navigation.NavController
 import com.example.moodtrackr.components.MoodEntryInput
 import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.models.MoodEntry
-import com.example.moodtrackr.repositories.IMoodEntriesRepository
-import com.example.moodtrackr.repositories.ISave
+import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
+import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.utilities.DateUtilities
 import java.time.LocalDate
 
