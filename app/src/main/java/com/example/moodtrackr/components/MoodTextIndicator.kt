@@ -27,13 +27,11 @@ fun MoodTextIndicator(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.widthIn(0.dp, 100.dp)
         )
-
-        Text(
-            text = text,
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp)
-        )
     }
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleSmall,
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+    )
 }
