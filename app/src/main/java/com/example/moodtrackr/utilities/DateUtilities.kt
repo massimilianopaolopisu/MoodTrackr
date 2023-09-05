@@ -38,7 +38,7 @@ object DateUtilities {
         return try{
             LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern))
         } catch (ex: Exception) {
-            Log.e("DateUtilities", ex.stackTraceToString())
+            Log.e("DateUtilities.getLocalDateFromStringDate", ex.stackTraceToString())
             _defaultDate
         }
     }
@@ -47,7 +47,7 @@ object DateUtilities {
         return try{
             date.toEpochDay() * (24 * 60 * 60 * 1000)
         } catch (ex: Exception) {
-            Log.e("DateUtilities", ex.stackTraceToString())
+            Log.e("DateUtilities.getMillisFromLocalDate", ex.stackTraceToString())
             _defaultMillis
         }
     }
@@ -56,7 +56,7 @@ object DateUtilities {
         return try{
             date.format(DateTimeFormatter.ofPattern(pattern))
         } catch (ex: Exception) {
-            Log.e("DateUtilities", ex.stackTraceToString())
+            Log.e("DateUtilities.getStringDateFromLocalDate", ex.stackTraceToString())
             getDefaultStringDate(pattern)
         }
     }
@@ -65,7 +65,7 @@ object DateUtilities {
         return try{
             LocalDate.ofEpochDay(millis / (24 * 60 * 60 * 1000))
         } catch (ex: Exception) {
-            Log.e("DateUtilities", ex.stackTraceToString())
+            Log.e("DateUtilities.getLocalDateFromMillis", ex.stackTraceToString())
             _defaultDate
         }
     }
@@ -78,6 +78,7 @@ object DateUtilities {
             sdf.parse(date)
             true
         } catch (ex: Exception) {
+            Log.e("DateUtilities.isDateWellFormatted", ex.stackTraceToString())
             false
         }
     }

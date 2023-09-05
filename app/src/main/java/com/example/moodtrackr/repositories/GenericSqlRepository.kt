@@ -7,7 +7,7 @@ import android.util.Log
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
 import com.example.moodtrackr.models.interfaces.IDatabaseModel
 
-open class GenericRepository<T: IDatabaseModel<T>>(context: Context, private val databaseModel: IDatabaseModel<T>) {
+open class GenericSqlRepository<T: IDatabaseModel<T>>(context: Context, private val databaseModel: IDatabaseModel<T>) {
 
     private val _sqlDatabaseHelper = SqlDatabaseHelper(context)
 
