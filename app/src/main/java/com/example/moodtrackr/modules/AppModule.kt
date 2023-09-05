@@ -2,10 +2,10 @@ package com.example.moodtrackr.modules
 
 import android.content.Context
 import com.example.moodtrackr.repositories.ApplicationPreferencesRepository
-import com.example.moodtrackr.repositories.IApplicationPreferencesRepository
-import com.example.moodtrackr.repositories.IMoodEntriesRepository
-import com.example.moodtrackr.repositories.IProfilePreferencesRepository
-import com.example.moodtrackr.repositories.IThemePreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
+import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.IThemePreferencesRepository
 import com.example.moodtrackr.repositories.MoodEntriesRepository
 import com.example.moodtrackr.repositories.ProfilePreferencesRepository
 import com.example.moodtrackr.repositories.ThemePreferencesRepository

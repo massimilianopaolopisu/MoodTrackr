@@ -2,12 +2,14 @@ package com.example.moodtrackr.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
@@ -32,52 +34,77 @@ fun MoodEntrySummary(
 ) {
     val route = "${Routes.EditMoodEntry}/${LocalDate.now()}"
 
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
         ) {
-            Text(
-                text = LocalDate.now().toString(),
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center
-            )
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "Edit Mood Entry",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable {
-                    navController.navigate(route)
-                }
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = LocalDate.now().toString(),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center
+                )
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Edit Mood Entry",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable {
+                        navController.navigate(route)
+                    }
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         if (moodEntry == null) {
-            Button(
-                onClick = {  navController.navigate(route) },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .align(Alignment.TopCenter)
+                    .padding(top = 50.dp)
+                    .padding(bottom = 45.dp)
             ) {
-                Text("Add Mood Entry")
+                Button(
+                    onClick = { navController.navigate(route) },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Add Mood Entry")
+                }
             }
         } else {
 
-            MoodIndicatorRow("Happiness", moodEntry.happiness)
-            MoodIndicatorRow("Anger", moodEntry.anger)
-            MoodIndicatorRow("Love", moodEntry.love)
-            MoodIndicatorRow("Stress", moodEntry.stress)
-            MoodIndicatorRow("Energy", moodEntry.energy)
-            MoodIndicatorRow("Sleep", moodEntry.sleep)
-            MoodIndicatorRow("Health", moodEntry.health)
-            MoodIndicatorRow("Depression", moodEntry.depression)
-            MoodTextIndicator("Notes", moodEntry.notes)
+            LazyColumn (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .align(Alignment.TopCenter)
+                    .padding(top = 50.dp)
+                    .padding(bottom = 45.dp)
+            ) {
+                item {
+                    MoodIndicatorRow("Happiness", moodEntry.happiness)
+                    MoodIndicatorRow("Anger", moodEntry.anger)
+                    MoodIndicatorRow("Love", moodEntry.love)
+                    MoodIndicatorRow("Stress", moodEntry.stress)
+                    MoodIndicatorRow("Energy", moodEntry.energy)
+                    MoodIndicatorRow("Sleep", moodEntry.sleep)
+                    MoodIndicatorRow("Health", moodEntry.health)
+                    MoodIndicatorRow("Depression", moodEntry.depression)
+                    MoodTextIndicator("Notes", moodEntry.notes)
+                }
+            }
         }
     }
 }
+

@@ -1,4 +1,4 @@
-package com.example.moodtrackr.repositories
+package com.example.moodtrackr.repositories.interfaces
 
 import com.example.moodtrackr.models.Profile
 

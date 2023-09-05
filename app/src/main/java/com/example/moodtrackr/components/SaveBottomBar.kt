@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
-import com.example.moodtrackr.repositories.ISave
+import com.example.moodtrackr.repositories.interfaces.ISave
 
 @Composable
 fun SaveBottomBar(

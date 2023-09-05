@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.models.Profile
-import com.example.moodtrackr.repositories.IProfilePreferencesRepository
-import com.example.moodtrackr.repositories.ISave
+import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.utilities.DateUtilities
 
 @OptIn(ExperimentalMaterial3Api::class)
