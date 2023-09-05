@@ -1,12 +1,13 @@
 package com.example.moodtrackr.repositories
 
 import android.content.Context
+import com.example.moodtrackr.dataAccess.GenericSqlWrapper
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import java.time.LocalDate
 import javax.inject.Inject
 
-class MoodEntriesRepository @Inject constructor(context: Context) : GenericSqlRepository<MoodEntry>(context, MoodEntry()), IMoodEntriesRepository {
+class MoodEntriesRepository @Inject constructor(context: Context) : GenericSqlWrapper<MoodEntry>(context, MoodEntry()), IMoodEntriesRepository {
 
     override fun insertMoodEntry(t: MoodEntry): MoodEntry? {
         return insert(t)
