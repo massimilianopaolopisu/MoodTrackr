@@ -25,7 +25,7 @@ class ThemePreferencesRepository @Inject constructor(context: Context) : SharedP
             return ThemePreferences(themeMode, dynamicColorsEnabled)
         } catch(ex: Exception)
         {
-            Log.e("ThemePreferencesRepository", ex.stackTraceToString())
+            Log.e("ThemePreferencesRepository.load", ex.stackTraceToString())
             return themePreferences
         }
     }
@@ -39,7 +39,7 @@ class ThemePreferencesRepository @Inject constructor(context: Context) : SharedP
             editor.putString("themeMode", t.themeMode.toString())
             editor.apply()
         } catch(ex: Exception) {
-            Log.e("ThemePreferencesRepository", ex.stackTraceToString())
+            Log.e("ThemePreferencesRepository.save", ex.stackTraceToString())
         }
     }
 }

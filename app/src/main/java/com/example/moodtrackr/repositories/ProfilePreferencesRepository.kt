@@ -35,7 +35,7 @@ class ProfilePreferencesRepository @Inject constructor(context: Context) : Share
 
             return Profile(savedName, savedSurname, sex, birthday)
         } catch(ex: Exception) {
-            Log.e("ProfilePreferencesRepository", ex.stackTraceToString())
+            Log.e("ProfilePreferencesRepository.load", ex.stackTraceToString())
             return profile
         }
     }
@@ -51,7 +51,7 @@ class ProfilePreferencesRepository @Inject constructor(context: Context) : Share
             editor.putString("birthday", DateUtilities.getStringDateFromLocalDate(t.birthday))
             editor.apply()
         } catch (ex: Exception) {
-            Log.e("ProfilePreferencesRepository", ex.stackTraceToString())
+            Log.e("ProfilePreferencesRepository.save", ex.stackTraceToString())
         }
     }
 }

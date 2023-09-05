@@ -6,7 +6,7 @@ import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import java.time.LocalDate
 import javax.inject.Inject
 
-class MoodEntriesRepository @Inject constructor(context: Context) : GenericRepository<MoodEntry>(context, MoodEntry()), IMoodEntriesRepository {
+class MoodEntriesRepository @Inject constructor(context: Context) : GenericSqlRepository<MoodEntry>(context, MoodEntry()), IMoodEntriesRepository {
 
     override fun insertMoodEntry(t: MoodEntry): MoodEntry? {
         return insert(t)
@@ -35,7 +35,7 @@ class MoodEntriesRepository @Inject constructor(context: Context) : GenericRepos
         return deleteByPrimaryKey(date)
     }
 
-    override fun updateMoodEntry(moodEntry: MoodEntry): MoodEntry? {
-        return update(moodEntry)
+    override fun updateMoodEntry(t: MoodEntry): MoodEntry? {
+        return update(t)
     }
 }

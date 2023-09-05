@@ -21,7 +21,7 @@ class ApplicationPreferencesRepository @Inject constructor(context: Context) : S
 
             return applicationPreferences
         } catch(ex: Exception) {
-            Log.e("ProfilePreferencesRepository", ex.stackTraceToString())
+            Log.e("ProfilePreferencesRepository.load", ex.stackTraceToString())
             return applicationPreferences
         }
     }
@@ -35,7 +35,7 @@ class ApplicationPreferencesRepository @Inject constructor(context: Context) : S
             editor.putBoolean("sqlMoodEntryTableExists", t.sqlMoodEntryTableExists)
             editor.apply()
         } catch (ex: Exception) {
-            Log.e("ApplicationPreferencesRepository", ex.stackTraceToString())
+            Log.e("ApplicationPreferencesRepository.save", ex.stackTraceToString())
         }
     }
 }

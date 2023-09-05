@@ -42,7 +42,6 @@ fun MoodEntrySummary(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
