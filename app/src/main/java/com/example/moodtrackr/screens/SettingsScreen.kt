@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.components.ThemeOptionsRadioButtons
+import com.example.moodtrackr.dataImportExport.interfaces.IDataImporterExporterStrategy
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.ThemePreferences
@@ -43,7 +44,8 @@ import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    themePreferencesRepository: IThemePreferencesRepository
+    themePreferencesRepository: IThemePreferencesRepository,
+    dataImporterExporterStrategy: IDataImporterExporterStrategy
 ) {
     val themePreferences = themePreferencesRepository.load()
 
@@ -155,6 +157,38 @@ fun SettingsScreen(
                         onCheckedChange = { enabled ->
                             dynamicColorsEnabled = enabled
                         }
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            dataImporterExporterStrategy.export(null)
+                        }
+                        .padding(vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Export settings",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            dataImporterExporterStrategy.import(null)
+                        }
+                        .padding(vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Import settings",
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }
