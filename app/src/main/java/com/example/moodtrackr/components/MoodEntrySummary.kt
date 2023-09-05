@@ -67,11 +67,20 @@ fun MoodEntrySummary(
         }
 
         if (moodEntry == null) {
-            Button(
-                onClick = { navController.navigate(route) },
-                //modifier = Modifier.align(Alignment.CenterHorizontally)
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .align(Alignment.TopCenter)
+                    .padding(top = 50.dp)
+                    .padding(bottom = 45.dp)
             ) {
-                Text("Add Mood Entry")
+                Button(
+                    onClick = { navController.navigate(route) },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Add Mood Entry")
+                }
             }
         } else {
 
