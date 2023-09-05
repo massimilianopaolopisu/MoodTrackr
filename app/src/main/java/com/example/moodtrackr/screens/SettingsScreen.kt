@@ -6,15 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -57,7 +57,7 @@ fun SettingsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(20.dp)
     ) {
         Column(
             modifier = Modifier
@@ -70,16 +70,21 @@ fun SettingsScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = Color.Black),
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .weight(1f)
             )
         }
 
-        LazyColumn(
+        LazyColumn (
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .align(Alignment.TopCenter)
                 .padding(top = 25.dp)
+                .padding(bottom = 45.dp)
+                .padding(horizontal = 16.dp)
         ) {
             item {
                 Row(
@@ -88,16 +93,17 @@ fun SettingsScreen(
                         .clickable {
                             navController.navigate(Routes.EditProfile.toString())
                         }
-                        .padding(vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(top = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = "Edit Profile",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
                     )
                     Icon(
-                        imageVector = Icons.Default.ArrowForward,
+                        imageVector = Icons.Default.Face,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -107,10 +113,9 @@ fun SettingsScreen(
             item {
                 Text(
                     text = "Theme",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier
+                        .padding(top = 16.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
 
                 ThemeOptionsRadioButtons(
                     options = listOf(
@@ -126,11 +131,9 @@ fun SettingsScreen(
                             ThemeMode.System -> {
                                 isSystemInDarkMode
                             }
-
                             ThemeMode.Light -> {
                                 false
                             }
-
                             ThemeMode.Dark -> {
                                 true
                             }
@@ -140,17 +143,17 @@ fun SettingsScreen(
             }
 
             item {
-                Spacer(modifier = Modifier.height(16.dp))
-
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = "Dynamic Colors",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
                     )
                     Switch(
                         checked = dynamicColorsEnabled,
@@ -165,14 +168,19 @@ fun SettingsScreen(
                         .clickable {
                             dataImporterExporterStrategy.export(null)
                         }
-                        .padding(vertical = 12.dp),
+                        .padding(top = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Export settings",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.weight(1f)
+                        text = "Export settings and data",
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    Icon(
+                        imageVector = Icons.Default.ArrowForward,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
                 Row(
@@ -181,14 +189,19 @@ fun SettingsScreen(
                         .clickable {
                             dataImporterExporterStrategy.import(null)
                         }
-                        .padding(vertical = 12.dp),
+                        .padding(top = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "Import settings",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.weight(1f)
+                        text = "Import settings and data",
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }

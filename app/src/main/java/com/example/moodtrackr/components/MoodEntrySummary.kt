@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.MoodEntry
+import com.example.moodtrackr.utilities.DateUtilities
 import java.time.LocalDate
 
 @Composable
@@ -37,19 +38,20 @@ fun MoodEntrySummary(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            //.padding(16.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = LocalDate.now().toString(),
+                    text = DateUtilities.getStringDateFromLocalDate(LocalDate.now()),
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center

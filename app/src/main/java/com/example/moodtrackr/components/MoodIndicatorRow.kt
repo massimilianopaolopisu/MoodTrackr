@@ -28,7 +28,7 @@ fun MoodIndicatorRow(label: String, progress: Int, max: Int = 100) {
         )
         LinearProgressIndicator(
             progress = progress.toFloat() / max,
-            modifier = Modifier.weight(3f),
+            modifier = Modifier.weight(4f),
             color = MaterialTheme.colorScheme.primary
         )
         Text(
