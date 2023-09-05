@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,7 +45,7 @@ fun EditProfileScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(20.dp)
     ) {
         Column(
             modifier = Modifier
@@ -58,8 +57,11 @@ fun EditProfileScreen(
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = Color.Black
-                )
+                    color = Color.Black),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .weight(1f)
             )
         }
 
@@ -74,13 +76,8 @@ fun EditProfileScreen(
             item {
                 Text(
                     text = "Name",
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Center
-                    ),
                     modifier = Modifier
-                        .padding(top = 16.dp)
+                        .padding(top = 8.dp)
                 )
                 BasicTextField(
                     value = newName,
@@ -101,11 +98,6 @@ fun EditProfileScreen(
 
                 Text(
                     text = "Surname",
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Center
-                    ),
                     modifier = Modifier
                         .padding(top = 16.dp)
                 )
@@ -128,11 +120,6 @@ fun EditProfileScreen(
 
                 Text(
                     text = "Sex",
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Center
-                    ),
                     modifier = Modifier
                         .padding(top = 16.dp)
                 )
@@ -155,11 +142,6 @@ fun EditProfileScreen(
 
                 Text(
                     text = "Birthday",
-                    style = MaterialTheme.typography.titleSmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Center
-                    ),
                     modifier = Modifier
                         .padding(top = 16.dp)
                 )
