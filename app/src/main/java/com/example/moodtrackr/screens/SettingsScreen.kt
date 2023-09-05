@@ -84,7 +84,6 @@ fun SettingsScreen(
                 .align(Alignment.TopCenter)
                 .padding(top = 25.dp)
                 .padding(bottom = 45.dp)
-                .padding(horizontal = 16.dp)
         ) {
             item {
                 Row(

@@ -38,7 +38,6 @@ fun MoodEntrySummary(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            //.padding(16.dp)
     ) {
         Column(
             modifier = Modifier
