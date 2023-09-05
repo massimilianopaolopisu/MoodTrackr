@@ -51,7 +51,12 @@ open class GenericSqlRepository<T: IDatabaseModel<T>>(context: Context, private 
             )
 
             while (cursor.moveToNext()) {
-                itemList.add(databaseModel.getItemFromCursor(cursor))
+                try {
+                    itemList.add(databaseModel.getItemFromCursor(cursor))
+                } catch (ex: Exception)
+                {
+                    Log.e("GenericRepository.getAll", ex.stackTraceToString())
+                }
             }
 
             cursor.close()

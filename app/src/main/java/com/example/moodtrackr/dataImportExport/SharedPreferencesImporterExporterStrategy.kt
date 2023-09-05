@@ -17,6 +17,7 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
     private val _dataDirectory = "backup"
     private val _appName = context.getString(R.string.app_name)
     private val _defaultFilePath = File(context.getExternalFilesDir(_dataDirectory), "$_appName-sharedPreferences.json").absolutePath
+
     override fun export(outputFilePath: String?): Boolean {
         try {
             val keys = getAllSharedPreferencesKeys()
