@@ -1,4 +1,4 @@
-package com.example.moodtrackr.repositories
+package com.example.moodtrackr.dataAccess
 
 import android.content.Context
 import android.database.Cursor
@@ -7,7 +7,7 @@ import android.util.Log
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
 import com.example.moodtrackr.models.interfaces.IDatabaseModel
 
-open class GenericSqlRepository<T: IDatabaseModel<T>>(context: Context, private val databaseModel: IDatabaseModel<T>) {
+open class GenericSqlWrapper<T: IDatabaseModel<T>>(context: Context, private val databaseModel: IDatabaseModel<T>) {
 
     private val _sqlDatabaseHelper = SqlDatabaseHelper(context)
 
@@ -23,11 +23,14 @@ open class GenericSqlRepository<T: IDatabaseModel<T>>(context: Context, private 
                 SQLiteDatabase.CONFLICT_REPLACE
             )
 
-            val insertedItem = item.getItemFromCursor(
-                getCursor(item.getPrimaryKeyColumnName(), newRowId)
-            )
+            val cursor = getCursor(item.getPrimaryKeyColumnName(), newRowId)
 
+            if (!cursor.moveToFirst())
+                return null
+
+            val insertedItem = item.getItemFromCursor(cursor)
             db.close()
+
             insertedItem
         } catch (ex: Exception) {
             Log.e("GenericRepository.insert", ex.stackTraceToString())
