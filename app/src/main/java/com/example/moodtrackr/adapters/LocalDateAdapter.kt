@@ -1,4 +1,4 @@
-package com.example.moodtrackr
+package com.example.moodtrackr.adapters
 
 import com.example.moodtrackr.utilities.DateUtilities
 import com.google.gson.TypeAdapter

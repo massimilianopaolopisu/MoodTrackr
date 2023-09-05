@@ -2,7 +2,7 @@ package com.example.moodtrackr.models
 
 import android.content.ContentValues
 import android.database.Cursor
-import com.example.moodtrackr.LocalDateAdapter
+import com.example.moodtrackr.adapters.LocalDateAdapter
 import com.example.moodtrackr.models.interfaces.IDatabaseModel
 import com.example.moodtrackr.utilities.DateUtilities
 import com.google.gson.annotations.JsonAdapter

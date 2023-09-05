@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -51,7 +52,7 @@ fun EditMoodEntryScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(20.dp)
     ) {
         Column(
             modifier = Modifier
@@ -63,20 +64,21 @@ fun EditMoodEntryScreen(
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = Color.Black
-                )
+                    color = Color.Black),
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
             )
 
             Text(
-                text = LocalDate.now().toString(),
+                text = DateUtilities.getStringDateFromLocalDate(LocalDate.now()),
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 15.dp)
-                    .padding(bottom = 15.dp)
+                    .weight(1f)
+                    .align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
         }
 
         LazyColumn(
