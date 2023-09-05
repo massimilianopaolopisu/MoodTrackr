@@ -16,7 +16,7 @@ import androidx.navigation.navArgument
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
-import com.example.moodtrackr.repositories.IApplicationPreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
 import com.example.moodtrackr.screens.EditMoodEntryScreen
 import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.HomeScreen

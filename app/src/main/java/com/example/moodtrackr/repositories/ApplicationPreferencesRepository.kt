@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.moodtrackr.dataAccess.SharedPreferencesConnector
 import com.example.moodtrackr.models.ApplicationPreferences
 import com.example.moodtrackr.models.SharedPreferencesKeys
+import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
 import javax.inject.Inject
 
 class ApplicationPreferencesRepository @Inject constructor(context: Context) : SharedPreferencesConnector(context),

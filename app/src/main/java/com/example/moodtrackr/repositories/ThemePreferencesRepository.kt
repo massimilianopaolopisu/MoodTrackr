@@ -6,9 +6,11 @@ import com.example.moodtrackr.dataAccess.SharedPreferencesConnector
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.SharedPreferencesKeys
 import com.example.moodtrackr.models.ThemePreferences
+import com.example.moodtrackr.repositories.interfaces.IThemePreferencesRepository
 import javax.inject.Inject
 
-class ThemePreferencesRepository @Inject constructor(context: Context) : SharedPreferencesConnector(context), IThemePreferencesRepository
+class ThemePreferencesRepository @Inject constructor(context: Context) : SharedPreferencesConnector(context),
+    IThemePreferencesRepository
 {
     override fun load() : ThemePreferences {
         val themePreferences = ThemePreferences(ThemeMode.System, true)

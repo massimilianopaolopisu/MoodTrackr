@@ -1,10 +1,10 @@
 package com.example.moodtrackr.viewModels
 
 import androidx.lifecycle.ViewModel
-import com.example.moodtrackr.repositories.IApplicationPreferencesRepository
-import com.example.moodtrackr.repositories.IMoodEntriesRepository
-import com.example.moodtrackr.repositories.IProfilePreferencesRepository
-import com.example.moodtrackr.repositories.IThemePreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
+import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.IThemePreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

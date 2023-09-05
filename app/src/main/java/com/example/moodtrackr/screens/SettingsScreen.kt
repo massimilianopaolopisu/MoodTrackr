@@ -36,8 +36,8 @@ import com.example.moodtrackr.components.ThemeOptionsRadioButtons
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.ThemePreferences
-import com.example.moodtrackr.repositories.ISave
-import com.example.moodtrackr.repositories.IThemePreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.ISave
+import com.example.moodtrackr.repositories.interfaces.IThemePreferencesRepository
 import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 
 @Composable
