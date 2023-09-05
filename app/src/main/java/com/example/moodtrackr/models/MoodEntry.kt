@@ -2,7 +2,10 @@ package com.example.moodtrackr.models
 
 import android.content.ContentValues
 import android.database.Cursor
+import com.example.moodtrackr.LocalDateAdapter
 import com.example.moodtrackr.models.interfaces.IDatabaseModel
+import com.example.moodtrackr.utilities.DateUtilities
+import com.google.gson.annotations.JsonAdapter
 import java.time.LocalDate
 
 class MoodEntry() : IDatabaseModel<MoodEntry> {
@@ -34,6 +37,7 @@ class MoodEntry() : IDatabaseModel<MoodEntry> {
     private val  _minValue = 1
     private val _maxValue = 100
     private val _primaryKey = COLUMN_DATE
+    @JsonAdapter(LocalDateAdapter::class)
     private var _date: LocalDate = LocalDate.now()
     private var _happiness: Int? = _defaultValue
     private var _anger: Int? = _defaultValue
@@ -59,9 +63,6 @@ class MoodEntry() : IDatabaseModel<MoodEntry> {
         const val COLUMN_NOTES = "notes"
 
         fun fromCursor(cursor: Cursor): MoodEntry {
-            if (!cursor.moveToFirst())
-                return MoodEntry()
-
             val dateIndex = cursor.getColumnIndex(COLUMN_DATE)
             val happinessIndex = cursor.getColumnIndex(COLUMN_HAPPINESS)
             val angerIndex = cursor.getColumnIndex(COLUMN_ANGER)
@@ -73,7 +74,7 @@ class MoodEntry() : IDatabaseModel<MoodEntry> {
             val depressionIndex = cursor.getColumnIndex(COLUMN_DEPRESSION)
             val notesIndex = cursor.getColumnIndex(COLUMN_NOTES)
 
-            val date = if (dateIndex >= 0) LocalDate.parse(cursor.getString(dateIndex)) else LocalDate.now()
+            val date = if (dateIndex >= 0) DateUtilities.getLocalDateFromStringDate(cursor.getString(dateIndex)) else LocalDate.now()
             val happiness = if (happinessIndex >= 0) cursor.getInt(happinessIndex) else 0
             val anger = if (angerIndex >= 0) cursor.getInt(angerIndex) else 0
             val love = if (loveIndex >= 0) cursor.getInt(loveIndex) else 0
