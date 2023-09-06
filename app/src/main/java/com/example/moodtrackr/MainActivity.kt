@@ -20,7 +20,9 @@ import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRep
 import com.example.moodtrackr.screens.EditMoodEntryScreen
 import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.HomeScreen
+import com.example.moodtrackr.screens.MoodEntriesHistoryScreen
 import com.example.moodtrackr.screens.SettingsScreen
+import com.example.moodtrackr.screens.ViewMoodEntryScreen
 import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
@@ -88,6 +90,19 @@ fun Content(viewModel: MainViewModel) {
         ) {
             backStackEntry ->
             EditMoodEntryScreen(
+                navController,
+                viewModel.moodEntriesRepository,
+                backStackEntry.arguments?.getString("date")?: DateUtilities.getStringDateFromLocalDate(LocalDate.now()))
+        }
+        composable(Routes.MoodEntriesHistory.toString()) {
+            MoodEntriesHistoryScreen(navController, viewModel.moodEntriesRepository)
+        }
+        composable(
+            route = "${Routes.ViewMoodEntry}/{date}",
+            arguments = listOf(navArgument("date") { type = NavType.StringType })
+        ) {
+                backStackEntry ->
+            ViewMoodEntryScreen(
                 navController,
                 viewModel.moodEntriesRepository,
                 backStackEntry.arguments?.getString("date")?: DateUtilities.getStringDateFromLocalDate(LocalDate.now()))

@@ -20,8 +20,8 @@ object DateUtilities {
         _format = context.getString(R.string.date_format)
     }
 
-    fun getMillisFromStringDate(date: String, pattern: String = _format): Long {
-        if(date.isBlank() || !isDateWellFormatted(date, pattern))
+    fun getMillisFromStringDate(date: String?, pattern: String = _format): Long {
+        if(date.isNullOrBlank() || !isDateWellFormatted(date, pattern))
             return getMillisFromLocalDate(LocalDate.now())
 
         return getMillisFromLocalDate(getLocalDateFromStringDate(date, pattern))
@@ -31,8 +31,8 @@ object DateUtilities {
         return getStringDateFromLocalDate(getLocalDateFromMillis(millis), pattern)
     }
 
-    fun getLocalDateFromStringDate(date: String, pattern: String = _format): LocalDate {
-        if(date.isBlank() || !isDateWellFormatted(date, pattern))
+    fun getLocalDateFromStringDate(date: String?, pattern: String = _format): LocalDate {
+        if(date.isNullOrBlank() || !isDateWellFormatted(date, pattern))
             return LocalDate.MIN
 
         return try{
