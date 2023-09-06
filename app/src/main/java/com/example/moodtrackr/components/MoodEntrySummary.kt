@@ -31,9 +31,10 @@ import java.time.LocalDate
 @Composable
 fun MoodEntrySummary(
     navController: NavController,
-    moodEntry: MoodEntry?
+    moodEntry: MoodEntry?,
+    date: LocalDate
 ) {
-    val route = "${Routes.EditMoodEntry}/${LocalDate.now()}"
+    val route = "${Routes.EditMoodEntry}/${date}"
 
     Box(
         modifier = Modifier
@@ -50,7 +51,7 @@ fun MoodEntrySummary(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = DateUtilities.getStringDateFromLocalDate(LocalDate.now()),
+                    text = DateUtilities.getStringDateFromLocalDate(date),
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center

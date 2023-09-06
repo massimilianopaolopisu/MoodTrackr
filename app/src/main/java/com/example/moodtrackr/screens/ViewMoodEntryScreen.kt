@@ -9,8 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,27 +19,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moodtrackr.R
 import com.example.moodtrackr.components.MoodEntrySummary
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
-import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
-import java.time.LocalDate
+import com.example.moodtrackr.utilities.DateUtilities
 
 @Composable
-fun HomeScreen(
+fun ViewMoodEntryScreen(
     navController: NavController,
-    profilePreferencesRepository: IProfilePreferencesRepository,
-    moodEntriesRepository: IMoodEntriesRepository
+    moodEntriesRepository: IMoodEntriesRepository,
+    date: String?
 ) {
-    val name = getName(profilePreferencesRepository)
-    val date = LocalDate.now()
-    val moodEntry = moodEntriesRepository.getMoodEntry(date)
+    val dateParsed = DateUtilities.getLocalDateFromStringDate(date)
+    val moodEntry = moodEntriesRepository.getMoodEntry(dateParsed)
 
     Box(
         modifier = Modifier
@@ -50,27 +47,21 @@ fun HomeScreen(
                 .fillMaxSize()
                 .align(Alignment.TopCenter)
         ) {
-            Row(
+            Text(
+                text = "Mood Entry",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = Color.Black),
                 modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "Hello $name, how do you feel today?",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = Color.Black),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .align(Alignment.CenterVertically)
-                        .weight(1f)
-                )
-            }
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
 
             MoodEntrySummary(
                 navController,
                 moodEntry,
-                date
+                dateParsed
             )
         }
 
@@ -85,45 +76,34 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = "Mood Entries History",
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(Routes.MoodEntriesHistory.toString())
+                            navController.popBackStack()
                         }
                         .align(Alignment.CenterVertically)
                         .weight(1f)
                 )
                 Icon(
-                    painterResource(id = R.drawable.ic_graph),
-                    contentDescription = "Graphs",
+                    imageVector = Icons.Default.ExitToApp,
+                    contentDescription = "Exit",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(Routes.MoodEntriesHistory.toString())
+                            android.os.Process.killProcess(android.os.Process.myPid())
                         }
                         .align(Alignment.CenterVertically)
                         .weight(1f)
                 )
                 Icon(
-                    painterResource(id = R.drawable.ic_chart),
-                    contentDescription = "Statistics",
+                    imageVector = Icons.Default.Home,
+                    contentDescription = "Home",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(Routes.MoodEntriesHistory.toString())
-                        }
-                        .align(Alignment.CenterVertically)
-                        .weight(1f)
-                )
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Settings",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate(Routes.Settings.toString())
+                            navController.navigate(Routes.Home.toString())
                         }
                         .align(Alignment.CenterVertically)
                         .weight(1f)
@@ -131,16 +111,4 @@ fun HomeScreen(
             }
         }
     }
-}
-
-
-
-fun getName(profilePreferencesRepository: IProfilePreferencesRepository): String {
-    val profile = profilePreferencesRepository.load()
-    var name = profile.name
-
-    if (name.isBlank())
-        name = "user"
-
-    return name
 }

@@ -38,6 +38,7 @@ fun EditMoodEntryScreen(
     val dateParsed = if (date.isNullOrBlank()) DateUtilities.getStringDateFromLocalDate(LocalDate.now()) else date
     val moodEntryDate = DateUtilities.getLocalDateFromStringDate(dateParsed)
     val moodEntry = moodEntriesRepository.getMoodEntry(moodEntryDate) ?: MoodEntry()
+    moodEntry.date = moodEntryDate
 
     var happiness by remember { mutableIntStateOf(moodEntry.happiness) }
     var love by remember { mutableIntStateOf(moodEntry.love) }
@@ -71,7 +72,7 @@ fun EditMoodEntryScreen(
             )
 
             Text(
-                text = DateUtilities.getStringDateFromLocalDate(LocalDate.now()),
+                text = DateUtilities.getStringDateFromLocalDate(moodEntry.date),
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
                 modifier = Modifier
                     .weight(1f)
