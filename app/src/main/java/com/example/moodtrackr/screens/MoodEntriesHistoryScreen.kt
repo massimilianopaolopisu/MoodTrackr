@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
+import com.example.moodtrackr.models.DatePickerSelectableDates
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.utilities.DateUtilities
 import java.time.LocalDate
@@ -29,9 +30,17 @@ fun MoodEntriesHistoryScreen(
     moodEntriesRepository: IMoodEntriesRepository
 ) {
     val moodEntryList = moodEntriesRepository.getAllMoodEntries()
+    val datesToHighlight = moodEntryList.map { it.date }.toSet()
+    val highlightedDates = remember { datesToHighlight }
+
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
-    val datePicker = rememberDatePickerState(DateUtilities.getMillisFromLocalDate(selectedDate))
-    var showRemoveConfirmDalog by remember { mutableStateOf(false) }
+    var showDeleteConfirmDialog by remember { mutableStateOf(false) }
+    var showOnlyInsertedDays by remember { mutableStateOf(true) }
+
+    val datePicker = rememberDatePickerState(
+        DateUtilities.getMillisFromLocalDate(selectedDate),
+        selectableDates = DatePickerSelectableDates(highlightedDates)
+    )
 
     Box(
         modifier = Modifier
@@ -73,17 +82,37 @@ fun MoodEntriesHistoryScreen(
                     colors = DatePickerDefaults
                         .colors(titleContentColor = Color.Black,
                             navigationContentColor = Color.Black,
-                            headlineContentColor = Color.Black)
+                            headlineContentColor = Color.Black
+                        )
                 )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Show only inserted days",
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    Switch(
+                        checked = showOnlyInsertedDays,
+                        onCheckedChange = { enabled ->
+                            showOnlyInsertedDays = enabled
+                        }
+                    )
+                }
             }
         }
 
         selectedDate = DateUtilities.getLocalDateFromMillis(datePicker.selectedDateMillis?: 0)
 
-        if (showRemoveConfirmDalog) {
+        if (showDeleteConfirmDialog) {
             AlertDialog(
                 onDismissRequest = {
-                    showRemoveConfirmDalog = false
+                    showDeleteConfirmDialog = false
                 },
                 title = { Text("Confirm") },
                 text = { Text("Are you sure to remove $selectedDate Mood Entry?") },
@@ -91,7 +120,7 @@ fun MoodEntriesHistoryScreen(
                     Button(
                         onClick = {
                             moodEntriesRepository.deleteMoodEntry(selectedDate)
-                            showRemoveConfirmDalog = false
+                            showDeleteConfirmDialog = false
                         }
                     ) {
                         Text("Yes")
@@ -100,7 +129,7 @@ fun MoodEntriesHistoryScreen(
                 dismissButton = {
                     Button(
                         onClick = {
-                            showRemoveConfirmDalog = false
+                            showDeleteConfirmDialog = false
                         }
                     ) {
                         Text("No")
@@ -154,11 +183,11 @@ fun MoodEntriesHistoryScreen(
                 )
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Remove",
+                    contentDescription = "Delete",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .clickable {
-                            showRemoveConfirmDalog = true
+                            showDeleteConfirmDialog = true
                         }
                         .align(Alignment.CenterVertically)
                         .weight(1f)

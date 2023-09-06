@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import com.example.moodtrackr.components.MoodEntrySummary
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
-import java.time.LocalDate
+import com.example.moodtrackr.utilities.DateUtilities
 
 @Composable
 fun ViewMoodEntryScreen(
@@ -34,7 +34,9 @@ fun ViewMoodEntryScreen(
     moodEntriesRepository: IMoodEntriesRepository,
     date: String?
 ) {
-    val moodEntry = moodEntriesRepository.getMoodEntry(LocalDate.now())
+    val dateParsed = DateUtilities.getLocalDateFromStringDate(date)
+    val moodEntry = moodEntriesRepository.getMoodEntry(dateParsed)
+    moodEntry?.date = dateParsed
 
     Box(
         modifier = Modifier
