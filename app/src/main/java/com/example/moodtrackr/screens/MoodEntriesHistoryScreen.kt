@@ -31,6 +31,7 @@ fun MoodEntriesHistoryScreen(
     val moodEntryList = moodEntriesRepository.getAllMoodEntries()
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     val datePicker = rememberDatePickerState(DateUtilities.getMillisFromLocalDate(selectedDate))
+    var showRemoveConfirmDalog by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -76,7 +77,37 @@ fun MoodEntriesHistoryScreen(
                 )
             }
         }
+
         selectedDate = DateUtilities.getLocalDateFromMillis(datePicker.selectedDateMillis?: 0)
+
+        if (showRemoveConfirmDalog) {
+            AlertDialog(
+                onDismissRequest = {
+                    showRemoveConfirmDalog = false
+                },
+                title = { Text("Confirm") },
+                text = { Text("Are you sure to remove $selectedDate Mood Entry?") },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            moodEntriesRepository.deleteMoodEntry(selectedDate)
+                            showRemoveConfirmDalog = false
+                        }
+                    ) {
+                        Text("Yes")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = {
+                            showRemoveConfirmDalog = false
+                        }
+                    ) {
+                        Text("No")
+                    }
+                }
+            )
+        }
 
         Column(
             modifier = Modifier
@@ -127,7 +158,7 @@ fun MoodEntriesHistoryScreen(
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate("${Routes.EditMoodEntry}/${selectedDate}")
+                            showRemoveConfirmDalog = true
                         }
                         .align(Alignment.CenterVertically)
                         .weight(1f)
