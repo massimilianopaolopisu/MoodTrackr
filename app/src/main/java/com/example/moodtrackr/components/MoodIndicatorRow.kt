@@ -23,12 +23,12 @@ fun MoodIndicatorRow(label: String, progress: Int, max: Int = 100) {
         Text(
             text = label,
             modifier = Modifier
-                .weight(2f)
+                .weight(3f)
                 .padding(end = 8.dp)
         )
         LinearProgressIndicator(
             progress = progress.toFloat() / max,
-            modifier = Modifier.weight(4f),
+            modifier = Modifier.weight(5f),
             color = MaterialTheme.colorScheme.primary
         )
         Text(
