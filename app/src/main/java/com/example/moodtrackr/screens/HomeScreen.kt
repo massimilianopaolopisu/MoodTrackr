@@ -99,7 +99,7 @@ fun HomeScreen(
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(Routes.Settings.toString())
+                            navController.navigate(Routes.MoodEntriesHistory.toString())
                         }
                         .align(Alignment.CenterVertically)
                         .weight(1f)
@@ -110,7 +110,7 @@ fun HomeScreen(
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(Routes.Settings.toString())
+                            navController.navigate(Routes.MoodEntriesHistory.toString())
                         }
                         .align(Alignment.CenterVertically)
                         .weight(1f)
