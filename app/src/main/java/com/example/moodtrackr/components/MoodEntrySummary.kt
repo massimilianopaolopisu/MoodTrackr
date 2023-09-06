@@ -31,9 +31,9 @@ import java.time.LocalDate
 @Composable
 fun MoodEntrySummary(
     navController: NavController,
-    moodEntry: MoodEntry?
+    moodEntry: MoodEntry?,
+    date: LocalDate
 ) {
-    val date = moodEntry?.date?: LocalDate.now()
     val route = "${Routes.EditMoodEntry}/${date}"
 
     Box(

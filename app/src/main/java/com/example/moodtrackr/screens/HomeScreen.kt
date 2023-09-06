@@ -37,7 +37,8 @@ fun HomeScreen(
     moodEntriesRepository: IMoodEntriesRepository
 ) {
     val name = getName(profilePreferencesRepository)
-    val moodEntry = moodEntriesRepository.getMoodEntry(LocalDate.now())
+    val date = LocalDate.now()
+    val moodEntry = moodEntriesRepository.getMoodEntry(date)
 
     Box(
         modifier = Modifier
@@ -68,7 +69,8 @@ fun HomeScreen(
 
             MoodEntrySummary(
                 navController,
-                moodEntry
+                moodEntry,
+                date
             )
         }
 

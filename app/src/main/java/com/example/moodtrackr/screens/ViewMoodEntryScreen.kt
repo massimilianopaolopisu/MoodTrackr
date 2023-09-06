@@ -36,7 +36,6 @@ fun ViewMoodEntryScreen(
 ) {
     val dateParsed = DateUtilities.getLocalDateFromStringDate(date)
     val moodEntry = moodEntriesRepository.getMoodEntry(dateParsed)
-    moodEntry?.date = dateParsed
 
     Box(
         modifier = Modifier
@@ -61,7 +60,8 @@ fun ViewMoodEntryScreen(
 
             MoodEntrySummary(
                 navController,
-                moodEntry
+                moodEntry,
+                dateParsed
             )
         }
 

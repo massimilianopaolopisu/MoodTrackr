@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
+import com.example.moodtrackr.models.DatePickerAllSelectableDates
 import com.example.moodtrackr.models.DatePickerSelectableDates
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.utilities.DateUtilities
@@ -37,9 +38,14 @@ fun MoodEntriesHistoryScreen(
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
     var showOnlyInsertedDays by remember { mutableStateOf(true) }
 
-    val datePicker = rememberDatePickerState(
+    val datePickerStateHighlighted = rememberDatePickerState(
         DateUtilities.getMillisFromLocalDate(selectedDate),
         selectableDates = DatePickerSelectableDates(highlightedDates)
+    )
+
+    val datePickerStateAll = rememberDatePickerState(
+        DateUtilities.getMillisFromLocalDate(selectedDate),
+        selectableDates = DatePickerAllSelectableDates()
     )
 
     Box(
@@ -74,17 +80,34 @@ fun MoodEntriesHistoryScreen(
                 .padding(bottom = 45.dp)
         ) {
             item {
-                DatePicker(
-                    state = datePicker,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    showModeToggle = false,
-                    colors = DatePickerDefaults
-                        .colors(titleContentColor = Color.Black,
-                            navigationContentColor = Color.Black,
-                            headlineContentColor = Color.Black
-                        )
-                )
+                if(showOnlyInsertedDays) {
+                    DatePicker(
+                        state = datePickerStateHighlighted,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        showModeToggle = false,
+                        colors = DatePickerDefaults
+                            .colors(
+                                titleContentColor = Color.Black,
+                                navigationContentColor = Color.Black,
+                                headlineContentColor = Color.Black
+                            )
+                    )
+                }
+                else{
+                    DatePicker(
+                        state = datePickerStateAll,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        showModeToggle = false,
+                        colors = DatePickerDefaults
+                            .colors(
+                                titleContentColor = Color.Black,
+                                navigationContentColor = Color.Black,
+                                headlineContentColor = Color.Black
+                            )
+                    )
+                }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -107,7 +130,11 @@ fun MoodEntriesHistoryScreen(
             }
         }
 
-        selectedDate = DateUtilities.getLocalDateFromMillis(datePicker.selectedDateMillis?: 0)
+        selectedDate = if(showOnlyInsertedDays) {
+            DateUtilities.getLocalDateFromMillis(datePickerStateHighlighted.selectedDateMillis?: 0)
+        } else {
+            DateUtilities.getLocalDateFromMillis(datePickerStateAll.selectedDateMillis?: 0)
+        }
 
         if (showDeleteConfirmDialog) {
             AlertDialog(
