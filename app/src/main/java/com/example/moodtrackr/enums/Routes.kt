@@ -4,5 +4,6 @@ enum class Routes {
     Home,
     Settings,
     EditProfile,
-    EditMoodEntry
+    EditMoodEntry,
+    MoodEntriesHistory
 }

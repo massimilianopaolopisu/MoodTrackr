@@ -84,11 +84,11 @@ fun HomeScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.DateRange,
-                    contentDescription = "Mood Entries Calendar",
+                    contentDescription = "Mood Entries History",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(Routes.Settings.toString())
+                            navController.navigate(Routes.MoodEntriesHistory.toString())
                         }
                         .align(Alignment.CenterVertically)
                         .weight(1f)
