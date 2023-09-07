@@ -8,5 +8,5 @@ enum class Routes {
     MoodEntriesHistory,
     ViewMoodEntry,
     Statistics,
-    Graph
+    Graphs
 }
