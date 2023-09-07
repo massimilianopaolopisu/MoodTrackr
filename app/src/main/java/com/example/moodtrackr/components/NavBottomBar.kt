@@ -17,7 +17,7 @@ import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
 
 @Composable
-fun MoodEntryViewBar(
+fun NavBottomBar(
     navController: NavController
 ){
     Row(

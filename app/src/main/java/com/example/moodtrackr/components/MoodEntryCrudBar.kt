@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.AlertDialog
@@ -30,9 +32,12 @@ import java.time.LocalDate
 fun MoodEntryCrudBar(
     navController: NavController,
     moodEntriesRepository: IMoodEntriesRepository,
-    selectedDate: LocalDate
+    selectedDate: LocalDate,
+    returnRoute: String? = null
 ) {
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
+    val viewRoute = "${Routes.ViewMoodEntry}/${selectedDate}"
+    val editRoute = "${Routes.EditMoodEntry}/${selectedDate}"
 
     if (showDeleteConfirmDialog) {
         AlertDialog(
@@ -46,6 +51,9 @@ fun MoodEntryCrudBar(
                     onClick = {
                         moodEntriesRepository.deleteMoodEntry(selectedDate)
                         showDeleteConfirmDialog = false
+
+                        if(!returnRoute.isNullOrBlank())
+                            navController.navigate(returnRoute)
                     }
                 ) {
                     Text("Yes")
@@ -80,12 +88,34 @@ fun MoodEntryCrudBar(
                 .weight(1f)
         )
         Icon(
+            imageVector = Icons.Default.ExitToApp,
+            contentDescription = "Exit",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .clickable {
+                    android.os.Process.killProcess(android.os.Process.myPid())
+                }
+                .align(Alignment.CenterVertically)
+                .weight(1f)
+        )
+        Icon(
+            imageVector = Icons.Default.Home,
+            contentDescription = "Home",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .clickable {
+                    navController.navigate(Routes.Home.toString())
+                }
+                .align(Alignment.CenterVertically)
+                .weight(1f)
+        )
+        Icon(
             imageVector = Icons.Default.Info,
             contentDescription = "View",
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .clickable {
-                    navController.navigate("${Routes.ViewMoodEntry}/${selectedDate}")
+                    navController.navigate(viewRoute)
                 }
                 .align(Alignment.CenterVertically)
                 .weight(1f)
@@ -96,7 +126,7 @@ fun MoodEntryCrudBar(
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .clickable {
-                    navController.navigate("${Routes.EditMoodEntry}/${selectedDate}")
+                    navController.navigate(editRoute)
                 }
                 .align(Alignment.CenterVertically)
                 .weight(1f)

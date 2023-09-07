@@ -1,6 +1,7 @@
 package com.example.moodtrackr
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,9 +37,20 @@ class MainActivity @Inject constructor() : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = getOrientationFromPreferences()
+
         setContent {
             MoodTrackrApp(LocalContext.current, viewModel)
         }
+    }
+
+    private fun getOrientationFromPreferences(): Int{
+        val themePreferences = viewModel.themePreferencesRepository.load()
+
+        return if(themePreferences.lockOrientationEnabled)
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        else
+            ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
     }
 }
 
@@ -50,6 +62,8 @@ fun MoodTrackrApp(
     init(context, viewModel.applicationPreferencesRepository)
 
     val themePreferences = viewModel.themePreferencesRepository.load()
+
+    //Activity.setRequestedOrientation() = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
     val darkMode = when (themePreferences.themeMode) {
         ThemeMode.System -> {

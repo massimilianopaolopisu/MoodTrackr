@@ -69,6 +69,7 @@ fun MoodEntrySummary(
                     .padding(bottom = 45.dp)
             ) {
                 item {
+                    MoodIndicatorRow("Overall", moodEntry.getOverallIndicator(), useDynamicColors = true )
                     MoodIndicatorRow("Happiness", moodEntry.happiness)
                     MoodIndicatorRow("Anger", moodEntry.anger)
                     MoodIndicatorRow("Love", moodEntry.love)

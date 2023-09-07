@@ -15,8 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moodtrackr.components.MoodEntryCrudBar
 import com.example.moodtrackr.components.MoodEntrySummary
-import com.example.moodtrackr.components.MoodEntryViewBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.utilities.DateUtilities
@@ -65,8 +65,11 @@ fun ViewMoodEntryScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            MoodEntryViewBar(
-                navController = navController
+            MoodEntryCrudBar(
+                navController = navController,
+                moodEntriesRepository = moodEntriesRepository,
+                selectedDate = dateParsed,
+                returnRoute = "${Routes.ViewMoodEntry}/${dateParsed}"
             )
         }
     }
