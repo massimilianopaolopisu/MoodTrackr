@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.MainBottomBar
 import com.example.moodtrackr.components.MoodEntrySummary
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
 import java.time.LocalDate
@@ -26,10 +27,10 @@ import java.time.LocalDate
 fun HomeScreen(
     navController: NavController,
     profilePreferencesRepository: IProfilePreferencesRepository,
-    moodEntriesRepository: IMoodEntriesRepository
+    moodEntriesRepository: IMoodEntriesRepository,
+    date: LocalDate
 ) {
     val name = getName(profilePreferencesRepository)
-    val date = LocalDate.now()
     val moodEntry = moodEntriesRepository.getMoodEntry(date)
 
     Box(
@@ -60,9 +61,11 @@ fun HomeScreen(
             }
 
             MoodEntrySummary(
-                navController,
-                moodEntry,
-                date
+                navController = navController,
+                moodEntry = moodEntry,
+                date = date,
+                origin = Routes.Home.toString(),
+                allowChangeDate = false
             )
         }
 

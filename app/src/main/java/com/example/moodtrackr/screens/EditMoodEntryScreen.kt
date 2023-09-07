@@ -17,12 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moodtrackr.components.DateBar
 import com.example.moodtrackr.components.MoodEntryInput
 import com.example.moodtrackr.components.SaveBottomBar
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.repositories.interfaces.ISave
@@ -71,13 +72,11 @@ fun EditMoodEntryScreen(
                     .align(Alignment.CenterHorizontally)
             )
 
-            Text(
-                text = DateUtilities.getStringDateFromLocalDate(moodEntry.date),
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center
+            DateBar(
+                navController = navController,
+                localDate = moodEntryDate ,
+                origin = Routes.EditMoodEntry.toString(),
+                showButtons = true
             )
 
         }

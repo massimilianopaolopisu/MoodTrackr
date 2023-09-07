@@ -76,7 +76,23 @@ fun Content(viewModel: MainViewModel) {
 
     NavHost(navController, startDestination = Routes.Home.toString()) {
         composable(Routes.Home.toString()) {
-            HomeScreen(navController, viewModel.profilePreferencesRepository, viewModel.moodEntriesRepository)
+            HomeScreen(
+                navController,
+                viewModel.profilePreferencesRepository,
+                viewModel.moodEntriesRepository,
+                LocalDate.now())
+        }
+        composable(
+            route = "${Routes.Home}/{date}",
+            arguments = listOf(navArgument("date") { type = NavType.StringType })
+        ){
+                backStackEntry ->
+            HomeScreen(
+                navController,
+                viewModel.profilePreferencesRepository,
+                viewModel.moodEntriesRepository,
+                DateUtilities.getLocalDateFromStringDate(backStackEntry.arguments?.getString("date")?: "")
+            )
         }
         composable(Routes.EditProfile.toString()) {
             EditProfileScreen(navController, viewModel.profilePreferencesRepository)

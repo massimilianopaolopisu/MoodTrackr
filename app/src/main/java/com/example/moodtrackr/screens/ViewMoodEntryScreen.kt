@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.MoodEntrySummary
 import com.example.moodtrackr.components.MoodEntryViewBar
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.utilities.DateUtilities
 
@@ -51,9 +52,11 @@ fun ViewMoodEntryScreen(
             )
 
             MoodEntrySummary(
-                navController,
-                moodEntry,
-                dateParsed
+                navController = navController,
+                moodEntry = moodEntry,
+                date = dateParsed,
+                origin = Routes.ViewMoodEntry.toString(),
+                allowChangeDate = true
             )
         }
 
