@@ -33,11 +33,32 @@ fun MoodEntryCrudBar(
     navController: NavController,
     moodEntriesRepository: IMoodEntriesRepository,
     selectedDate: LocalDate,
-    returnRoute: String? = null
+    returnRoute: String = ""
 ) {
+    val viewRoute = "${Routes.ViewMoodEntry}/$selectedDate"
+    val editRoute = "${Routes.EditMoodEntry}/$selectedDate"
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
-    val viewRoute = "${Routes.ViewMoodEntry}/${selectedDate}"
-    val editRoute = "${Routes.EditMoodEntry}/${selectedDate}"
+
+    val icons = listOf(
+        Triple(Icons.Default.KeyboardArrowLeft, "Back") {
+            navController.popBackStack()
+        },
+        Triple(Icons.Default.ExitToApp, "Exit") {
+            android.os.Process.killProcess(android.os.Process.myPid())
+        },
+        Triple(Icons.Default.Home, "Home") {
+            navController.navigate(Routes.Home.toString())
+        },
+        Triple(Icons.Default.Info, "View") {
+            navController.navigate(viewRoute)
+        },
+        Triple(Icons.Default.Edit, "Update") {
+            navController.navigate(editRoute)
+        },
+        Triple(Icons.Default.Delete, "Delete") {
+            showDeleteConfirmDialog = true
+        }
+    )
 
     if (showDeleteConfirmDialog) {
         AlertDialog(
@@ -52,8 +73,9 @@ fun MoodEntryCrudBar(
                         moodEntriesRepository.deleteMoodEntry(selectedDate)
                         showDeleteConfirmDialog = false
 
-                        if(!returnRoute.isNullOrBlank())
+                        if (returnRoute.isNotBlank()) {
                             navController.navigate(returnRoute)
+                        }
                     }
                 ) {
                     Text("Yes")
@@ -76,71 +98,18 @@ fun MoodEntryCrudBar(
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
-        Icon(
-            imageVector = Icons.Default.KeyboardArrowLeft,
-            contentDescription = "Back",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    navController.popBackStack()
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
-        Icon(
-            imageVector = Icons.Default.ExitToApp,
-            contentDescription = "Exit",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    android.os.Process.killProcess(android.os.Process.myPid())
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
-        Icon(
-            imageVector = Icons.Default.Home,
-            contentDescription = "Home",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    navController.navigate(Routes.Home.toString())
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
-        Icon(
-            imageVector = Icons.Default.Info,
-            contentDescription = "View",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    navController.navigate(viewRoute)
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
-        Icon(
-            imageVector = Icons.Default.Edit,
-            contentDescription = "Update",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    navController.navigate(editRoute)
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
-        Icon(
-            imageVector = Icons.Default.Delete,
-            contentDescription = "Delete",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    showDeleteConfirmDialog = true
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
+        for ((icon, contentDescription, action) in icons) {
+            Icon(
+                imageVector = icon,
+                contentDescription = contentDescription,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .clickable {
+                        action()
+                    }
+                    .align(Alignment.CenterVertically)
+                    .weight(1f)
+            )
+        }
     }
 }

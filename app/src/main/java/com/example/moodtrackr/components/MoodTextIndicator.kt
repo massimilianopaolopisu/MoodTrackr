@@ -1,9 +1,8 @@
 package com.example.moodtrackr.components
 
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,22 +15,19 @@ fun MoodTextIndicator(
     label: String,
     text: String
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
+        horizontalAlignment = Alignment.Start
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.widthIn(0.dp, 100.dp)
+            style = MaterialTheme.typography.titleMedium
+        )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleSmall
         )
     }
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleSmall,
-        modifier = Modifier
-            .padding(horizontal = 8.dp)
-    )
 }

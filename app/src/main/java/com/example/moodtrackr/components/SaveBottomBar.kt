@@ -23,61 +23,56 @@ import com.example.moodtrackr.repositories.interfaces.ISave
 fun SaveBottomBar(
     navController: NavController,
     saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>>,
-    afterSaveRoute: Routes? = Routes.Home,
-) {
+    afterSaveRoute: Routes? = Routes.Home) {
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Icon(
-            imageVector = Icons.Default.KeyboardArrowLeft,
-            contentDescription = "Back",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    navController.popBackStack()
+        val icons = listOf(
+            Triple(
+                Icons.Default.KeyboardArrowLeft,
+                "Back"
+            ) {
+                navController.popBackStack()
+            },
+            Triple(
+                Icons.Default.ExitToApp,
+                "Exit"
+            ) {
+                android.os.Process.killProcess(android.os.Process.myPid())
+            },
+            Triple(
+                Icons.Default.Home,
+                "Home"
+            ) {
+                navController.navigate(Routes.Home.toString())
+            },
+            Triple(
+                Icons.Default.Done,
+                "Save"
+            ) {
+                saveHandlerAndObjectPairList.forEach { (saveHandler, obj) ->
+                    saveHandler.save(obj)
                 }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
-        Icon(
-            imageVector = Icons.Default.ExitToApp,
-            contentDescription = "Exit",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    android.os.Process.killProcess(android.os.Process.myPid())
+                afterSaveRoute?.let {
+                    navController.navigate(it.toString())
                 }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
+            }
         )
-        Icon(
-            imageVector = Icons.Default.Home,
-            contentDescription = "Home",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    navController.navigate(Routes.Home.toString())
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
-        Icon(
-            imageVector = Icons.Default.Done,
-            contentDescription = "Save",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    saveHandlerAndObjectPairList.forEach{ (saveHandler, obj) ->
-                        saveHandler.save(obj)
-                        if(afterSaveRoute != null){
-                            navController.navigate(afterSaveRoute.toString())
-                        }
+
+        for ((icon, contentDescription, onClick) in icons) {
+            Icon(
+                imageVector = icon,
+                contentDescription = contentDescription,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .clickable {
+                        onClick.invoke()
                     }
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
+                    .align(Alignment.CenterVertically)
+                    .weight(1f)
+            )
+        }
     }
 }

@@ -16,11 +16,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MoodIndicatorRow(
     label: String,
-    progress: Int,
+    value: Int,
     max: Int = 100,
     useDynamicColors: Boolean = false) {
 
-    val value = progress.toFloat() / max
+    val progress = value.toFloat() / max
     var color = MaterialTheme.colorScheme.primary
 
     if(useDynamicColors){
@@ -40,12 +40,12 @@ fun MoodIndicatorRow(
                 .padding(end = 8.dp)
         )
         LinearProgressIndicator(
-            progress = value,
+            progress = progress,
             modifier = Modifier.weight(5f),
             color = color
         )
         Text(
-            text = progress.toString(),
+            text = value.toString(),
             modifier = Modifier
                 .weight(1f),
             textAlign = TextAlign.End
