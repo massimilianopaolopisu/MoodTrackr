@@ -5,14 +5,17 @@ import com.example.moodtrackr.logic.dataImportExport.DataImporterExporterStrateg
 import com.example.moodtrackr.logic.dataImportExport.SharedPreferencesImporterExporterStrategy
 import com.example.moodtrackr.logic.dataImportExport.SqlMoodEntriesImporterExporterStrategy
 import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
+import com.example.moodtrackr.logic.statistics.MoodEntryStatisticsCalculator
+import com.example.moodtrackr.logic.statistics.interfaces.IStatisticsCalculator
+import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.ApplicationPreferencesRepository
+import com.example.moodtrackr.repositories.MoodEntriesRepository
+import com.example.moodtrackr.repositories.ProfilePreferencesRepository
+import com.example.moodtrackr.repositories.ThemePreferencesRepository
 import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
 import com.example.moodtrackr.repositories.interfaces.IThemePreferencesRepository
-import com.example.moodtrackr.repositories.MoodEntriesRepository
-import com.example.moodtrackr.repositories.ProfilePreferencesRepository
-import com.example.moodtrackr.repositories.ThemePreferencesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -62,5 +65,11 @@ object AppModule {
             SqlMoodEntriesImporterExporterStrategy(context)
         )
         return DataImporterExporterStrategy(strategies)
+    }
+
+    @Provides
+    @Singleton
+    fun provideIStatisticsCalculator(): IStatisticsCalculator<MoodEntry> {
+        return MoodEntryStatisticsCalculator()
     }
 }
