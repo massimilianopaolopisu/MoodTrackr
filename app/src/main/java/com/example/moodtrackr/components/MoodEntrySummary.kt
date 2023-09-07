@@ -26,6 +26,8 @@ fun MoodEntrySummary(
     origin: String?,
     allowChangeDate: Boolean
 ) {
+    val editRoute = "${Routes.EditMoodEntry}/$date"
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +54,7 @@ fun MoodEntrySummary(
                     .padding(bottom = 45.dp)
             ) {
                 Button(
-                    onClick = { navController.navigate("${Routes.EditMoodEntry}/$date") },
+                    onClick = { navController.navigate(editRoute) },
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
                     Text("Add Mood Entry")

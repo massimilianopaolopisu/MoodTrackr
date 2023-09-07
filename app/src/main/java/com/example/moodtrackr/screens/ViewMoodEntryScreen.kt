@@ -29,7 +29,7 @@ fun ViewMoodEntryScreen(
 ) {
     val dateParsed = DateUtilities.getLocalDateFromStringDate(date)
     val moodEntry = moodEntriesRepository.getMoodEntry(dateParsed)
-
+    val route = "${Routes.ViewMoodEntry}/${dateParsed}"
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +69,7 @@ fun ViewMoodEntryScreen(
                 navController = navController,
                 moodEntriesRepository = moodEntriesRepository,
                 selectedDate = dateParsed,
-                returnRoute = "${Routes.ViewMoodEntry}/${dateParsed}"
+                returnRoute = route
             )
         }
     }
