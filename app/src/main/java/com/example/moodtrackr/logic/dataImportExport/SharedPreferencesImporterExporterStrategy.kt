@@ -1,18 +1,19 @@
-package com.example.moodtrackr.dataImportExport
+package com.example.moodtrackr.logic.dataImportExport
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.example.moodtrackr.R
 import com.example.moodtrackr.dataAccess.SharedPreferencesConnector
-import com.example.moodtrackr.dataImportExport.interfaces.IDataImporterExporterStrategy
+import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
 import java.io.File
 import java.io.FileWriter
 import javax.inject.Inject
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Context) : SharedPreferencesConnector(context), IDataImporterExporterStrategy{
+class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Context) : SharedPreferencesConnector(context),
+    IDataImporterExporterStrategy {
 
     private val _dataDirectory = "backup"
     private val _appName = context.getString(R.string.app_name)

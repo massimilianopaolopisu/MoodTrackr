@@ -1,10 +1,10 @@
-package com.example.moodtrackr.dataImportExport
+package com.example.moodtrackr.logic.dataImportExport
 
 import android.content.Context
 import android.util.Log
 import com.example.moodtrackr.adapters.LocalDateAdapter
 import com.example.moodtrackr.R
-import com.example.moodtrackr.dataImportExport.interfaces.IDataImporterExporterStrategy
+import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.dataAccess.GenericSqlWrapper
 import com.google.gson.Gson
@@ -16,7 +16,8 @@ import java.io.FileReader
 import java.time.LocalDate
 import javax.inject.Inject
 
-class SqlMoodEntriesImporterExporterStrategy @Inject constructor(context: Context) : GenericSqlWrapper<MoodEntry>(context, MoodEntry()), IDataImporterExporterStrategy {
+class SqlMoodEntriesImporterExporterStrategy @Inject constructor(context: Context) : GenericSqlWrapper<MoodEntry>(context, MoodEntry()),
+    IDataImporterExporterStrategy {
 
     private val _dataDirectory = "backup"
     private val _appName = context.getString(R.string.app_name)

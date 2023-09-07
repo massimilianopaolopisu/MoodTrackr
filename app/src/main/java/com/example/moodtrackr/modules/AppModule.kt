@@ -1,10 +1,10 @@
 package com.example.moodtrackr.modules
 
 import android.content.Context
-import com.example.moodtrackr.dataImportExport.DataImporterExporterStrategy
-import com.example.moodtrackr.dataImportExport.SharedPreferencesImporterExporterStrategy
-import com.example.moodtrackr.dataImportExport.SqlMoodEntriesImporterExporterStrategy
-import com.example.moodtrackr.dataImportExport.interfaces.IDataImporterExporterStrategy
+import com.example.moodtrackr.logic.dataImportExport.DataImporterExporterStrategy
+import com.example.moodtrackr.logic.dataImportExport.SharedPreferencesImporterExporterStrategy
+import com.example.moodtrackr.logic.dataImportExport.SqlMoodEntriesImporterExporterStrategy
+import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
 import com.example.moodtrackr.repositories.ApplicationPreferencesRepository
 import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository

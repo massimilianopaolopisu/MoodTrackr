@@ -1,10 +1,11 @@
-package com.example.moodtrackr.dataImportExport
+package com.example.moodtrackr.logic.dataImportExport
 
 import android.util.Log
-import com.example.moodtrackr.dataImportExport.interfaces.IDataImporterExporterStrategy
+import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
 import javax.inject.Inject
 
-class DataImporterExporterStrategy @Inject constructor(private var strategies: List<IDataImporterExporterStrategy>) : IDataImporterExporterStrategy {
+class DataImporterExporterStrategy @Inject constructor(private var strategies: List<IDataImporterExporterStrategy>) :
+    IDataImporterExporterStrategy {
     override fun export(outputFilePath: String?): Boolean {
         var success = true
 

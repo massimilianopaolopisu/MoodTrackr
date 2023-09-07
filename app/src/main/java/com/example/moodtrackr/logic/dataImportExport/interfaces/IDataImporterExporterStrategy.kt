@@ -1,4 +1,4 @@
-package com.example.moodtrackr.dataImportExport.interfaces
+package com.example.moodtrackr.logic.dataImportExport.interfaces
 
 interface IDataImporterExporterStrategy {
     fun export(outputFilePath: String?): Boolean

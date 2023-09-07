@@ -12,6 +12,7 @@ import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.HomeScreen
 import com.example.moodtrackr.screens.MoodEntriesHistoryScreen
 import com.example.moodtrackr.screens.SettingsScreen
+import com.example.moodtrackr.screens.StatisticsScreen
 import com.example.moodtrackr.screens.ViewMoodEntryScreen
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
@@ -71,6 +72,9 @@ fun Navigation(viewModel: MainViewModel) {
                 viewModel.moodEntriesRepository,
                 backStackEntry.arguments?.getString("date")?: DateUtilities.getStringDateFromLocalDate(
                     LocalDate.now()))
+        }
+        composable(Routes.Statistics.toString()) {
+            StatisticsScreen(navController, viewModel.moodEntriesRepository)
         }
     }
 }
