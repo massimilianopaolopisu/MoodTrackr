@@ -34,6 +34,7 @@ fun LineChart(
         },
         update = { chartView ->
             chartView.data = chart.value
+            chartView.invalidate()
             chartView.description.text = description
             chartView.setBackgroundColor(backgroundColor.toArgb())
 
