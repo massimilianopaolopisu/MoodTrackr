@@ -106,6 +106,9 @@ class MoodEntry() : IDatabaseModel<MoodEntry> {
             _date = value
         }
 
+    val overall: Int
+        get() = getOverallIndicator()
+
     var happiness: Int
         get() = clampValue(_happiness)
         set(value) {
