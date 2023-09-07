@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.DropdownMenu
@@ -19,53 +18,54 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import com.example.moodtrackr.components.IndicatorStatsCard
 import com.example.moodtrackr.components.NavBottomBar
 import com.example.moodtrackr.enums.TimeFrame
-import com.example.moodtrackr.logic.statistics.MoodEntryStatisticsCalculator
-import com.example.moodtrackr.models.IndicatorStats
+import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.viewModels.MainViewModel
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis.XAxisPosition
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import java.time.LocalDate
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.starProjectedType
+
+private val indicatorListNames = MoodEntry::class.memberProperties
+    .filterIsInstance<KProperty1<MoodEntry, Int>>()
+    .filter { it.returnType == Int::class.starProjectedType && !it.name.startsWith("_") }
+    .map { it.name }
 
 @Composable
 fun GraphScreen(
     navController: NavController,
     viewModel: MainViewModel
 ) {
-    val statisticsCalculator = MoodEntryStatisticsCalculator()
-
+    var isTimeFrameMenuExpanded by remember { mutableStateOf(false) }
+    var isPropertiesMenuExpanded by remember { mutableStateOf(false) }
     var selectedTimeFrame by remember { mutableStateOf(TimeFrame.LastWeek) }
-    var statistics by remember { mutableStateOf(emptyList<IndicatorStats>()) }
-    var isDropdownOpen by remember { mutableStateOf(false) }
+    var selectedProperty by remember { mutableStateOf("Overall") }
 
-    fun calculateStatistics() {
-        val endDate = LocalDate.now()
-        val startDate = when (selectedTimeFrame) {
-            TimeFrame.LastWeek -> endDate.minusWeeks(1)
-            TimeFrame.LastMonth -> endDate.minusMonths(1)
-            TimeFrame.LastYear -> endDate.minusYears(1)
-            TimeFrame.AllTime -> LocalDate.MIN
-        }
-
-        val moodEntriesInRange = viewModel.moodEntriesRepository.getMoodEntriesInRange(startDate, endDate)
-        statistics = statisticsCalculator.calculateStats(moodEntriesInRange)
-    }
-
-    LaunchedEffect(selectedTimeFrame) {
-        calculateStatistics()
-    }
+    val moodEntries = viewModel.moodEntriesRepository.getMoodEntriesInRange(
+        getStartDate(selectedTimeFrame),
+        LocalDate.now()
+    )
 
     Box(
         modifier = Modifier
@@ -78,7 +78,7 @@ fun GraphScreen(
                 .align(Alignment.TopCenter)
         ) {
             Text(
-                text = "Statistics",
+                text = "Graph",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
@@ -99,7 +99,7 @@ fun GraphScreen(
                     contentDescription = "OpenTimeFrameSelection",
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable {
-                        isDropdownOpen = true
+                        isTimeFrameMenuExpanded = true
                     }
                 )
                 Text(
@@ -107,44 +107,83 @@ fun GraphScreen(
                     style = MaterialTheme.typography.labelMedium,
                 )
             }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.List,
+                    contentDescription = "OpenPropertiesSelection",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable {
+                        isPropertiesMenuExpanded = true
+                    }
+                )
+                Text(
+                    text = "Open properties selection list",
+                    style = MaterialTheme.typography.labelMedium,
+                )
+            }
+
+            DropdownMenu(
+                expanded = isTimeFrameMenuExpanded,
+                onDismissRequest = { isTimeFrameMenuExpanded = false },
+                modifier = Modifier.padding(8.dp)
+            ) {
+                TimeFrame.values().forEach { timeFrame ->
+                    DropdownMenuItem(
+                        text = { Text(text = timeFrame.displayName) },
+                        onClick = {
+                            selectedTimeFrame = timeFrame
+                        }
+                    )
+                }
+            }
+
+            DropdownMenu(
+                expanded = isPropertiesMenuExpanded,
+                onDismissRequest = { isPropertiesMenuExpanded = false },
+                modifier = Modifier.padding(8.dp)
+            ) {
+                indicatorListNames.forEach { propertyName ->
+                    DropdownMenuItem(
+                        text = { Text(text = propertyName) },
+                        onClick = {
+                            selectedProperty = propertyName
+                        }
+                    )
+                }
+            }
         }
 
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .align(Alignment.TopCenter)
-                .padding(top = 80.dp)
+                .padding(top = 90.dp)
                 .padding(bottom = 45.dp)
         ) {
-            item {
-                if (isDropdownOpen) {
-                    DropdownMenu(
-                        expanded = true,
-                        onDismissRequest = { isDropdownOpen = false },
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        TimeFrame.values().forEach { timeFrame ->
-                            DropdownMenuItem(
-                                text = { Text(text = timeFrame.displayName) },
-                                onClick = {
-                                    selectedTimeFrame = timeFrame
-                                    calculateStatistics()
-                                }
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.height(16.dp))
+            if (moodEntries.isNotEmpty()) {
+                val chartModifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+                LineChart(
+                    modifier = chartModifier,
+                    data = createLineData(selectedProperty, moodEntries),
+                    description = selectedTimeFrame.displayName,
+                    backgroundColor = Color.White,
+                    legendEnabled = true,
+                    xAxisPosition = XAxisPosition.BOTTOM,
+                    yAxisMinimum = 0f,
+                    yAxisEnabled = true
+                )
 
-                if (statistics.isNotEmpty()) {
-                    statistics.forEach { indicatorStats ->
-                        IndicatorStatsCard(indicatorStats)
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                } else {
-                    Text(text = "No statistics available for the selected period.")
-                }
+                Spacer(modifier = Modifier.height(16.dp))
+            } else {
+                Text(text = "No mood entries available for the selected period.")
             }
         }
 
@@ -158,4 +197,72 @@ fun GraphScreen(
             )
         }
     }
+}
+
+fun createLineData(propertyName: String, moodEntries: List<MoodEntry>): LineData {
+    val entries = mutableListOf<Entry>()
+
+    moodEntries.forEachIndexed { index, moodEntry ->
+        val value = getValueFromPropertyName(propertyName, moodEntry) ?: 0
+        entries.add(Entry(index.toFloat(), value.toFloat()))
+    }
+
+    val dataSet = LineDataSet(entries, propertyName)
+    dataSet.color = Color.Blue.toArgb()
+    dataSet.lineWidth = 2f
+    dataSet.setCircleColor(Color.Blue.toArgb())
+    dataSet.setDrawValues(false)
+
+    return LineData(dataSet)
+}
+
+fun getValueFromPropertyName(fieldName: String, moodEntry: MoodEntry): Int? {
+    val getter = MoodEntry::class.declaredMemberProperties.find { it.name == fieldName }?.getter
+    return getter?.call(moodEntry) as? Int
+}
+
+fun getStartDate(timeFrame: TimeFrame): LocalDate {
+    return when (timeFrame) {
+        TimeFrame.LastWeek -> LocalDate.now().minusWeeks(1)
+        TimeFrame.LastMonth -> LocalDate.now().minusMonths(1)
+        TimeFrame.LastYear -> LocalDate.now().minusYears(1)
+        TimeFrame.AllTime -> LocalDate.MIN
+    }
+}
+
+@Composable
+fun LineChart(
+    modifier: Modifier = Modifier,
+    data: LineData,
+    description: String? = null,
+    backgroundColor: Color = Color.Transparent,
+    legendEnabled: Boolean = false,
+    xAxisPosition: XAxisPosition = XAxisPosition.BOTTOM,
+    yAxisMinimum: Float = 0f,
+    yAxisEnabled: Boolean = false
+) {
+    val chart = rememberUpdatedState(data)
+
+    AndroidView(
+        modifier = modifier.fillMaxWidth().fillMaxHeight(),
+        factory = { context ->
+            LineChart(context)
+        },
+        update = { chartView ->
+            chartView.data = chart.value
+            chartView.description.text = description
+            chartView.setBackgroundColor(backgroundColor.toArgb())
+
+            val legend = chartView.legend
+            legend.isEnabled = legendEnabled
+
+            val xAxis = chartView.xAxis
+            xAxis.position = xAxisPosition
+
+            val leftYAxis = chartView.axisLeft
+            leftYAxis.axisMinimum = yAxisMinimum
+
+            chartView.axisRight.isEnabled = yAxisEnabled
+        }
+    )
 }
