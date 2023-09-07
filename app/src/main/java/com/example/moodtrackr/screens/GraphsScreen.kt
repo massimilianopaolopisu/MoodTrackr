@@ -62,7 +62,7 @@ fun GraphsScreen(
     var selectedProperty by remember { mutableStateOf("Overall") }
 
     val moodEntries = viewModel.moodEntriesRepository.getMoodEntriesInRange(
-        getStartDate(selectedTimeFrame),
+        DateUtilities.getStartDateFromTimeFrame(selectedTimeFrame),
         LocalDate.now()
     )
 
@@ -223,13 +223,4 @@ fun createLineData(propertyName: String, moodEntries: List<MoodEntry>): LineData
 fun getValueFromPropertyName(fieldName: String, moodEntry: MoodEntry): Int? {
     val getter = MoodEntry::class.declaredMemberProperties.find { it.name == fieldName }?.getter
     return getter?.call(moodEntry) as? Int
-}
-
-fun getStartDate(timeFrame: TimeFrame): LocalDate {
-    return when (timeFrame) {
-        TimeFrame.LastWeek -> LocalDate.now().minusWeeks(1)
-        TimeFrame.LastMonth -> LocalDate.now().minusMonths(1)
-        TimeFrame.LastYear -> LocalDate.now().minusYears(1)
-        TimeFrame.AllTime -> LocalDate.MIN
-    }
 }

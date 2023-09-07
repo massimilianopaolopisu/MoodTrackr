@@ -36,6 +36,7 @@ import com.example.moodtrackr.components.NavBottomBar
 import com.example.moodtrackr.enums.TimeFrame
 import com.example.moodtrackr.logic.statistics.MoodEntryStatisticsCalculator
 import com.example.moodtrackr.models.IndicatorStats
+import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
 import java.time.LocalDate
 
@@ -51,15 +52,8 @@ fun StatisticsScreen(
     var isDropdownOpen by remember { mutableStateOf(false) }
 
     fun calculateStatistics() {
-        val endDate = LocalDate.now()
-        val startDate = when (selectedTimeFrame) {
-            TimeFrame.LastWeek -> endDate.minusWeeks(1)
-            TimeFrame.LastMonth -> endDate.minusMonths(1)
-            TimeFrame.LastYear -> endDate.minusYears(1)
-            TimeFrame.AllTime -> LocalDate.MIN
-        }
-
-        val moodEntriesInRange = viewModel.moodEntriesRepository.getMoodEntriesInRange(startDate, endDate)
+        val startDate = DateUtilities.getStartDateFromTimeFrame(selectedTimeFrame)
+        val moodEntriesInRange = viewModel.moodEntriesRepository.getMoodEntriesInRange(startDate, LocalDate.now())
         statistics = statisticsCalculator.calculateStats(moodEntriesInRange)
     }
 
