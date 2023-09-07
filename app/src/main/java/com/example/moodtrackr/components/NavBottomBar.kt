@@ -18,8 +18,8 @@ import com.example.moodtrackr.enums.Routes
 @Composable
 fun NavBottomBar(navController: NavController) {
     val icons = listOf(
-        Triple(Icons.Default.KeyboardArrowLeft, "Back", null),
-        Triple(Icons.Default.ExitToApp, "Exit", null),
+        Triple(Icons.Default.KeyboardArrowLeft, "Back", "Back"),
+        Triple(Icons.Default.ExitToApp, "Exit", "Exit"),
         Triple(Icons.Default.Home, "Home", Routes.Home.toString())
     )
 
@@ -34,11 +34,17 @@ fun NavBottomBar(navController: NavController) {
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .clickable {
-                        route?.let {
-                            navController.navigate(it)
-                        } ?: run {
-                            if (contentDescription == "Exit") {
+                        when (route) {
+                            "Exit" -> {
                                 android.os.Process.killProcess(android.os.Process.myPid())
+                            }
+
+                            "Back" -> {
+                                navController.popBackStack()
+                            }
+
+                            else -> {
+                                navController.navigate(route)
                             }
                         }
                     }
