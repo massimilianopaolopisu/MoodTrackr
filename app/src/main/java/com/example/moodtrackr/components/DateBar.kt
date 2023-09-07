@@ -11,10 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -30,8 +26,6 @@ fun DateBar(
     origin: String?,
     showButtons: Boolean
 ){
-    var date by remember { mutableStateOf(localDate) }
-
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -44,14 +38,14 @@ fun DateBar(
                 contentDescription = "Back",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-                    date = date.minusDays(1)
+                    val date = localDate.minusDays(1)
                     navController.navigate("$origin/$date")
                 }
             )
         }
 
         Text(
-            text = DateUtilities.getStringDateFromLocalDate(date),
+            text = DateUtilities.getStringDateFromLocalDate(localDate),
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.Center
@@ -63,7 +57,7 @@ fun DateBar(
                 contentDescription = "Next",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
-                    date = date.plusDays(1)
+                    val date = localDate.plusDays(1)
                     navController.navigate("$origin/$date")
                 }
             )
