@@ -1,12 +1,29 @@
 package com.example.moodtrackr.screens
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,13 +36,14 @@ import com.example.moodtrackr.components.NavBottomBar
 import com.example.moodtrackr.enums.TimeFrame
 import com.example.moodtrackr.logic.statistics.MoodEntryStatisticsCalculator
 import com.example.moodtrackr.models.IndicatorStats
-import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
+import com.example.moodtrackr.utilities.DateUtilities
+import com.example.moodtrackr.viewModels.MainViewModel
 import java.time.LocalDate
 
 @Composable
 fun StatisticsScreen(
     navController: NavController,
-    moodEntriesRepository: IMoodEntriesRepository
+    viewModel: MainViewModel
 ) {
     val statisticsCalculator = MoodEntryStatisticsCalculator()
 
@@ -34,15 +52,8 @@ fun StatisticsScreen(
     var isDropdownOpen by remember { mutableStateOf(false) }
 
     fun calculateStatistics() {
-        val endDate = LocalDate.now()
-        val startDate = when (selectedTimeFrame) {
-            TimeFrame.LastWeek -> endDate.minusWeeks(1)
-            TimeFrame.LastMonth -> endDate.minusMonths(1)
-            TimeFrame.LastYear -> endDate.minusYears(1)
-            TimeFrame.AllTime -> LocalDate.MIN
-        }
-
-        val moodEntriesInRange = moodEntriesRepository.getMoodEntriesInRange(startDate, endDate)
+        val startDate = DateUtilities.getStartDateFromTimeFrame(selectedTimeFrame)
+        val moodEntriesInRange = viewModel.moodEntriesRepository.getMoodEntriesInRange(startDate, LocalDate.now())
         statistics = statisticsCalculator.calculateStats(moodEntriesInRange)
     }
 

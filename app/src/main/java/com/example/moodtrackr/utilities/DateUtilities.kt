@@ -6,13 +6,14 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.ULocale
 import android.util.Log
 import com.example.moodtrackr.R
+import com.example.moodtrackr.enums.TimeFrame
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 object DateUtilities {
     private lateinit var _locale: ULocale
     private lateinit var _format: String
-    private val _defaultDate = LocalDate.of(1970,1,1)
+    private val _defaultDate = LocalDate.of(1970, 1, 1)
     private val _defaultMillis = _defaultDate.toEpochDay() * (24 * 60 * 60 * 1000)
 
     fun initialize(context: Context) {
@@ -21,7 +22,7 @@ object DateUtilities {
     }
 
     fun getMillisFromStringDate(date: String?, pattern: String = _format): Long {
-        if(date.isNullOrBlank() || !isDateWellFormatted(date, pattern))
+        if (date.isNullOrBlank() || !isDateWellFormatted(date, pattern))
             return getMillisFromLocalDate(LocalDate.now())
 
         return getMillisFromLocalDate(getLocalDateFromStringDate(date, pattern))
@@ -32,10 +33,10 @@ object DateUtilities {
     }
 
     fun getLocalDateFromStringDate(date: String?, pattern: String = _format): LocalDate {
-        if(date.isNullOrBlank() || !isDateWellFormatted(date, pattern))
+        if (date.isNullOrBlank() || !isDateWellFormatted(date, pattern))
             return LocalDate.MIN
 
-        return try{
+        return try {
             LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern))
         } catch (ex: Exception) {
             Log.e("DateUtilities.getLocalDateFromStringDate", ex.stackTraceToString())
@@ -44,7 +45,7 @@ object DateUtilities {
     }
 
     fun getMillisFromLocalDate(date: LocalDate): Long {
-        return try{
+        return try {
             date.toEpochDay() * (24 * 60 * 60 * 1000)
         } catch (ex: Exception) {
             Log.e("DateUtilities.getMillisFromLocalDate", ex.stackTraceToString())
@@ -53,7 +54,7 @@ object DateUtilities {
     }
 
     fun getStringDateFromLocalDate(date: LocalDate, pattern: String = _format): String {
-        return try{
+        return try {
             date.format(DateTimeFormatter.ofPattern(pattern))
         } catch (ex: Exception) {
             Log.e("DateUtilities.getStringDateFromLocalDate", ex.stackTraceToString())
@@ -62,12 +63,25 @@ object DateUtilities {
     }
 
     fun getLocalDateFromMillis(millis: Long): LocalDate {
-        return try{
+        return try {
             LocalDate.ofEpochDay(millis / (24 * 60 * 60 * 1000))
         } catch (ex: Exception) {
             Log.e("DateUtilities.getLocalDateFromMillis", ex.stackTraceToString())
             _defaultDate
         }
+    }
+
+    fun getStartDateFromTimeFrame(timeFrame: TimeFrame): LocalDate {
+        val today = LocalDate.now()
+
+        val startDate = when (timeFrame) {
+            TimeFrame.LastWeek -> today.minusWeeks(1)
+            TimeFrame.LastMonth -> today.minusMonths(1)
+            TimeFrame.LastYear -> today.minusYears(1)
+            TimeFrame.AllTime -> LocalDate.MIN
+        }
+
+        return startDate
     }
 
     @SuppressLint("SimpleDateFormat")

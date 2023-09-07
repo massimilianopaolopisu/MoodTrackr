@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
@@ -24,8 +25,9 @@ fun NavBottomBar(navController: NavController) {
     )
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround
     ) {
         for ((icon, contentDescription, route) in icons) {
             Icon(
@@ -48,6 +50,8 @@ fun NavBottomBar(navController: NavController) {
                             }
                         }
                     }
+                    .align(Alignment.CenterVertically)
+                    .weight(1f)
             )
         }
     }

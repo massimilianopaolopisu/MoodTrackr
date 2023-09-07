@@ -72,3 +72,8 @@ Replace {issue-number} with the number of the issue you're addressing.
 
 ## License
 This project is licensed under the MIT License.
+
+## Third-Party Attribution
+This project utilizes the [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) library by Philipp Jahoda. The library is distributed under the Apache License, Version 2.0. Copyright 2020 Philipp Jahoda.
+
+[Full Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
