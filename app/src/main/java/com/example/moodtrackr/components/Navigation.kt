@@ -45,7 +45,7 @@ fun Navigation(viewModel: MainViewModel) {
             EditProfileScreen(navController, viewModel.profilePreferencesRepository)
         }
         composable(Routes.Settings.toString()) {
-            SettingsScreen(navController, viewModel.themePreferencesRepository, viewModel.dataImporterExporterStrategy)
+            SettingsScreen(navController, viewModel)
         }
         composable(
             route = "${Routes.EditMoodEntry}/{date}",
