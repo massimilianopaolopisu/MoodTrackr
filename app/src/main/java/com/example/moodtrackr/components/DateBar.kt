@@ -47,7 +47,11 @@ fun DateBar(
         Text(
             text = DateUtilities.getStringDateFromLocalDate(localDate),
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    navController.navigate("$origin/$localDate")
+                },
             textAlign = TextAlign.Center
         )
 

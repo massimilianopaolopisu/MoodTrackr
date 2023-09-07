@@ -30,11 +30,11 @@ fun MainBottomBar(
             "Mood Entries History",
             Routes.MoodEntriesHistory.toString()
         ),
-//        Triple(
-//            ImageVector.vectorResource(id = R.drawable.ic_graph),
-//            "Graphs",
-//            Routes.MoodEntriesHistory.toString()
-//        ),
+        Triple(
+            ImageVector.vectorResource(id = R.drawable.ic_graph),
+            "Graphs",
+            Routes.Graph.toString()
+        ),
         Triple(
             Icons.Default.ExitToApp,
             "Exit",

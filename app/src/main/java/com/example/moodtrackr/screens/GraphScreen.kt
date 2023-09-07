@@ -40,7 +40,7 @@ import com.example.moodtrackr.viewModels.MainViewModel
 import java.time.LocalDate
 
 @Composable
-fun StatisticsScreen(
+fun GraphScreen(
     navController: NavController,
     viewModel: MainViewModel
 ) {

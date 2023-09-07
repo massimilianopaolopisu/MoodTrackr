@@ -2,7 +2,6 @@ package com.example.moodtrackr.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,22 +42,24 @@ fun HomeScreen(
                 .fillMaxSize()
                 .align(Alignment.TopCenter)
         ) {
-            Row(
+            Text(
+                text = "Mood Trackr",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = Color.Black),
                 modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "Hello $name, how do you feel today?",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = Color.Black),
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .align(Alignment.CenterVertically)
-                        .weight(1f)
-                )
-            }
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Text(
+                text = "Hello $name, how do you feel today?",
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
 
             MoodEntrySummary(
                 navController = navController,
@@ -80,8 +81,6 @@ fun HomeScreen(
         }
     }
 }
-
-
 
 fun getName(profilePreferencesRepository: IProfilePreferencesRepository): String {
     val profile = profilePreferencesRepository.load()
