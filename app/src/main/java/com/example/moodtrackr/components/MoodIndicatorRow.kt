@@ -9,11 +9,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MoodIndicatorRow(label: String, progress: Int, max: Int = 100) {
+fun MoodIndicatorRow(
+    label: String,
+    progress: Int,
+    max: Int = 100,
+    useDynamicColors: Boolean = false) {
+
+    val value = progress.toFloat() / max
+    var color = MaterialTheme.colorScheme.primary
+
+    if(useDynamicColors){
+        color = if(value < 50) Color.Red else Color.Green
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -27,9 +40,9 @@ fun MoodIndicatorRow(label: String, progress: Int, max: Int = 100) {
                 .padding(end = 8.dp)
         )
         LinearProgressIndicator(
-            progress = progress.toFloat() / max,
+            progress = value,
             modifier = Modifier.weight(5f),
-            color = MaterialTheme.colorScheme.primary
+            color = color
         )
         Text(
             text = progress.toString(),

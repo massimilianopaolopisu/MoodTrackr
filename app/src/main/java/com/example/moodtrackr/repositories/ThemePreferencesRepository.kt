@@ -13,16 +13,21 @@ class ThemePreferencesRepository @Inject constructor(context: Context) : SharedP
     IThemePreferencesRepository
 {
     override fun load() : ThemePreferences {
-        val themePreferences = ThemePreferences(ThemeMode.System, true)
+        val themePreferences = ThemePreferences(
+            ThemeMode.System,
+            dynamicColorsEnabled = true,
+            lockOrientationEnabled = false
+        )
 
         try{
             val sharedPreferences = loadPreferences(SharedPreferencesKeys.THEME) ?: return themePreferences
 
             val dynamicColorsEnabled = sharedPreferences.getBoolean("dynamicColorsEnabled", true)
+            val lockOrientationEnabled = sharedPreferences.getBoolean("lockOrientationEnabled", false)
             val themeModeString = sharedPreferences.getString("themeMode", "System") ?: "System"
             val themeMode = ThemeMode.valueOf(themeModeString)
 
-            return ThemePreferences(themeMode, dynamicColorsEnabled)
+            return ThemePreferences(themeMode, dynamicColorsEnabled, lockOrientationEnabled)
         } catch(ex: Exception)
         {
             Log.e("ThemePreferencesRepository.load", ex.stackTraceToString())
@@ -36,6 +41,7 @@ class ThemePreferencesRepository @Inject constructor(context: Context) : SharedP
             val editor = sharedPreferences.edit()
 
             editor.putBoolean("dynamicColorsEnabled", t.dynamicColorsEnabled)
+            editor.putBoolean("lockOrientationEnabled", t.lockOrientationEnabled)
             editor.putString("themeMode", t.themeMode.toString())
             editor.apply()
         } catch(ex: Exception) {
