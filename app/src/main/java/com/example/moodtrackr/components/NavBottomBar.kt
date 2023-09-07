@@ -11,52 +11,38 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
 
 @Composable
-fun NavBottomBar(
-    navController: NavController
-){
+fun NavBottomBar(navController: NavController) {
+    val icons = listOf(
+        Triple(Icons.Default.KeyboardArrowLeft, "Back", null),
+        Triple(Icons.Default.ExitToApp, "Exit", null),
+        Triple(Icons.Default.Home, "Home", Routes.Home.toString())
+    )
+
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Icon(
-            imageVector = Icons.Default.KeyboardArrowLeft,
-            contentDescription = "Back",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    navController.popBackStack()
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
-        Icon(
-            imageVector = Icons.Default.ExitToApp,
-            contentDescription = "Exit",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    android.os.Process.killProcess(android.os.Process.myPid())
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
-        Icon(
-            imageVector = Icons.Default.Home,
-            contentDescription = "Home",
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable {
-                    navController.navigate(Routes.Home.toString())
-                }
-                .align(Alignment.CenterVertically)
-                .weight(1f)
-        )
+        for ((icon, contentDescription, route) in icons) {
+            Icon(
+                imageVector = icon,
+                contentDescription = contentDescription,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .clickable {
+                        route?.let {
+                            navController.navigate(it)
+                        } ?: run {
+                            if (contentDescription == "Exit") {
+                                android.os.Process.killProcess(android.os.Process.myPid())
+                            }
+                        }
+                    }
+            )
+        }
     }
 }

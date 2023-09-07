@@ -33,21 +33,18 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.components.ThemeOptionsRadioButtons
-import com.example.moodtrackr.dataImportExport.interfaces.IDataImporterExporterStrategy
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.ThemePreferences
 import com.example.moodtrackr.repositories.interfaces.ISave
-import com.example.moodtrackr.repositories.interfaces.IThemePreferencesRepository
-import com.example.moodtrackr.ui.theme.MoodTrackrTheme
+import com.example.moodtrackr.viewModels.MainViewModel
 
 @Composable
 fun SettingsScreen(
     navController: NavController,
-    themePreferencesRepository: IThemePreferencesRepository,
-    dataImporterExporterStrategy: IDataImporterExporterStrategy
+    viewModel: MainViewModel
 ) {
-    val themePreferences = themePreferencesRepository.load()
+    val themePreferences = viewModel.themePreferencesRepository.load()
 
     var selectedTheme by remember { mutableStateOf(themePreferences.themeMode) }
     var dynamicColorsEnabled by remember { mutableStateOf(themePreferences.dynamicColorsEnabled) }
@@ -185,7 +182,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            dataImporterExporterStrategy.export(null)
+                            viewModel.dataImporterExporterStrategy.export(null)
                         }
                         .padding(top = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -206,7 +203,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            dataImporterExporterStrategy.import(null)
+                            viewModel.dataImporterExporterStrategy.import(null)
                         }
                         .padding(top = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -231,15 +228,11 @@ fun SettingsScreen(
                 .align(Alignment.BottomCenter)
         ) {
             @Suppress("UNCHECKED_CAST")
-            val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf<Pair<ISave<Any>, Any>>(
-                themePreferencesRepository as ISave<Any> to ThemePreferences(selectedTheme, dynamicColorsEnabled, lockOrientationEnabled) as Any
+            val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf(
+                viewModel.themePreferencesRepository as ISave<Any> to ThemePreferences(selectedTheme, dynamicColorsEnabled, lockOrientationEnabled) as Any
             )
 
             SaveBottomBar(navController, saveHandlerAndObjectPairList)
         }
-    }
-
-    MoodTrackrTheme(darkTheme = darkMode, dynamicColor = dynamicColorsEnabled){
-
     }
 }
