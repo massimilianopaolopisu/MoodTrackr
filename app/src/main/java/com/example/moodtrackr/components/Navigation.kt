@@ -9,7 +9,7 @@ import androidx.navigation.navArgument
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.screens.EditMoodEntryScreen
 import com.example.moodtrackr.screens.EditProfileScreen
-import com.example.moodtrackr.screens.GraphScreen
+import com.example.moodtrackr.screens.GraphsScreen
 import com.example.moodtrackr.screens.HomeScreen
 import com.example.moodtrackr.screens.MoodEntriesHistoryScreen
 import com.example.moodtrackr.screens.SettingsScreen
@@ -77,8 +77,8 @@ fun Navigation(viewModel: MainViewModel) {
         composable(Routes.Statistics.toString()) {
             StatisticsScreen(navController, viewModel)
         }
-        composable(Routes.Graph.toString()) {
-            GraphScreen(navController, viewModel)
+        composable(Routes.Graphs.toString()) {
+            GraphsScreen(navController, viewModel)
         }
     }
 }

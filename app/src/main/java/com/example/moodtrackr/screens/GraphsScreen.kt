@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,13 +29,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.example.moodtrackr.components.LineChart
 import com.example.moodtrackr.components.NavBottomBar
 import com.example.moodtrackr.enums.TimeFrame
 import com.example.moodtrackr.models.MoodEntry
+import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
-import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -53,7 +52,7 @@ private val indicatorListNames = MoodEntry::class.memberProperties
     .map { it.name }
 
 @Composable
-fun GraphScreen(
+fun GraphsScreen(
     navController: NavController,
     viewModel: MainViewModel
 ) {
@@ -137,6 +136,7 @@ fun GraphScreen(
                         text = { Text(text = timeFrame.displayName) },
                         onClick = {
                             selectedTimeFrame = timeFrame
+                            isTimeFrameMenuExpanded = false
                         }
                     )
                 }
@@ -152,6 +152,7 @@ fun GraphScreen(
                         text = { Text(text = propertyName) },
                         onClick = {
                             selectedProperty = propertyName
+                            isPropertiesMenuExpanded = false
                         }
                     )
                 }
@@ -178,8 +179,10 @@ fun GraphScreen(
                     legendEnabled = true,
                     xAxisPosition = XAxisPosition.BOTTOM,
                     yAxisMinimum = 0f,
-                    yAxisEnabled = true
-                )
+                    yAxisEnabled = true,
+                    xAxisConvertMillisToDate = true,
+                    xAxisLabelCount = 4
+                    )
 
                 Spacer(modifier = Modifier.height(16.dp))
             } else {
@@ -202,9 +205,10 @@ fun GraphScreen(
 fun createLineData(propertyName: String, moodEntries: List<MoodEntry>): LineData {
     val entries = mutableListOf<Entry>()
 
-    moodEntries.forEachIndexed { index, moodEntry ->
+    moodEntries.forEachIndexed { _, moodEntry ->
         val value = getValueFromPropertyName(propertyName, moodEntry) ?: 0
-        entries.add(Entry(index.toFloat(), value.toFloat()))
+        val dateInMillis = DateUtilities.getMillisFromLocalDate(moodEntry.date)
+        entries.add(Entry(dateInMillis.toFloat(), value.toFloat()))
     }
 
     val dataSet = LineDataSet(entries, propertyName)
@@ -228,41 +232,4 @@ fun getStartDate(timeFrame: TimeFrame): LocalDate {
         TimeFrame.LastYear -> LocalDate.now().minusYears(1)
         TimeFrame.AllTime -> LocalDate.MIN
     }
-}
-
-@Composable
-fun LineChart(
-    modifier: Modifier = Modifier,
-    data: LineData,
-    description: String? = null,
-    backgroundColor: Color = Color.Transparent,
-    legendEnabled: Boolean = false,
-    xAxisPosition: XAxisPosition = XAxisPosition.BOTTOM,
-    yAxisMinimum: Float = 0f,
-    yAxisEnabled: Boolean = false
-) {
-    val chart = rememberUpdatedState(data)
-
-    AndroidView(
-        modifier = modifier.fillMaxWidth().fillMaxHeight(),
-        factory = { context ->
-            LineChart(context)
-        },
-        update = { chartView ->
-            chartView.data = chart.value
-            chartView.description.text = description
-            chartView.setBackgroundColor(backgroundColor.toArgb())
-
-            val legend = chartView.legend
-            legend.isEnabled = legendEnabled
-
-            val xAxis = chartView.xAxis
-            xAxis.position = xAxisPosition
-
-            val leftYAxis = chartView.axisLeft
-            leftYAxis.axisMinimum = yAxisMinimum
-
-            chartView.axisRight.isEnabled = yAxisEnabled
-        }
-    )
 }

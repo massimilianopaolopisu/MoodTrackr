@@ -33,7 +33,7 @@ fun MainBottomBar(
         Triple(
             ImageVector.vectorResource(id = R.drawable.ic_graph),
             "Graphs",
-            Routes.Graph.toString()
+            Routes.Graphs.toString()
         ),
         Triple(
             Icons.Default.ExitToApp,
