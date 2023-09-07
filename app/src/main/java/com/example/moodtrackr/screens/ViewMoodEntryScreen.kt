@@ -15,8 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moodtrackr.components.MoodEntryCrudBar
 import com.example.moodtrackr.components.MoodEntrySummary
-import com.example.moodtrackr.components.MoodEntryViewBar
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.utilities.DateUtilities
 
@@ -28,7 +29,7 @@ fun ViewMoodEntryScreen(
 ) {
     val dateParsed = DateUtilities.getLocalDateFromStringDate(date)
     val moodEntry = moodEntriesRepository.getMoodEntry(dateParsed)
-
+    val route = "${Routes.ViewMoodEntry}/${dateParsed}"
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -51,9 +52,11 @@ fun ViewMoodEntryScreen(
             )
 
             MoodEntrySummary(
-                navController,
-                moodEntry,
-                dateParsed
+                navController = navController,
+                moodEntry = moodEntry,
+                date = dateParsed,
+                origin = Routes.ViewMoodEntry.toString(),
+                allowChangeDate = true
             )
         }
 
@@ -62,8 +65,11 @@ fun ViewMoodEntryScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            MoodEntryViewBar(
-                navController = navController
+            MoodEntryCrudBar(
+                navController = navController,
+                moodEntriesRepository = moodEntriesRepository,
+                selectedDate = dateParsed,
+                returnRoute = route
             )
         }
     }

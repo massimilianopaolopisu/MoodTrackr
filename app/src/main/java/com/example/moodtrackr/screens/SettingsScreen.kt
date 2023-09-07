@@ -53,6 +53,7 @@ fun SettingsScreen(
     var dynamicColorsEnabled by remember { mutableStateOf(themePreferences.dynamicColorsEnabled) }
     val isSystemInDarkMode = isSystemInDarkTheme()
     var darkMode by remember { mutableStateOf(isSystemInDarkMode) }
+    var lockOrientationEnabled by remember { mutableStateOf(themePreferences.lockOrientationEnabled) }
 
     Box(
         modifier = Modifier
@@ -164,6 +165,25 @@ fun SettingsScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Lock orientation",
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    Switch(
+                        checked = lockOrientationEnabled,
+                        onCheckedChange = { enabled ->
+                            lockOrientationEnabled = enabled
+                        }
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .clickable {
                             dataImporterExporterStrategy.export(null)
                         }
@@ -212,7 +232,7 @@ fun SettingsScreen(
         ) {
             @Suppress("UNCHECKED_CAST")
             val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf<Pair<ISave<Any>, Any>>(
-                themePreferencesRepository as ISave<Any> to ThemePreferences(selectedTheme, dynamicColorsEnabled) as Any
+                themePreferencesRepository as ISave<Any> to ThemePreferences(selectedTheme, dynamicColorsEnabled, lockOrientationEnabled) as Any
             )
 
             SaveBottomBar(navController, saveHandlerAndObjectPairList)
