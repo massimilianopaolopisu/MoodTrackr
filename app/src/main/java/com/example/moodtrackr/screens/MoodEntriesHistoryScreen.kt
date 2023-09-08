@@ -6,7 +6,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,7 +55,8 @@ fun MoodEntriesHistoryScreen(
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = Color.Black),
+                    color = MaterialTheme.colorScheme.onBackground
+                ),
                 modifier = Modifier
                     .padding(bottom = 16.dp)
                     .align(Alignment.CenterHorizontally)
@@ -80,10 +80,9 @@ fun MoodEntriesHistoryScreen(
                             .fillMaxWidth(),
                         showModeToggle = false,
                         colors = DatePickerDefaults
-                            .colors(
-                                titleContentColor = Color.Black,
-                                navigationContentColor = Color.Black,
-                                headlineContentColor = Color.Black
+                            .colors(titleContentColor = MaterialTheme.colorScheme.onBackground,
+                                navigationContentColor = MaterialTheme.colorScheme.onBackground,
+                                headlineContentColor = MaterialTheme.colorScheme.onBackground
                             )
                     )
                 }
@@ -94,31 +93,37 @@ fun MoodEntriesHistoryScreen(
                             .fillMaxWidth(),
                         showModeToggle = false,
                         colors = DatePickerDefaults
-                            .colors(
-                                titleContentColor = Color.Black,
-                                navigationContentColor = Color.Black,
-                                headlineContentColor = Color.Black
+                            .colors(titleContentColor = MaterialTheme.colorScheme.onBackground,
+                                navigationContentColor = MaterialTheme.colorScheme.onBackground,
+                                headlineContentColor = MaterialTheme.colorScheme.onBackground
                             )
                     )
                 }
-                Row(
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .padding(top = 16.dp)
                 ) {
-                    Text(
-                        text = "Show only inserted days",
+                    Row(
                         modifier = Modifier
-                            .weight(1f)
-                    )
-                    Switch(
-                        checked = showOnlyInsertedDays,
-                        onCheckedChange = { enabled ->
-                            showOnlyInsertedDays = enabled
-                        }
-                    )
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Show only inserted days",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+                        Switch(
+                            checked = showOnlyInsertedDays,
+                            onCheckedChange = { enabled ->
+                                showOnlyInsertedDays = enabled
+                            }
+                        )
+                    }
                 }
             }
         }

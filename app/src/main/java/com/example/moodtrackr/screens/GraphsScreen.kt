@@ -82,7 +82,7 @@ fun GraphsScreen(
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 ),
                 modifier = Modifier
                     .padding(bottom = 16.dp)
@@ -91,39 +91,42 @@ fun GraphsScreen(
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable {
+                        isTimeFrameMenuExpanded = true
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Default.List,
                     contentDescription = "OpenTimeFrameSelection",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable {
-                        isTimeFrameMenuExpanded = true
-                    }
+                    tint = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     text = "Open time frame selection list",
                     style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable {
+                        isPropertiesMenuExpanded = true
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Default.List,
                     contentDescription = "OpenPropertiesSelection",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable {
-                        isPropertiesMenuExpanded = true
-                    }
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
                 )
                 Text(
                     text = "Open properties selection list",
                     style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 

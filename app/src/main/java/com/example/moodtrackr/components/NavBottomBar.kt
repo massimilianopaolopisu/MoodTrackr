@@ -33,7 +33,7 @@ fun NavBottomBar(navController: NavController) {
             Icon(
                 imageVector = icon,
                 contentDescription = contentDescription,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .clickable {
                         when (route) {

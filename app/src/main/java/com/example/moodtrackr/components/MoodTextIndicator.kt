@@ -23,10 +23,12 @@ fun MoodTextIndicator(
     ) {
         Text(
             text = label,
+            color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleMedium
         )
         Text(
             text = text,
+            color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleSmall
         )
     }
