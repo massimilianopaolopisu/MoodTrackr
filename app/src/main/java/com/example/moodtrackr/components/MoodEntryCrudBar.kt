@@ -102,7 +102,7 @@ fun MoodEntryCrudBar(
             Icon(
                 imageVector = icon,
                 contentDescription = contentDescription,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .clickable {
                         action()

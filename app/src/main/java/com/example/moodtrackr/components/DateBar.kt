@@ -39,7 +39,7 @@ fun DateBar(
             Icon(
                 imageVector = Icons.Default.KeyboardArrowLeft,
                 contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.clickable {
                     val date = localDate.minusDays(1)
                     navController.navigate("$origin/$date")
@@ -50,6 +50,7 @@ fun DateBar(
         Text(
             text = DateUtilities.getStringDateFromLocalDate(localDate),
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .weight(1f)
                 .clickable {
@@ -62,7 +63,7 @@ fun DateBar(
             Icon(
                 imageVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = "Next",
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.clickable {
                     val date = localDate.plusDays(1)
                     navController.navigate("$origin/$date")

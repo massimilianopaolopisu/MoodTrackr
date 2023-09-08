@@ -64,7 +64,7 @@ fun MainBottomBar(
                 Icon(
                     imageVector = imageVector,
                     contentDescription = contentDescription,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .clickable {
                             route?.let {

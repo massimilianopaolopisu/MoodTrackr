@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,7 +34,13 @@ fun ThemeOptionsRadioButtons(
         ) {
             RadioButton(
                 selected = selectedOption == themeMode,
-                onClick = { onOptionSelected(themeMode) }
+                onClick = {
+                    onOptionSelected(themeMode)
+                },
+                colors = RadioButtonDefaults.colors(
+                    unselectedColor = MaterialTheme.colorScheme.onBackground,
+                    selectedColor = MaterialTheme.colorScheme.onBackground
+                )
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
