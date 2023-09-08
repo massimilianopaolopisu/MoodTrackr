@@ -258,7 +258,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            viewModel.dataImporterExporterStrategy.export(null)
+                            viewModel.dataImporterExporterStrategy.export(null, null)
                         }
                         .padding(top = 16.dp)
                 ) {
@@ -294,7 +294,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            viewModel.dataImporterExporterStrategy.import(null)
+                            viewModel.dataImporterExporterStrategy.import(null, null)
                         }
                         .padding(top = 16.dp, bottom = 16.dp)
                 ) {
