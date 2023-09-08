@@ -43,11 +43,11 @@ fun MoodEntryCrudBar(
         Triple(Icons.Default.KeyboardArrowLeft, "Back") {
             navController.popBackStack()
         },
-        Triple(Icons.Default.ExitToApp, "Exit") {
-            android.os.Process.killProcess(android.os.Process.myPid())
-        },
         Triple(Icons.Default.Home, "Home") {
             navController.navigate(Routes.Home.toString())
+        },
+        Triple(Icons.Default.ExitToApp, "Exit") {
+            android.os.Process.killProcess(android.os.Process.myPid())
         },
         Triple(Icons.Default.Info, "View") {
             navController.navigate(viewRoute)

@@ -182,7 +182,7 @@ fun GraphsScreen(
                     yAxisMinimum = 0f,
                     yAxisEnabled = true,
                     xAxisConvertMillisToDate = true,
-                    xAxisLabelCount = 4
+                    xAxisLabelCount = 5
                     )
 
                 Spacer(modifier = Modifier.height(16.dp))
