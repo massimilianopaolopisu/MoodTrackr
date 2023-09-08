@@ -31,12 +31,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moodtrackr.components.SaveBottomBar
+import com.example.moodtrackr.components.NavBottomBar
 import com.example.moodtrackr.components.ThemeOptionsRadioButtons
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.ThemePreferences
-import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.viewModels.MainViewModel
 
 @Composable
@@ -162,6 +161,13 @@ fun SettingsScreen(
                                             true
                                         }
                                     }
+                                    viewModel.themePreferencesRepository.save(
+                                        ThemePreferences(
+                                            selectedTheme,
+                                            dynamicColorsEnabled,
+                                            lockOrientationEnabled
+                                        )
+                                    )
                                 }
                             )
                         }
@@ -195,6 +201,13 @@ fun SettingsScreen(
                             checked = dynamicColorsEnabled,
                             onCheckedChange = { enabled ->
                                 dynamicColorsEnabled = enabled
+                                viewModel.themePreferencesRepository.save(
+                                    ThemePreferences(
+                                        selectedTheme,
+                                        dynamicColorsEnabled,
+                                        lockOrientationEnabled
+                                    )
+                                )
                             }
                         )
                     }
@@ -227,6 +240,13 @@ fun SettingsScreen(
                             checked = lockOrientationEnabled,
                             onCheckedChange = { enabled ->
                                 lockOrientationEnabled = enabled
+                                viewModel.themePreferencesRepository.save(
+                                    ThemePreferences(
+                                        selectedTheme,
+                                        dynamicColorsEnabled,
+                                        lockOrientationEnabled
+                                    )
+                                )
                             }
                         )
                     }
@@ -311,16 +331,7 @@ fun SettingsScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            @Suppress("UNCHECKED_CAST")
-            val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf(
-                viewModel.themePreferencesRepository as ISave<Any> to ThemePreferences(
-                    selectedTheme,
-                    dynamicColorsEnabled,
-                    lockOrientationEnabled
-                ) as Any
-            )
-
-            SaveBottomBar(navController, saveHandlerAndObjectPairList)
+            NavBottomBar(navController)
         }
     }
 }
