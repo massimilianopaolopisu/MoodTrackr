@@ -21,7 +21,7 @@ fun MoodIndicatorRow(
     useDynamicColors: Boolean = false) {
 
     val progress = value.toFloat() / max
-    var color = MaterialTheme.colorScheme.primary
+    var color = MaterialTheme.colorScheme.onBackground
 
     if(useDynamicColors){
         color = if(value < 50) Color.Red else Color.Green
@@ -35,6 +35,7 @@ fun MoodIndicatorRow(
     ) {
         Text(
             text = label,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .weight(3f)
                 .padding(end = 8.dp)
@@ -46,6 +47,7 @@ fun MoodIndicatorRow(
         )
         Text(
             text = value.toString(),
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .weight(1f),
             textAlign = TextAlign.End

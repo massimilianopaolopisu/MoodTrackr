@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -57,7 +56,8 @@ fun EditProfileScreen(
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = Color.Black),
+                    color = MaterialTheme.colorScheme.onBackground,
+                ),
                 modifier = Modifier
                     .padding(bottom = 16.dp)
                     .align(Alignment.CenterHorizontally)
@@ -76,6 +76,7 @@ fun EditProfileScreen(
             item {
                 Text(
                     text = "Name",
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .padding(top = 8.dp)
                 )
@@ -84,7 +85,9 @@ fun EditProfileScreen(
                     onValueChange = { newValue: String -> newName = newValue },
                     modifier = Modifier
                         .fillMaxWidth(),
-                    textStyle = MaterialTheme.typography.bodyMedium,
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
@@ -98,6 +101,7 @@ fun EditProfileScreen(
 
                 Text(
                     text = "Surname",
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .padding(top = 16.dp)
                 )
@@ -106,7 +110,9 @@ fun EditProfileScreen(
                     onValueChange = { newValue: String -> newSurname = newValue },
                     modifier = Modifier
                         .fillMaxWidth(),
-                    textStyle = MaterialTheme.typography.bodyMedium,
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
@@ -120,6 +126,7 @@ fun EditProfileScreen(
 
                 Text(
                     text = "Sex",
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .padding(top = 16.dp)
                 )
@@ -130,18 +137,33 @@ fun EditProfileScreen(
                 ) {
                     RadioButton(
                         selected = newSex == "M",
-                        onClick = { newSex = "M" }
+                        onClick = { newSex = "M" },
+                        colors = RadioButtonDefaults.colors(
+                                unselectedColor = MaterialTheme.colorScheme.onBackground,
+                                selectedColor = MaterialTheme.colorScheme.onBackground
+                        )
                     )
-                    Text("M")
+                    Text(
+                        text = "M",
+                        color = MaterialTheme.colorScheme.onBackground
+                        )
                     RadioButton(
                         selected = newSex == "F",
-                        onClick = { newSex = "F" }
+                        onClick = { newSex = "F" },
+                        colors = RadioButtonDefaults.colors(
+                            unselectedColor = MaterialTheme.colorScheme.onBackground,
+                            selectedColor = MaterialTheme.colorScheme.onBackground
+                        )
                     )
-                    Text("F")
+                    Text(
+                        text = "F",
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 }
 
                 Text(
                     text = "Birthday",
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .padding(top = 16.dp)
                 )
@@ -151,9 +173,10 @@ fun EditProfileScreen(
                         .fillMaxWidth(),
                     showModeToggle = false,
                     colors = DatePickerDefaults
-                        .colors(titleContentColor = Color.Black,
-                            navigationContentColor = Color.Black,
-                            headlineContentColor = Color.Black)
+                        .colors(titleContentColor = MaterialTheme.colorScheme.onBackground,
+                            navigationContentColor = MaterialTheme.colorScheme.onBackground,
+                            headlineContentColor = MaterialTheme.colorScheme.onBackground
+                        )
                 )
             }
         }

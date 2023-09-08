@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import com.example.moodtrackr.components.LineChart
 import com.example.moodtrackr.components.NavBottomBar
 import com.example.moodtrackr.enums.TimeFrame
+import com.example.moodtrackr.extensions.capitalizeFirstLetter
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
@@ -59,7 +60,7 @@ fun GraphsScreen(
     var isTimeFrameMenuExpanded by remember { mutableStateOf(false) }
     var isPropertiesMenuExpanded by remember { mutableStateOf(false) }
     var selectedTimeFrame by remember { mutableStateOf(TimeFrame.LastWeek) }
-    var selectedProperty by remember { mutableStateOf("Overall") }
+    var selectedProperty by remember { mutableStateOf("overall") }
 
     val moodEntries = viewModel.moodEntriesRepository.getMoodEntriesInRange(
         DateUtilities.getStartDateFromTimeFrame(selectedTimeFrame),
@@ -77,11 +78,11 @@ fun GraphsScreen(
                 .align(Alignment.TopCenter)
         ) {
             Text(
-                text = "Graph",
+                text = "Graphs",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 ),
                 modifier = Modifier
                     .padding(bottom = 16.dp)
@@ -90,39 +91,42 @@ fun GraphsScreen(
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable {
+                        isTimeFrameMenuExpanded = true
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Default.List,
                     contentDescription = "OpenTimeFrameSelection",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable {
-                        isTimeFrameMenuExpanded = true
-                    }
+                    tint = MaterialTheme.colorScheme.onBackground,
                 )
                 Text(
                     text = "Open time frame selection list",
                     style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable {
+                        isPropertiesMenuExpanded = true
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Default.List,
                     contentDescription = "OpenPropertiesSelection",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable {
-                        isPropertiesMenuExpanded = true
-                    }
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
                 )
                 Text(
                     text = "Open properties selection list",
                     style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
@@ -149,7 +153,7 @@ fun GraphsScreen(
             ) {
                 indicatorListNames.forEach { propertyName ->
                     DropdownMenuItem(
-                        text = { Text(text = propertyName) },
+                        text = { Text(text = propertyName.capitalizeFirstLetter()?:"Unknown") },
                         onClick = {
                             selectedProperty = propertyName
                             isPropertiesMenuExpanded = false
@@ -181,7 +185,7 @@ fun GraphsScreen(
                     yAxisMinimum = 0f,
                     yAxisEnabled = true,
                     xAxisConvertMillisToDate = true,
-                    xAxisLabelCount = 4
+                    xAxisLabelCount = 5
                     )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -211,7 +215,7 @@ fun createLineData(propertyName: String, moodEntries: List<MoodEntry>): LineData
         entries.add(Entry(dateInMillis.toFloat(), value.toFloat()))
     }
 
-    val dataSet = LineDataSet(entries, propertyName)
+    val dataSet = LineDataSet(entries, propertyName.capitalizeFirstLetter())
     dataSet.color = Color.Blue.toArgb()
     dataSet.lineWidth = 2f
     dataSet.setCircleColor(Color.Blue.toArgb())

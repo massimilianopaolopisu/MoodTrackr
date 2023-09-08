@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.utilities.DateUtilities
 import java.time.LocalDate
 
@@ -26,6 +27,8 @@ fun DateBar(
     origin: String?,
     showButtons: Boolean
 ){
+    val editRoute = "${Routes.EditMoodEntry}/$localDate"
+
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -36,7 +39,7 @@ fun DateBar(
             Icon(
                 imageVector = Icons.Default.KeyboardArrowLeft,
                 contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.clickable {
                     val date = localDate.minusDays(1)
                     navController.navigate("$origin/$date")
@@ -47,10 +50,11 @@ fun DateBar(
         Text(
             text = DateUtilities.getStringDateFromLocalDate(localDate),
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .weight(1f)
                 .clickable {
-                    navController.navigate("$origin/$localDate")
+                    navController.navigate(editRoute)
                 },
             textAlign = TextAlign.Center
         )
@@ -59,7 +63,7 @@ fun DateBar(
             Icon(
                 imageVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = "Next",
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.clickable {
                     val date = localDate.plusDays(1)
                     navController.navigate("$origin/$date")
