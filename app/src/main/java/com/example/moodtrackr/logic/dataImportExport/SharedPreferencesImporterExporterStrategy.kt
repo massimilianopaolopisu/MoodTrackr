@@ -37,7 +37,7 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
             }
 
             val jsonData: String = gson.toJson(allData)
-            fileSystemIO.write(context, outputFilePath, fileName?: _fileName, jsonData)
+            fileSystemIO.write(context, fileName?: _fileName, jsonData)
 
             return true
         } catch (ex: Exception) {
@@ -50,7 +50,7 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
     override fun import(inputFilePath: String?, fileName: String?): Boolean {
         try {
             val gson = Gson()
-            val jsonData = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)
+            val jsonData = fileSystemIO.read(context, fileName?: _fileName)
 
             val type = object : TypeToken<Map<String, Map<String, Any>>>() {}.type
             val deserializedData: Map<String, Map<String, Any>> = gson.fromJson(jsonData, type)

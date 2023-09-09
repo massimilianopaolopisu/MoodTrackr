@@ -11,7 +11,6 @@ import com.example.moodtrackr.models.MoodEntry
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import java.io.FileReader
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -20,7 +19,7 @@ class SqlMoodEntriesImporterExporterStrategy @Inject constructor(private val con
     IDataImporterExporterStrategy {
 
     private val _appName = context.getString(R.string.app_name)
-    private val _fileName = "$_appName-sql-mood_entries-data.json\""
+    private val _fileName = "$_appName-sql-mood_entries-data.json"
 
     override fun export(outputFilePath: String?, fileName: String?): Boolean {
         return try {
@@ -29,7 +28,7 @@ class SqlMoodEntriesImporterExporterStrategy @Inject constructor(private val con
             val gson = Gson()
             val jsonData: String = gson.toJson(moodEntries)
 
-            fileSystemIO.write(context, outputFilePath, fileName?: _fileName, jsonData)
+            fileSystemIO.write(context, fileName?: _fileName, jsonData)
         } catch (ex: Exception) {
             Log.e("SqliteImporterExporter.export", ex.stackTraceToString())
             false
@@ -42,10 +41,10 @@ class SqlMoodEntriesImporterExporterStrategy @Inject constructor(private val con
                 .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
                 .create()
 
-            val jsonData = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)
+            val jsonData = fileSystemIO.read(context, fileName?: _fileName)
 
             val moodEntriesType = object : TypeToken<List<MoodEntry>>() {}.type
-            val moodEntries: List<MoodEntry> = gson.fromJson(FileReader(jsonData), moodEntriesType)
+            val moodEntries: List<MoodEntry> = gson.fromJson(jsonData, moodEntriesType)
 
             for (entry in moodEntries) {
                 insert(entry)
