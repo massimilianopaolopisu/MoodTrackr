@@ -28,7 +28,7 @@ class SqlMoodEntriesImporterExporterStrategy @Inject constructor(private val con
             val gson = Gson()
             val jsonData: String = gson.toJson(moodEntries)
 
-            fileSystemIO.write(context, fileName?: _fileName, jsonData)
+            fileSystemIO.write(context, outputFilePath, fileName?: _fileName, jsonData)
         } catch (ex: Exception) {
             Log.e("SqliteImporterExporter.export", ex.stackTraceToString())
             false
@@ -41,7 +41,7 @@ class SqlMoodEntriesImporterExporterStrategy @Inject constructor(private val con
                 .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
                 .create()
 
-            val jsonData = fileSystemIO.read(context, fileName?: _fileName)
+            val jsonData = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)
 
             val moodEntriesType = object : TypeToken<List<MoodEntry>>() {}.type
             val moodEntries: List<MoodEntry> = gson.fromJson(jsonData, moodEntriesType)

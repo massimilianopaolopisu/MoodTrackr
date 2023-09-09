@@ -95,7 +95,6 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.9")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-    implementation("com.anggrayudi:storage:1.5.5")
     kapt("com.google.dagger:hilt-compiler:2.44")
     kapt("com.google.dagger:dagger-compiler:2.44")
     testImplementation("junit:junit:4.13.2")

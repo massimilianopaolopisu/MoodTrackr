@@ -13,7 +13,7 @@ import java.io.OutputStream
 
 class MediaStoreIO : IFileSystemIO {
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun write(context: Context, fileName: String, data: String): Boolean {
+    override fun write(context: Context, path: String?, fileName: String, data: String): Boolean {
         try {
             val extension = fileName.substringAfterLast(".")
             val contentResolver = context.contentResolver
@@ -57,7 +57,7 @@ class MediaStoreIO : IFileSystemIO {
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun read(context: Context, fileName: String): String? {
+    override fun read(context: Context, path: String?, fileName: String): String? {
         try {
             val contentResolver = context.contentResolver
             val uri = MediaStore.Downloads.EXTERNAL_CONTENT_URI

@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -33,7 +33,6 @@ import androidx.navigation.NavController
 import com.example.moodtrackr.components.IndicatorStatsCard
 import com.example.moodtrackr.components.NavBottomBar
 import com.example.moodtrackr.enums.TimeFrame
-import com.example.moodtrackr.logic.statistics.MoodEntryStatisticsCalculator
 import com.example.moodtrackr.models.IndicatorStats
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
@@ -44,8 +43,6 @@ fun StatisticsScreen(
     navController: NavController,
     viewModel: MainViewModel
 ) {
-    val statisticsCalculator = MoodEntryStatisticsCalculator()
-
     var selectedTimeFrame by remember { mutableStateOf(TimeFrame.LastWeek) }
     var statistics by remember { mutableStateOf(emptyList<IndicatorStats>()) }
     var isDropdownOpen by remember { mutableStateOf(false) }
@@ -53,7 +50,7 @@ fun StatisticsScreen(
     fun calculateStatistics() {
         val startDate = DateUtilities.getStartDateFromTimeFrame(selectedTimeFrame)
         val moodEntriesInRange = viewModel.moodEntriesRepository.getMoodEntriesInRange(startDate, LocalDate.now())
-        statistics = statisticsCalculator.calculateStats(moodEntriesInRange)
+        statistics = viewModel.moodEntryStatisticsCalculator.calculateStats(moodEntriesInRange)
     }
 
     LaunchedEffect(selectedTimeFrame) {
@@ -91,7 +88,7 @@ fun StatisticsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Default.List,
+                    imageVector = Icons.AutoMirrored.Filled.List,
                     contentDescription = "OpenTimeFrameSelection",
                     tint = MaterialTheme.colorScheme.onBackground,
 

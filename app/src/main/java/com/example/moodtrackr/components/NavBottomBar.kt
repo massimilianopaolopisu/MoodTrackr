@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,8 +19,8 @@ import com.example.moodtrackr.enums.Routes
 @Composable
 fun NavBottomBar(navController: NavController) {
     val icons = listOf(
-        Triple(Icons.Default.KeyboardArrowLeft, "Back", "Back"),
-        Triple(Icons.Default.ExitToApp, "Exit", "Exit"),
+        Triple(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Back", "Back"),
+        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit", "Exit"),
         Triple(Icons.Default.Home, "Home", Routes.Home.toString())
     )
 
