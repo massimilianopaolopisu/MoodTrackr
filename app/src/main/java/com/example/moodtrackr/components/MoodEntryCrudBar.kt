@@ -5,12 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -40,13 +40,13 @@ fun MoodEntryCrudBar(
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
 
     val icons = listOf(
-        Triple(Icons.Default.KeyboardArrowLeft, "Back") {
+        Triple(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Back") {
             navController.popBackStack()
         },
         Triple(Icons.Default.Home, "Home") {
             navController.navigate(Routes.Home.toString())
         },
-        Triple(Icons.Default.ExitToApp, "Exit") {
+        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit") {
             android.os.Process.killProcess(android.os.Process.myPid())
         },
         Triple(Icons.Default.Info, "View") {

@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -31,13 +31,13 @@ fun SaveBottomBar(
     ) {
         val icons = listOf(
             Triple(
-                Icons.Default.KeyboardArrowLeft,
+                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                 "Back"
             ) {
                 navController.popBackStack()
             },
             Triple(
-                Icons.Default.ExitToApp,
+                Icons.AutoMirrored.Filled.ExitToApp,
                 "Exit"
             ) {
                 android.os.Process.killProcess(android.os.Process.myPid())

@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class DataImporterExporterStrategy @Inject constructor(private var strategies: List<IDataImporterExporterStrategy>) :
     IDataImporterExporterStrategy {
-    override fun export(outputFilePath: String?): Boolean {
+    override fun export(outputFilePath: String?, fileName: String?): Boolean {
         var success = true
 
         if (!strategies.any())
@@ -14,7 +14,7 @@ class DataImporterExporterStrategy @Inject constructor(private var strategies: L
 
         strategies.forEach {
             try {
-                val result = it.export(null)
+                val result = it.export(outputFilePath, fileName)
                 if (!result)
                     success = false
             } catch (ex: Exception) {
@@ -26,7 +26,7 @@ class DataImporterExporterStrategy @Inject constructor(private var strategies: L
         return success
     }
 
-    override fun import(inputFilePath: String?): Boolean {
+    override fun import(inputFilePath: String?, fileName: String?): Boolean {
         var success = true
 
         if (!strategies.any())
@@ -34,7 +34,7 @@ class DataImporterExporterStrategy @Inject constructor(private var strategies: L
 
         strategies.forEach {
             try {
-                val result = it.import(null)
+                val result = it.import(inputFilePath, fileName)
                 if (!result)
                     success = false
             } catch (ex: Exception) {

@@ -1,6 +1,8 @@
 package com.example.moodtrackr.modules
 
 import android.content.Context
+import com.example.moodtrackr.dataAccess.MediaStoreIO
+import com.example.moodtrackr.dataAccess.interfaces.IFileSystemIO
 import com.example.moodtrackr.logic.dataImportExport.DataImporterExporterStrategy
 import com.example.moodtrackr.logic.dataImportExport.SharedPreferencesImporterExporterStrategy
 import com.example.moodtrackr.logic.dataImportExport.SqlMoodEntriesImporterExporterStrategy
@@ -59,10 +61,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideIDataImporterExporterStrategy(context: Context): IDataImporterExporterStrategy {
+    fun provideIDataImporterExporterStrategy(context: Context, fileSystemIO: IFileSystemIO): IDataImporterExporterStrategy {
         val strategies = listOf(
-            SharedPreferencesImporterExporterStrategy(context),
-            SqlMoodEntriesImporterExporterStrategy(context)
+            SharedPreferencesImporterExporterStrategy(context, fileSystemIO),
+            SqlMoodEntriesImporterExporterStrategy(context, fileSystemIO)
         )
         return DataImporterExporterStrategy(strategies)
     }
@@ -71,5 +73,11 @@ object AppModule {
     @Singleton
     fun provideIStatisticsCalculator(): IStatisticsCalculator<MoodEntry> {
         return MoodEntryStatisticsCalculator()
+    }
+
+    @Provides
+    @Singleton
+    fun provideIFileSystemIO(): IFileSystemIO {
+        return MediaStoreIO()
     }
 }

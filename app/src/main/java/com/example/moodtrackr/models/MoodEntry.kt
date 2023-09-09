@@ -163,7 +163,7 @@ class MoodEntry() : IDatabaseModel<MoodEntry> {
             _notes = value
         }
 
-    fun getOverallIndicator(): Int {
+    private fun getOverallIndicator(): Int {
         val values = listOf(
             happiness,
             getOpposite(anger),
