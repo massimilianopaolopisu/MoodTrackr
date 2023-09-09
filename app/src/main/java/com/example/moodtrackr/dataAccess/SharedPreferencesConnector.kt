@@ -15,24 +15,6 @@ open class SharedPreferencesConnector(val context: Context) {
         }
     }
 
-    fun loadAllPreferences(): List<SharedPreferences>{
-        val sharedPreferencesList = mutableListOf<SharedPreferences>()
-
-        val keys = getAllSharedPreferencesKeys()
-
-        if (!keys.any())
-            return sharedPreferencesList
-
-        keys.forEach {
-            val sharedPreferences = loadPreferences(it)
-
-            if (sharedPreferences != null)
-                sharedPreferencesList.add(sharedPreferences)
-        }
-
-        return sharedPreferencesList
-    }
-
     fun getAllSharedPreferencesKeys(): List<String> {
         return SharedPreferencesKeys.getAllKeys()
     }

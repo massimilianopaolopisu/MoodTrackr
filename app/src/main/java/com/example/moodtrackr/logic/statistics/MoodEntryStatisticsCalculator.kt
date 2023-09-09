@@ -1,15 +1,15 @@
 package com.example.moodtrackr.logic.statistics
 
 import com.example.moodtrackr.logic.statistics.interfaces.IStatisticsCalculator
-import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.models.IndicatorStats
 import com.example.moodtrackr.models.IndicatorValue
+import com.example.moodtrackr.models.MoodEntry
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.starProjectedType
 
-class MoodEntryStatisticsCalculator() : IStatisticsCalculator<MoodEntry> {
+class MoodEntryStatisticsCalculator : IStatisticsCalculator<MoodEntry> {
     private val indicatorListNames = MoodEntry::class.memberProperties
         .filterIsInstance<KProperty1<MoodEntry, Int>>()
         .filter { it.returnType == Int::class.starProjectedType && !it.name.startsWith("_") }

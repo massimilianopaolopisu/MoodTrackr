@@ -148,6 +148,9 @@ open class GenericSqlWrapper<T: IDatabaseModel<T>>(context: Context, private val
                 selectionArgs
             )
 
+            if(updatedRows <= 0)
+                return null
+
             val updatedItem = item.getItemFromCursor(
                 getCursor(item.getPrimaryKeyColumnName(), item.getPrimaryKeyValue(item))
             )

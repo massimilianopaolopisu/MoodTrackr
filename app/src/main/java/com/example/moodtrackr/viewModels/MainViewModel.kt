@@ -19,5 +19,4 @@ class MainViewModel @Inject constructor(
     val themePreferencesRepository: IThemePreferencesRepository,
     val dataImporterExporterStrategy: IDataImporterExporterStrategy,
     val moodEntryStatisticsCalculator: IStatisticsCalculator<MoodEntry>
-) : ViewModel() {
-}
+) : ViewModel()

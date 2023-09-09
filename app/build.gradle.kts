@@ -16,8 +16,8 @@ android {
         applicationId = "com.example.moodtrackr"
         minSdk = 26
         targetSdk = 34
-        versionCode = 10
-        versionName = "1.0"
+        versionCode = 11
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -91,7 +91,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.2")
     implementation("com.google.dagger:hilt-android:2.44")
     implementation("com.google.dagger:dagger:2.44")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22")
     implementation("com.google.code.gson:gson:2.8.9")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.10")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")

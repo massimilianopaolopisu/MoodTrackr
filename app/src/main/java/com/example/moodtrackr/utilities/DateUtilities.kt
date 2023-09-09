@@ -34,7 +34,7 @@ object DateUtilities {
 
     fun getLocalDateFromStringDate(date: String?, pattern: String = _format): LocalDate {
         if (date.isNullOrBlank() || !isDateWellFormatted(date, pattern))
-            return LocalDate.MIN
+            return _defaultDate
 
         return try {
             LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern))
@@ -78,7 +78,7 @@ object DateUtilities {
             TimeFrame.LastWeek -> today.minusWeeks(1)
             TimeFrame.LastMonth -> today.minusMonths(1)
             TimeFrame.LastYear -> today.minusYears(1)
-            TimeFrame.AllTime -> LocalDate.MIN
+            TimeFrame.AllTime -> _defaultDate
         }
 
         return startDate

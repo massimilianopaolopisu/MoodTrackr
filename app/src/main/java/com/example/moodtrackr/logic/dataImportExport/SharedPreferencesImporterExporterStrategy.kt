@@ -5,21 +5,20 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.example.moodtrackr.R
 import com.example.moodtrackr.dataAccess.SharedPreferencesConnector
+import com.example.moodtrackr.dataAccess.interfaces.IFileSystemIO
 import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
-import java.io.File
-import java.io.FileWriter
-import javax.inject.Inject
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import javax.inject.Inject
 
-class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Context) : SharedPreferencesConnector(context),
+class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Context, private val fileSystemIO: IFileSystemIO) :
+    SharedPreferencesConnector(context),
     IDataImporterExporterStrategy {
 
-    private val _dataDirectory = "backup"
     private val _appName = context.getString(R.string.app_name)
-    private val _defaultFilePath = File(context.getExternalFilesDir(_dataDirectory), "$_appName-sharedPreferences.json").absolutePath
+    private val _fileName = "$_appName-sharedPreferences.json"
 
-    override fun export(outputFilePath: String?): Boolean {
+    override fun export(outputFilePath: String?, fileName: String?): Boolean {
         try {
             val keys = getAllSharedPreferencesKeys()
 
@@ -35,11 +34,7 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
             }
 
             val jsonData: String = gson.toJson(allData)
-
-            val file = File(outputFilePath?: _defaultFilePath)
-            val fileWriter = FileWriter(file)
-            fileWriter.write(jsonData)
-            fileWriter.close()
+            fileSystemIO.write(context, outputFilePath, fileName?: _fileName, jsonData)
 
             return true
         } catch (ex: Exception) {
@@ -48,18 +43,10 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
         }
     }
 
-    override fun import(inputFilePath: String?): Boolean {
+    override fun import(inputFilePath: String?, fileName: String?): Boolean {
         try {
-            val filePath = inputFilePath?: _defaultFilePath
             val gson = Gson()
-            val file = File(filePath)
-
-            if (!file.exists()) {
-                Log.e("SharedPreferencesImporterExporter.import", "File $filePath doesn't exists ")
-                return false
-            }
-
-            val jsonData: String = file.readText()
+            val jsonData = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)
 
             val type = object : TypeToken<Map<String, Map<String, Any>>>() {}.type
             val deserializedData: Map<String, Map<String, Any>> = gson.fromJson(jsonData, type)
