@@ -1,4 +1,4 @@
-package com.example.moodtrackr.components
+package com.example.moodtrackr.components.bars
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,11 +48,11 @@ fun DateBar(
         }
 
         Text(
-            text = DateUtilities.getStringDateFromLocalDate(localDate),
+            text = getDataLabel(localDate),
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 26.sp),
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
-                .weight(1f)
+                .weight(2f)
                 .clickable {
                     navController.navigate(editRoute)
                 },
@@ -64,11 +64,23 @@ fun DateBar(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = "Next",
                 tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.clickable {
-                    val date = localDate.plusDays(1)
-                    navController.navigate("$origin/$date")
+                modifier = Modifier
+                    .clickable {
+                        val date = localDate.plusDays(1)
+                        navController.navigate("$origin/$date")
                 }
             )
         }
+    }
+}
+
+fun getDataLabel(date: LocalDate): String {
+    val today = LocalDate.now()
+    val yesterday = today.minusDays(1)
+
+    return when (date) {
+        today -> "Today"
+        yesterday -> "Yesterday"
+        else -> DateUtilities.getStringDateFromLocalDate(date)
     }
 }

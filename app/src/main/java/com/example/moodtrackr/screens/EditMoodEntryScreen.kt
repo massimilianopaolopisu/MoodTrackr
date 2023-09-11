@@ -4,8 +4,6 @@ import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,15 +16,14 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moodtrackr.components.DateBar
 import com.example.moodtrackr.components.FloatingScrollButton
 import com.example.moodtrackr.components.MoodEntryEditCard
 import com.example.moodtrackr.components.MoodEntryNoteEditCard
-import com.example.moodtrackr.components.SaveBottomBar
+import com.example.moodtrackr.components.bars.DateBar
+import com.example.moodtrackr.components.bars.SaveBottomBar
+import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
@@ -81,17 +78,7 @@ fun EditMoodEntryScreen(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            Text(
-                text = "Edit Mood Entry",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
+            TitleTopBar(navController, "Edit Mood Entry")
 
             DateBar(
                 navController = navController,

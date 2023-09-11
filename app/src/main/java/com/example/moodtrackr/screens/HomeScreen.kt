@@ -1,7 +1,9 @@
 package com.example.moodtrackr.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,12 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moodtrackr.components.MainBottomBar
 import com.example.moodtrackr.components.MoodEntrySummary
+import com.example.moodtrackr.components.bars.MainBottomBar
+import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
@@ -41,34 +42,41 @@ fun HomeScreen(
                 .fillMaxSize()
                 .align(Alignment.TopCenter)
         ) {
-            Text(
-                text = "Mood Trackr",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
+            TitleTopBar(navController, "Mood Trackr")
 
-            Text(
-                text = "Hello $name, how do you feel today?",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onBackground,
+            Row(
                 modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.Center
 
-            MoodEntrySummary(
-                navController = navController,
-                moodEntry = moodEntry,
-                date = date,
-                origin = Routes.Home.toString(),
-                allowChangeDate = false
             )
+            {
+                Text(
+                    text = "Hello $name, how do you feel?",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.Center
+
+            )
+            {
+                MoodEntrySummary(
+                    navController = navController,
+                    moodEntriesRepository = moodEntriesRepository,
+                    moodEntry = moodEntry,
+                    date = date,
+                    origin = Routes.Home.toString(),
+                    allowChangeDate = true
+                )
+            }
         }
 
         Column(

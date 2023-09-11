@@ -10,17 +10,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moodtrackr.components.SaveBottomBar
+import com.example.moodtrackr.components.bars.MainBottomBar
+import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
-import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.utilities.DateUtilities
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,12 +33,21 @@ fun EditProfileScreen(
     var newName by remember { mutableStateOf(profile.name) }
     var newSurname by remember { mutableStateOf(profile.surname) }
     var newSex by remember { mutableStateOf(profile.sex) }
-    var newBirthday by remember { mutableStateOf(profile.birthday) }
+    val birthday by remember { mutableStateOf(profile.birthday) }
 
-    val datePicker = rememberDatePickerState(DateUtilities.getMillisFromLocalDate(newBirthday))
+    val datePicker = rememberDatePickerState(DateUtilities.getMillisFromLocalDate(birthday))
 
     val focusRequester = FocusRequester()
     val focusManager = LocalFocusManager.current
+
+    fun saveProfile() {
+        val newBirthday = DateUtilities.getLocalDateFromMillis(datePicker.selectedDateMillis?: 0)
+        profilePreferencesRepository.save(Profile(newName, newSurname, newSex, newBirthday))
+    }
+
+    LaunchedEffect(newSex, datePicker.selectedDateMillis) {
+        saveProfile()
+    }
 
     Box(
         modifier = Modifier
@@ -51,18 +59,7 @@ fun EditProfileScreen(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            Text(
-                text = "Edit Profile",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                ),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .weight(1f)
-            )
+            TitleTopBar(navController, "Edit Profile")
         }
 
         LazyColumn (
@@ -84,7 +81,12 @@ fun EditProfileScreen(
                     value = newName,
                     onValueChange = { newValue: String -> newName = newValue },
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .onFocusChanged { focusState ->
+                            if (!focusState.isFocused) {
+                                saveProfile()
+                            }
+                        },
                     textStyle = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.onBackground
                     ),
@@ -94,7 +96,10 @@ fun EditProfileScreen(
                     ),
                     keyboardActions = KeyboardActions(
                         onNext = { focusRequester.requestFocus() },
-                        onDone = { focusManager.clearFocus() }
+                        onDone = {
+                            focusManager.clearFocus()
+                            saveProfile()
+                        }
                     ),
                     singleLine = true
                 )
@@ -109,7 +114,12 @@ fun EditProfileScreen(
                     value = newSurname,
                     onValueChange = { newValue: String -> newSurname = newValue },
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .onFocusChanged { focusState ->
+                            if (!focusState.isFocused) {
+                                saveProfile()
+                            }
+                        },
                     textStyle = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.onBackground
                     ),
@@ -119,7 +129,10 @@ fun EditProfileScreen(
                     ),
                     keyboardActions = KeyboardActions(
                         onNext = { focusRequester.requestFocus() },
-                        onDone = { focusManager.clearFocus() }
+                        onDone = {
+                            focusManager.clearFocus()
+                            saveProfile()
+                        }
                     ),
                     singleLine = true
                 )
@@ -186,13 +199,7 @@ fun EditProfileScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            newBirthday = DateUtilities.getLocalDateFromMillis(datePicker.selectedDateMillis?: 0)
-            @Suppress("UNCHECKED_CAST")
-            val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf(
-                profilePreferencesRepository as ISave<Any> to Profile(newName, newSurname, newSex, newBirthday) as Any
-            )
-
-            SaveBottomBar(navController, saveHandlerAndObjectPairList)
+            MainBottomBar(navController)
         }
     }
 }

@@ -5,17 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moodtrackr.components.MoodEntryCrudBar
 import com.example.moodtrackr.components.MoodEntrySummary
+import com.example.moodtrackr.components.bars.MainBottomBar
+import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.utilities.DateUtilities
@@ -28,7 +25,7 @@ fun ViewMoodEntryScreen(
 ) {
     val dateParsed = DateUtilities.getLocalDateFromStringDate(date)
     val moodEntry = moodEntriesRepository.getMoodEntry(dateParsed)
-    val route = "${Routes.ViewMoodEntry}/${dateParsed}"
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -39,20 +36,11 @@ fun ViewMoodEntryScreen(
                 .fillMaxSize()
                 .align(Alignment.TopCenter)
         ) {
-            Text(
-                text = "Mood Entry",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
+            TitleTopBar(navController, "Mood Entry")
 
             MoodEntrySummary(
                 navController = navController,
+                moodEntriesRepository = moodEntriesRepository,
                 moodEntry = moodEntry,
                 date = dateParsed,
                 origin = Routes.ViewMoodEntry.toString(),
@@ -65,12 +53,7 @@ fun ViewMoodEntryScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            MoodEntryCrudBar(
-                navController = navController,
-                moodEntriesRepository = moodEntriesRepository,
-                selectedDate = dateParsed,
-                returnRoute = route
-            )
+            MainBottomBar(navController = navController)
         }
     }
 }
