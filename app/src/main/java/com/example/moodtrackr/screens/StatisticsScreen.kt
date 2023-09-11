@@ -110,6 +110,14 @@ fun StatisticsScreen(
                 .padding(bottom = 45.dp)
         ) {
             item {
+                Text(
+                    text = "Statistics for: ${selectedTimeFrame.displayName}",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+
                 if (isDropdownOpen) {
                     DropdownMenu(
                         expanded = true,
