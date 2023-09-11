@@ -26,12 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.LineChart
-import com.example.moodtrackr.components.NavBottomBar
+import com.example.moodtrackr.components.bars.MainBottomBar
+import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.TimeFrame
 import com.example.moodtrackr.extensions.capitalizeFirstLetter
 import com.example.moodtrackr.models.MoodEntry
@@ -77,17 +76,7 @@ fun GraphsScreen(
                 .fillMaxSize()
                 .align(Alignment.TopCenter)
         ) {
-            Text(
-                text = "Graphs",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
+            TitleTopBar(navController,"Graphs")
 
             Row(
                 modifier = Modifier
@@ -199,9 +188,7 @@ fun GraphsScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            NavBottomBar(
-                navController = navController
-            )
+            MainBottomBar(navController)
         }
     }
 }

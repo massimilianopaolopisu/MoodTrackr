@@ -27,12 +27,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.moodtrackr.components.NavBottomBar
 import com.example.moodtrackr.components.ThemeOptionsRadioButtons
+import com.example.moodtrackr.components.bars.MainBottomBar
+import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.models.ThemePreferences
@@ -61,18 +61,7 @@ fun SettingsScreen(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            Text(
-                text = "Settings",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .weight(1f)
-            )
+            TitleTopBar(navController, "Settings")
         }
         LazyColumn(
             modifier = Modifier
@@ -331,7 +320,7 @@ fun SettingsScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
-            NavBottomBar(navController)
+            MainBottomBar(navController)
         }
     }
 }
