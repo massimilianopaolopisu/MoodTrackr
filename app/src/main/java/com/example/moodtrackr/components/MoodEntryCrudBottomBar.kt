@@ -46,9 +46,6 @@ fun MoodEntryCrudBar(
         Triple(Icons.Default.Home, "Home") {
             navController.navigate(Routes.Home.toString())
         },
-        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit") {
-            android.os.Process.killProcess(android.os.Process.myPid())
-        },
         Triple(Icons.Default.Info, "View") {
             navController.navigate(viewRoute)
         },
@@ -57,6 +54,9 @@ fun MoodEntryCrudBar(
         },
         Triple(Icons.Default.Delete, "Delete") {
             showDeleteConfirmDialog = true
+        },
+        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit") {
+            android.os.Process.killProcess(android.os.Process.myPid())
         }
     )
 
