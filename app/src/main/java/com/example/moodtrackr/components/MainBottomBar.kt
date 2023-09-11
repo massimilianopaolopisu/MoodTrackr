@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,12 +20,21 @@ import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import com.example.moodtrackr.R
 import com.example.moodtrackr.enums.Routes
+import java.time.LocalDate
 
 @Composable
 fun MainBottomBar(
-    navController: NavController
+    navController: NavController,
+    date: LocalDate = LocalDate.now()
 ){
+    val editRoute = "${Routes.EditMoodEntry}/$date"
+
     val icons = listOf(
+        Triple(
+            Icons.Default.Edit,
+            "Edit",
+            editRoute
+        ),
         Triple(
             Icons.Default.DateRange,
             "Mood Entries History",
@@ -36,11 +46,6 @@ fun MainBottomBar(
             Routes.Graphs.toString()
         ),
         Triple(
-            Icons.AutoMirrored.Filled.ExitToApp,
-            "Exit",
-            null
-        ),
-        Triple(
             ImageVector.vectorResource(id = R.drawable.ic_chart),
             "Statistics",
             Routes.Statistics.toString()
@@ -49,6 +54,11 @@ fun MainBottomBar(
             Icons.Default.Settings,
             "Settings",
             Routes.Settings.toString()
+        ),
+        Triple(
+            Icons.AutoMirrored.Filled.ExitToApp,
+            "Exit",
+            null
         )
     )
 

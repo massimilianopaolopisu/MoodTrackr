@@ -20,9 +20,9 @@ import com.example.moodtrackr.enums.Routes
 fun NavBottomBar(navController: NavController) {
     val icons = listOf(
         Triple(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Back", "Back"),
-        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit", "Exit"),
-        Triple(Icons.Default.Home, "Home", Routes.Home.toString())
-    )
+        Triple(Icons.Default.Home, "Home", Routes.Home.toString()),
+        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit", "Exit")
+        )
 
     Row(
         modifier = Modifier
