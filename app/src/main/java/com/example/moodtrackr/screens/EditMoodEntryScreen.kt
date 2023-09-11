@@ -1,11 +1,9 @@
 package com.example.moodtrackr.screens
 
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.DateBar
+import com.example.moodtrackr.components.FloatingScrollButton
 import com.example.moodtrackr.components.MoodEntryEditCard
 import com.example.moodtrackr.components.MoodEntryNoteEditCard
 import com.example.moodtrackr.components.SaveBottomBar
@@ -31,6 +30,7 @@ import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.utilities.DateUtilities
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
@@ -56,6 +56,7 @@ fun EditMoodEntryScreen(
 
     val coroutineScope = rememberCoroutineScope()
     val localDensityCurrent = LocalDensity.current
+    val lazyListState = rememberLazyListState()
 
     Box(
         modifier = Modifier
@@ -81,13 +82,14 @@ fun EditMoodEntryScreen(
 
             DateBar(
                 navController = navController,
-                localDate = moodEntryDate ,
+                localDate = moodEntryDate,
                 origin = Routes.EditMoodEntry.toString(),
                 showButtons = true
             )
         }
 
         LazyColumn(
+            state = lazyListState,
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
@@ -138,7 +140,7 @@ fun EditMoodEntryScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-        ){
+        ) {
             @Suppress("UNCHECKED_CAST")
             val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf(
                 moodEntriesRepository as ISave<Any> to MoodEntry(
@@ -155,44 +157,29 @@ fun EditMoodEntryScreen(
                 ) as Any
             )
 
-//            Row(
-//                modifier = Modifier
-//                    .padding( bottom = 25.dp)
-//                    .fillMaxWidth(),
-//                horizontalArrangement = Arrangement.End
-//            ) {
-//                FloatingScrollButton(
-//                    modifier = Modifier,
-//                    onClick = {
-//                        val distanceToScroll = with(localDensityCurrent) { 100.dp.toPx() }
-//
-//                        coroutineScope.launch {
-//                            lazyListState.animateScrollBy(distanceToScroll)
-//                        }
-//                    }
-//                )
-//            }
+            Row(
+                modifier = Modifier
+                    .padding(bottom = 25.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                FloatingScrollButton(
+                    modifier = Modifier
+                        .padding(bottom = 16.dp),
+                    onClick = {
+                        val distanceToScroll = with(localDensityCurrent) { 100.dp.toPx() }
+
+                        coroutineScope.launch {
+                            lazyListState.animateScrollBy(distanceToScroll)
+                        }
+                    }
+                )
+            }
 
             SaveBottomBar(
                 navController = navController,
                 saveHandlerAndObjectPairList = saveHandlerAndObjectPairList
             )
         }
-    }
-}
-
-@Composable
-fun FloatingScrollButton(
-    onClick: () -> Unit,
-    modifier: Modifier
-) {
-    FloatingActionButton(
-        onClick = onClick,
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = Icons.Default.KeyboardArrowDown,
-            contentDescription = null
-        )
     }
 }
