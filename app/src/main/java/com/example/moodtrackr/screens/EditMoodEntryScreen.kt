@@ -1,32 +1,39 @@
 package com.example.moodtrackr.screens
 
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.DateBar
-import com.example.moodtrackr.components.MoodEntryInput
+import com.example.moodtrackr.components.FloatingScrollButton
+import com.example.moodtrackr.components.MoodEntryEditCard
+import com.example.moodtrackr.components.MoodEntryNoteEditCard
 import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.utilities.DateUtilities
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
@@ -49,6 +56,20 @@ fun EditMoodEntryScreen(
     var sleep by remember { mutableIntStateOf(moodEntry.sleep) }
     var depression by remember { mutableIntStateOf(moodEntry.depression) }
     var notes by remember { mutableStateOf(moodEntry.notes) }
+
+    var isButtonVisible by remember { mutableStateOf(true) }
+
+    val coroutineScope = rememberCoroutineScope()
+    val localDensityCurrent = LocalDensity.current
+    val lazyListState = rememberLazyListState()
+
+    LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.firstVisibleItemIndex }
+            .distinctUntilChanged()
+            .collect { visibleItemIndex ->
+                isButtonVisible = visibleItemIndex < lazyListState.layoutInfo.visibleItemsInfo.size - 1
+            }
+    }
 
     Box(
         modifier = Modifier
@@ -74,14 +95,14 @@ fun EditMoodEntryScreen(
 
             DateBar(
                 navController = navController,
-                localDate = moodEntryDate ,
+                localDate = moodEntryDate,
                 origin = Routes.EditMoodEntry.toString(),
                 showButtons = true
             )
-
         }
 
         LazyColumn(
+            state = lazyListState,
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
@@ -90,65 +111,57 @@ fun EditMoodEntryScreen(
                 .padding(bottom = 45.dp)
         ) {
             item {
-                MoodEntryInput(
-                    label = "Happiness",
-                    value = happiness,
-                    onValueChange = { happiness = it }
-                )
+                MoodEntryEditCard(label = "Happiness", value = happiness) { newValue ->
+                    happiness = newValue
+                }
+            }
 
-                MoodEntryInput(
-                    label = "Love",
-                    value = love,
-                    onValueChange = { love = it }
-                )
+            item {
+                MoodEntryEditCard(label = "Love", value = love) { newValue ->
+                    love = newValue
+                }
+            }
 
-                MoodEntryInput(
-                    label = "Energy",
-                    value = energy,
-                    onValueChange = { energy = it }
-                )
+            item {
+                MoodEntryEditCard(label = "Energy", value = energy) { newValue ->
+                    energy = newValue
+                }
+            }
 
-                MoodEntryInput(
-                    label = "Health",
-                    value = health,
-                    onValueChange = { health = it }
-                )
+            item {
+                MoodEntryEditCard(label = "Health", value = health) { newValue ->
+                    health = newValue
+                }
+            }
 
-                MoodEntryInput(
-                    label = "Anger",
-                    value = anger,
-                    onValueChange = { anger = it }
-                )
+            item {
+                MoodEntryEditCard(label = "Anger", value = anger) { newValue ->
+                    anger = newValue
+                }
+            }
 
-                MoodEntryInput(
-                    label = "Stress",
-                    value = stress,
-                    onValueChange = { stress = it }
-                )
+            item {
+                MoodEntryEditCard(label = "Stress", value = stress) { newValue ->
+                    stress = newValue
+                }
+            }
 
-                MoodEntryInput(
-                    label = "Sleep",
-                    value = sleep,
-                    onValueChange = { sleep = it }
-                )
+            item {
+                MoodEntryEditCard(label = "Sleep", value = sleep) { newValue ->
+                    sleep = newValue
+                }
+            }
 
-                MoodEntryInput(
-                    label = "Depression",
-                    value = depression,
-                    onValueChange = { depression = it }
-                )
+            item {
+                MoodEntryEditCard(label = "Depression", value = depression) { newValue ->
+                    depression = newValue
+                }
+            }
 
-                TextField(
-                    value = notes,
-                    onValueChange = { notes = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    label = { Text("Notes") },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
-                    )
-                )
+            item {
+                MoodEntryNoteEditCard(label = "Notes", value = notes) { newValue ->
+                    notes = newValue
+                }
             }
         }
 
@@ -156,7 +169,7 @@ fun EditMoodEntryScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-        ){
+        ) {
             @Suppress("UNCHECKED_CAST")
             val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf(
                 moodEntriesRepository as ISave<Any> to MoodEntry(
@@ -172,6 +185,27 @@ fun EditMoodEntryScreen(
                     notes = notes
                 ) as Any
             )
+
+            Row(
+                modifier = Modifier
+                    .padding(bottom = 25.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (isButtonVisible) {
+                    FloatingScrollButton(
+                        modifier = Modifier
+                            .padding(bottom = 16.dp),
+                        onClick = {
+                            val distanceToScroll = with(localDensityCurrent) { 200.dp.toPx() }
+
+                            coroutineScope.launch {
+                                lazyListState.animateScrollBy(distanceToScroll)
+                            }
+                        }
+                    )
+                }
+            }
 
             SaveBottomBar(
                 navController = navController,
