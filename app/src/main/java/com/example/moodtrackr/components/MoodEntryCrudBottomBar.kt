@@ -38,6 +38,7 @@ fun MoodEntryCrudBar(
     val viewRoute = "${Routes.ViewMoodEntry}/$selectedDate"
     val editRoute = "${Routes.EditMoodEntry}/$selectedDate"
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
+    var showExitConfirmDialog by remember { mutableStateOf(false) }
 
     val icons = listOf(
         Triple(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Back") {
@@ -45,9 +46,6 @@ fun MoodEntryCrudBar(
         },
         Triple(Icons.Default.Home, "Home") {
             navController.navigate(Routes.Home.toString())
-        },
-        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit") {
-            android.os.Process.killProcess(android.os.Process.myPid())
         },
         Triple(Icons.Default.Info, "View") {
             navController.navigate(viewRoute)
@@ -57,8 +55,19 @@ fun MoodEntryCrudBar(
         },
         Triple(Icons.Default.Delete, "Delete") {
             showDeleteConfirmDialog = true
+        },
+        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit") {
+            showExitConfirmDialog = true
         }
     )
+
+    if (showExitConfirmDialog) {
+        ExitConfirmDialog(
+            onDismiss = {
+                showExitConfirmDialog = false
+            }
+        )
+    }
 
     if (showDeleteConfirmDialog) {
         AlertDialog(

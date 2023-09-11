@@ -12,6 +12,10 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,6 +33,8 @@ fun SaveBottomBar(
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        var showExitConfirmDialog by remember { mutableStateOf(false) }
+
         val icons = listOf(
             Triple(
                 Icons.AutoMirrored.Filled.KeyboardArrowLeft,
@@ -37,16 +43,16 @@ fun SaveBottomBar(
                 navController.popBackStack()
             },
             Triple(
-                Icons.AutoMirrored.Filled.ExitToApp,
-                "Exit"
-            ) {
-                android.os.Process.killProcess(android.os.Process.myPid())
-            },
-            Triple(
                 Icons.Default.Home,
                 "Home"
             ) {
                 navController.navigate(Routes.Home.toString())
+            },
+            Triple(
+                Icons.AutoMirrored.Filled.ExitToApp,
+                "Exit"
+            ) {
+                showExitConfirmDialog = true
             },
             Triple(
                 Icons.Default.Done,
@@ -60,6 +66,14 @@ fun SaveBottomBar(
                 }
             }
         )
+
+        if (showExitConfirmDialog) {
+            ExitConfirmDialog(
+                onDismiss = {
+                    showExitConfirmDialog = false
+                }
+            )
+        }
 
         for ((icon, contentDescription, onClick) in icons) {
             Icon(

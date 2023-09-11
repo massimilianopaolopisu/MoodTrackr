@@ -183,7 +183,7 @@ fun GraphsScreen(
                     legendEnabled = true,
                     xAxisPosition = XAxisPosition.BOTTOM,
                     yAxisMinimum = 0f,
-                    yAxisEnabled = true,
+                    yAxisEnabled = false,
                     xAxisConvertMillisToDate = true,
                     xAxisLabelCount = 5
                     )
