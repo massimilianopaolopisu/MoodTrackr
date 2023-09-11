@@ -66,7 +66,7 @@ Replace {issue-number} with the number of the issue you're addressing.
   ```bash
   git push origin workitem-{issue-number}
   ```
-6. Create a Pull Request (PR) from your forked repository to the "dev" branch of this repository. Be sure to describe your changes in the PR.
+6. Create a Pull Request (PR) from your branch/forked repository to the "dev" branch of this repository. Be sure to describe your changes in the PR.
 
 7. The project maintainers will review your PR, and once approved, it will be merged into the dev branch. Periodically, PRs from dev will be merged into the main branch for release.
 
