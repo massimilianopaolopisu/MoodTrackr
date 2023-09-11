@@ -43,6 +43,12 @@ fun SaveBottomBar(
                 navController.navigate(Routes.Home.toString())
             },
             Triple(
+                Icons.AutoMirrored.Filled.ExitToApp,
+                "Exit"
+            ) {
+                android.os.Process.killProcess(android.os.Process.myPid())
+            },
+            Triple(
                 Icons.Default.Done,
                 "Save"
             ) {
@@ -52,12 +58,6 @@ fun SaveBottomBar(
                 afterSaveRoute?.let {
                     navController.navigate(it.toString())
                 }
-            },
-            Triple(
-                Icons.AutoMirrored.Filled.ExitToApp,
-                "Exit"
-            ) {
-                android.os.Process.killProcess(android.os.Process.myPid())
             }
         )
 

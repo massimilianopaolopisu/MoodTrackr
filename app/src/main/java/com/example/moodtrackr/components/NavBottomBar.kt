@@ -19,36 +19,29 @@ import com.example.moodtrackr.enums.Routes
 @Composable
 fun NavBottomBar(navController: NavController) {
     val icons = listOf(
-        Triple(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Back", "Back"),
-        Triple(Icons.Default.Home, "Home", Routes.Home.toString()),
-        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit", "Exit")
-        )
+        Triple(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Back") {
+            navController.popBackStack()
+        },
+        Triple(Icons.Default.Home, "Home") {
+            navController.navigate(Routes.Home.toString())
+        },
+        Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit") {
+            android.os.Process.killProcess(android.os.Process.myPid())
+        }
+    )
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        for ((icon, contentDescription, route) in icons) {
+        for ((icon, contentDescription, action) in icons) {
             Icon(
                 imageVector = icon,
                 contentDescription = contentDescription,
                 tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .clickable {
-                        when (route) {
-                            "Exit" -> {
-                                android.os.Process.killProcess(android.os.Process.myPid())
-                            }
-
-                            "Back" -> {
-                                navController.popBackStack()
-                            }
-
-                            else -> {
-                                navController.navigate(route)
-                            }
-                        }
+                        action()
                     }
                     .align(Alignment.CenterVertically)
                     .weight(1f)
