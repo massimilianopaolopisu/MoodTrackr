@@ -2,25 +2,29 @@ package com.example.moodtrackr.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.DateBar
-import com.example.moodtrackr.components.MoodEntryInput
+import com.example.moodtrackr.components.MoodEntryEditCard
+import com.example.moodtrackr.components.MoodEntryNoteEditCard
 import com.example.moodtrackr.components.SaveBottomBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.MoodEntry
@@ -50,6 +54,9 @@ fun EditMoodEntryScreen(
     var depression by remember { mutableIntStateOf(moodEntry.depression) }
     var notes by remember { mutableStateOf(moodEntry.notes) }
 
+    val coroutineScope = rememberCoroutineScope()
+    val localDensityCurrent = LocalDensity.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -78,7 +85,6 @@ fun EditMoodEntryScreen(
                 origin = Routes.EditMoodEntry.toString(),
                 showButtons = true
             )
-
         }
 
         LazyColumn(
@@ -90,65 +96,41 @@ fun EditMoodEntryScreen(
                 .padding(bottom = 45.dp)
         ) {
             item {
-                MoodEntryInput(
-                    label = "Happiness",
-                    value = happiness,
-                    onValueChange = { happiness = it }
-                )
+                MoodEntryEditCard(label = "Happiness", value = happiness) { newValue ->
+                    happiness = newValue
+                }
 
-                MoodEntryInput(
-                    label = "Love",
-                    value = love,
-                    onValueChange = { love = it }
-                )
+                MoodEntryEditCard(label = "Love", value = love) { newValue ->
+                    love = newValue
+                }
 
-                MoodEntryInput(
-                    label = "Energy",
-                    value = energy,
-                    onValueChange = { energy = it }
-                )
+                MoodEntryEditCard(label = "Energy", value = energy) { newValue ->
+                    energy = newValue
+                }
 
-                MoodEntryInput(
-                    label = "Health",
-                    value = health,
-                    onValueChange = { health = it }
-                )
+                MoodEntryEditCard(label = "Health", value = health) { newValue ->
+                    health = newValue
+                }
 
-                MoodEntryInput(
-                    label = "Anger",
-                    value = anger,
-                    onValueChange = { anger = it }
-                )
+                MoodEntryEditCard(label = "Anger", value = anger) { newValue ->
+                    anger = newValue
+                }
 
-                MoodEntryInput(
-                    label = "Stress",
-                    value = stress,
-                    onValueChange = { stress = it }
-                )
+                MoodEntryEditCard(label = "Stress", value = stress) { newValue ->
+                    stress = newValue
+                }
 
-                MoodEntryInput(
-                    label = "Sleep",
-                    value = sleep,
-                    onValueChange = { sleep = it }
-                )
+                MoodEntryEditCard(label = "Sleep", value = sleep) { newValue ->
+                    sleep = newValue
+                }
 
-                MoodEntryInput(
-                    label = "Depression",
-                    value = depression,
-                    onValueChange = { depression = it }
-                )
+                MoodEntryEditCard(label = "Depression", value = depression) { newValue ->
+                    depression = newValue
+                }
 
-                TextField(
-                    value = notes,
-                    onValueChange = { notes = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    label = { Text("Notes") },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
-                    )
-                )
+                MoodEntryNoteEditCard(label = "Notes", value = notes) { newValue ->
+                    notes = newValue
+                }
             }
         }
 
@@ -173,10 +155,44 @@ fun EditMoodEntryScreen(
                 ) as Any
             )
 
+//            Row(
+//                modifier = Modifier
+//                    .padding( bottom = 25.dp)
+//                    .fillMaxWidth(),
+//                horizontalArrangement = Arrangement.End
+//            ) {
+//                FloatingScrollButton(
+//                    modifier = Modifier,
+//                    onClick = {
+//                        val distanceToScroll = with(localDensityCurrent) { 100.dp.toPx() }
+//
+//                        coroutineScope.launch {
+//                            lazyListState.animateScrollBy(distanceToScroll)
+//                        }
+//                    }
+//                )
+//            }
+
             SaveBottomBar(
                 navController = navController,
                 saveHandlerAndObjectPairList = saveHandlerAndObjectPairList
             )
         }
+    }
+}
+
+@Composable
+fun FloatingScrollButton(
+    onClick: () -> Unit,
+    modifier: Modifier
+) {
+    FloatingActionButton(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.Default.KeyboardArrowDown,
+            contentDescription = null
+        )
     }
 }
