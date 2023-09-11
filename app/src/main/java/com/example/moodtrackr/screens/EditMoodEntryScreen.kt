@@ -7,12 +7,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -30,6 +32,7 @@ import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.utilities.DateUtilities
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -54,9 +57,19 @@ fun EditMoodEntryScreen(
     var depression by remember { mutableIntStateOf(moodEntry.depression) }
     var notes by remember { mutableStateOf(moodEntry.notes) }
 
+    var isButtonVisible by remember { mutableStateOf(true) }
+
     val coroutineScope = rememberCoroutineScope()
     val localDensityCurrent = LocalDensity.current
     val lazyListState = rememberLazyListState()
+
+    LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.firstVisibleItemIndex }
+            .distinctUntilChanged()
+            .collect { visibleItemIndex ->
+                isButtonVisible = visibleItemIndex < lazyListState.layoutInfo.visibleItemsInfo.size - 1
+            }
+    }
 
     Box(
         modifier = Modifier
@@ -101,35 +114,51 @@ fun EditMoodEntryScreen(
                 MoodEntryEditCard(label = "Happiness", value = happiness) { newValue ->
                     happiness = newValue
                 }
+            }
 
+            item {
                 MoodEntryEditCard(label = "Love", value = love) { newValue ->
                     love = newValue
                 }
+            }
 
+            item {
                 MoodEntryEditCard(label = "Energy", value = energy) { newValue ->
                     energy = newValue
                 }
+            }
 
+            item {
                 MoodEntryEditCard(label = "Health", value = health) { newValue ->
                     health = newValue
                 }
+            }
 
+            item {
                 MoodEntryEditCard(label = "Anger", value = anger) { newValue ->
                     anger = newValue
                 }
+            }
 
+            item {
                 MoodEntryEditCard(label = "Stress", value = stress) { newValue ->
                     stress = newValue
                 }
+            }
 
+            item {
                 MoodEntryEditCard(label = "Sleep", value = sleep) { newValue ->
                     sleep = newValue
                 }
+            }
 
+            item {
                 MoodEntryEditCard(label = "Depression", value = depression) { newValue ->
                     depression = newValue
                 }
+            }
 
+            item {
                 MoodEntryNoteEditCard(label = "Notes", value = notes) { newValue ->
                     notes = newValue
                 }
@@ -163,17 +192,19 @@ fun EditMoodEntryScreen(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                FloatingScrollButton(
-                    modifier = Modifier
-                        .padding(bottom = 16.dp),
-                    onClick = {
-                        val distanceToScroll = with(localDensityCurrent) { 100.dp.toPx() }
+                if (isButtonVisible) {
+                    FloatingScrollButton(
+                        modifier = Modifier
+                            .padding(bottom = 16.dp),
+                        onClick = {
+                            val distanceToScroll = with(localDensityCurrent) { 200.dp.toPx() }
 
-                        coroutineScope.launch {
-                            lazyListState.animateScrollBy(distanceToScroll)
+                            coroutineScope.launch {
+                                lazyListState.animateScrollBy(distanceToScroll)
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
 
             SaveBottomBar(
