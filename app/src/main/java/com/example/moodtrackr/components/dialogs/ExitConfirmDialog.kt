@@ -1,4 +1,4 @@
-package com.example.moodtrackr.components
+package com.example.moodtrackr.components.dialogs
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
