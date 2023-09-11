@@ -11,6 +11,10 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -18,6 +22,8 @@ import com.example.moodtrackr.enums.Routes
 
 @Composable
 fun NavBottomBar(navController: NavController) {
+    var showExitConfirmDialog by remember { mutableStateOf(false) }
+
     val icons = listOf(
         Triple(Icons.AutoMirrored.Filled.KeyboardArrowLeft, "Back") {
             navController.popBackStack()
@@ -26,9 +32,17 @@ fun NavBottomBar(navController: NavController) {
             navController.navigate(Routes.Home.toString())
         },
         Triple(Icons.AutoMirrored.Filled.ExitToApp, "Exit") {
-            android.os.Process.killProcess(android.os.Process.myPid())
+            showExitConfirmDialog = true
         }
     )
+
+    if (showExitConfirmDialog) {
+        ExitConfirmDialog(
+            onDismiss = {
+                showExitConfirmDialog = false
+            }
+        )
+    }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
