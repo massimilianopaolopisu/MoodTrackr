@@ -1,5 +1,6 @@
 package com.example.moodtrackr.screens
 
+import android.content.pm.ActivityInfo
 import androidx.compose.runtime.Composable
 import com.example.moodtrackr.components.Navigation
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
@@ -26,5 +27,12 @@ private fun init(
     if(!viewModel.applicationPreferences.sqlDatabaseExists) {
         val sqlDatabaseHelper = SqlDatabaseHelper(viewModel.context)
         sqlDatabaseHelper.writableDatabase
+    }
+
+    if(viewModel.mainActivity != null) {
+        viewModel.mainActivity!!.requestedOrientation = if(viewModel.themePreferences.lockOrientationEnabled)
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        else
+            ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
     }
 }

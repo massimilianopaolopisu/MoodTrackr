@@ -1,5 +1,6 @@
 package com.example.moodtrackr.viewModels
 
+import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
@@ -28,4 +29,5 @@ class MainViewModel @Inject constructor(
     var themePreferences: ThemePreferences = ThemePreferences()
     var applicationPreferences: ApplicationPreferences = ApplicationPreferences()
     var profile: Profile = Profile()
+    var mainActivity: Activity? = null
 }

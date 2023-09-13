@@ -1,5 +1,6 @@
 package com.example.moodtrackr.screens
 
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -217,7 +218,7 @@ fun SettingsScreen(
                                     viewModel.themePreferences
                                 )
 
-                                navController.navigate(route)
+                                changeOrientationBasedOnCurrentPreferences(viewModel)
                             }
                         )
                     }
@@ -305,4 +306,11 @@ fun SettingsScreen(
             MainBottomBar(navController)
         }
     }
+}
+
+fun changeOrientationBasedOnCurrentPreferences(viewModel: MainViewModel) {
+    viewModel.mainActivity?.requestedOrientation = if(viewModel.themePreferences.lockOrientationEnabled)
+        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    else
+        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
 }
