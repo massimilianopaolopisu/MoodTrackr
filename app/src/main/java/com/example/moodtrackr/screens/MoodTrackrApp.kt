@@ -7,7 +7,6 @@ import com.example.moodtrackr.components.Navigation
 import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
 import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
-import com.example.moodtrackr.ui.theme.MoodTrackrTheme
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
 
@@ -20,7 +19,7 @@ fun MoodTrackrApp(
 
     val themePreferences = viewModel.themePreferencesRepository.load()
 
-    val darkMode = when (themePreferences.themeMode) {
+    viewModel.darkModeEnabled = when (themePreferences.themeMode) {
         ThemeMode.System -> {
             isSystemInDarkTheme()
         }
@@ -34,9 +33,10 @@ fun MoodTrackrApp(
         }
     }
 
-    MoodTrackrTheme(darkMode, themePreferences.dynamicColorsEnabled) {
-        Navigation(viewModel)
-    }
+    viewModel.dynamicColorsEnabled = themePreferences.dynamicColorsEnabled
+    viewModel.lockOrientationEnabled = themePreferences.lockOrientationEnabled
+
+    Navigation(viewModel)
 }
 
 private fun init(

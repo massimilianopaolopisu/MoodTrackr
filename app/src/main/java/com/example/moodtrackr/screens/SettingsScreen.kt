@@ -51,6 +51,8 @@ fun SettingsScreen(
     var darkMode by remember { mutableStateOf(isSystemInDarkMode) }
     var lockOrientationEnabled by remember { mutableStateOf(themePreferences.lockOrientationEnabled) }
 
+    val route = "${Routes.Settings}"
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -157,6 +159,8 @@ fun SettingsScreen(
                                             lockOrientationEnabled
                                         )
                                     )
+                                    viewModel.darkModeEnabled = darkMode
+                                    navController.navigate(route)
                                 }
                             )
                         }
@@ -197,6 +201,8 @@ fun SettingsScreen(
                                         lockOrientationEnabled
                                     )
                                 )
+                                viewModel.dynamicColorsEnabled = enabled
+                                navController.navigate(route)
                             }
                         )
                     }
@@ -236,6 +242,8 @@ fun SettingsScreen(
                                         lockOrientationEnabled
                                     )
                                 )
+                                viewModel.lockOrientationEnabled = enabled
+                                navController.navigate(route)
                             }
                         )
                     }

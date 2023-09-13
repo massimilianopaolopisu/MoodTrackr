@@ -19,4 +19,8 @@ class MainViewModel @Inject constructor(
     val themePreferencesRepository: IThemePreferencesRepository,
     val dataImporterExporterStrategy: IDataImporterExporterStrategy,
     val moodEntryStatisticsCalculator: IStatisticsCalculator<MoodEntry>
-) : ViewModel()
+) : ViewModel() {
+    var darkModeEnabled: Boolean = true
+    var dynamicColorsEnabled: Boolean = false
+    var lockOrientationEnabled: Boolean = false
+}

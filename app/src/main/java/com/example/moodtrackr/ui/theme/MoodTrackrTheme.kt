@@ -3,7 +3,6 @@ package com.example.moodtrackr.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.moodtrackr.viewModels.MainViewModel
 
 private val _darkColorScheme = darkColorScheme(
     primary = Color.Black,
@@ -68,18 +68,17 @@ private val _lightColorScheme = lightColorScheme(
 
 @Composable
 fun MoodTrackrTheme(
-        darkTheme: Boolean = isSystemInDarkTheme(),
-        dynamicColor: Boolean = true,
+        viewModel: MainViewModel,
         content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
 
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        viewModel.dynamicColorsEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            if (viewModel.darkModeEnabled) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> _darkColorScheme
+        viewModel.darkModeEnabled -> _darkColorScheme
         else -> _lightColorScheme
     }
     val view = LocalView.current
@@ -92,7 +91,7 @@ fun MoodTrackrTheme(
             val controller = WindowCompat.getInsetsController(window, view)
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            controller.isAppearanceLightStatusBars = !darkTheme
+            controller.isAppearanceLightStatusBars = !viewModel.darkModeEnabled
 
             window.navigationBarColor = colorScheme.primary.toArgb()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
