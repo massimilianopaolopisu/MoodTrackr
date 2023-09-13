@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.ui.platform.LocalContext
 import com.example.moodtrackr.screens.MoodTrackrApp
 import com.example.moodtrackr.viewModels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +19,7 @@ class MainActivity @Inject constructor() : ComponentActivity() {
         requestedOrientation = getOrientationFromPreferences()
 
         setContent {
-            MoodTrackrApp(LocalContext.current, viewModel)
+            MoodTrackrApp(viewModel)
         }
     }
 

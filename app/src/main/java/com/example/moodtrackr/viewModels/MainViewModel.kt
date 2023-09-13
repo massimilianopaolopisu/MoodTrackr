@@ -2,9 +2,9 @@ package com.example.moodtrackr.viewModels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
 import com.example.moodtrackr.logic.statistics.interfaces.IStatisticsCalculator
+import com.example.moodtrackr.models.ApplicationPreferences
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.models.ThemePreferences
 import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
@@ -24,9 +24,6 @@ class MainViewModel @Inject constructor(
     val dataImporterExporterStrategy: IDataImporterExporterStrategy,
     val moodEntryStatisticsCalculator: IStatisticsCalculator<MoodEntry>
 ) : ViewModel() {
-    var themePreferences: ThemePreferences = ThemePreferences(
-        themeMode = ThemeMode.System,
-        dynamicColorsEnabled = false,
-        lockOrientationEnabled = false
-    )
+    var themePreferences: ThemePreferences = ThemePreferences()
+    var applicationPreferences: ApplicationPreferences = ApplicationPreferences()
 }

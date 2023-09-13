@@ -1,34 +1,29 @@
 package com.example.moodtrackr.screens
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import com.example.moodtrackr.components.Navigation
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
-import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
 
 @Composable
 fun MoodTrackrApp(
-    context: Context,
     viewModel: MainViewModel
 ) {
-    init(context, viewModel.applicationPreferencesRepository)
-
-    viewModel.themePreferences = viewModel.themePreferencesRepository.load()
+    init(viewModel)
 
     Navigation(viewModel)
 }
 
 private fun init(
-    context: Context,
-    applicationPreferencesRepository: IApplicationPreferencesRepository
+    viewModel: MainViewModel
 ){
-    DateUtilities.initialize(context)
-    val applicationPreferences = applicationPreferencesRepository.load()
+    DateUtilities.initialize(viewModel.context)
+    viewModel.applicationPreferences = viewModel.applicationPreferencesRepository.load()
+    viewModel.themePreferences = viewModel.themePreferencesRepository.load()
 
-    if(!applicationPreferences.sqlDatabaseExists) {
-        val sqlDatabaseHelper = SqlDatabaseHelper(context)
+    if(!viewModel.applicationPreferences.sqlDatabaseExists) {
+        val sqlDatabaseHelper = SqlDatabaseHelper(viewModel.context)
         sqlDatabaseHelper.writableDatabase
     }
 }
