@@ -6,6 +6,7 @@ import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExp
 import com.example.moodtrackr.logic.statistics.interfaces.IStatisticsCalculator
 import com.example.moodtrackr.models.ApplicationPreferences
 import com.example.moodtrackr.models.MoodEntry
+import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.models.ThemePreferences
 import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
@@ -26,4 +27,5 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     var themePreferences: ThemePreferences = ThemePreferences()
     var applicationPreferences: ApplicationPreferences = ApplicationPreferences()
+    var profile: Profile = Profile()
 }

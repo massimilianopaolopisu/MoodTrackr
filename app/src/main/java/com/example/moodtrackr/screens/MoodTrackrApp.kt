@@ -21,6 +21,7 @@ private fun init(
     DateUtilities.initialize(viewModel.context)
     viewModel.applicationPreferences = viewModel.applicationPreferencesRepository.load()
     viewModel.themePreferences = viewModel.themePreferencesRepository.load()
+    viewModel.profile = viewModel.profilePreferencesRepository.load()
 
     if(!viewModel.applicationPreferences.sqlDatabaseExists) {
         val sqlDatabaseHelper = SqlDatabaseHelper(viewModel.context)

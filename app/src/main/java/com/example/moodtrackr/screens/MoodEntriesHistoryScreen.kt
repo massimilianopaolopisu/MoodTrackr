@@ -13,17 +13,17 @@ import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.DatePickerAllSelectableDates
 import com.example.moodtrackr.models.DatePickerSelectableDates
-import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.utilities.DateUtilities
+import com.example.moodtrackr.viewModels.MainViewModel
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoodEntriesHistoryScreen(
     navController: NavController,
-    moodEntriesRepository: IMoodEntriesRepository
+    viewModel: MainViewModel
 ) {
-    val moodEntryList = moodEntriesRepository.getAllMoodEntries()
+    val moodEntryList = viewModel.moodEntriesRepository.getAllMoodEntries()
     val datesToHighlight = moodEntryList.map { it.date }.toSet()
     val highlightedDates = remember { datesToHighlight }
 

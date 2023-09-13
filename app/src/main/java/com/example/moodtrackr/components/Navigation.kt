@@ -29,8 +29,7 @@ fun Navigation(viewModel: MainViewModel) {
             MoodTrackrTheme(viewModel) {
                 HomeScreen(
                     navController,
-                    viewModel.profilePreferencesRepository,
-                    viewModel.moodEntriesRepository,
+                    viewModel,
                     LocalDate.now())
             }
         }
@@ -42,8 +41,7 @@ fun Navigation(viewModel: MainViewModel) {
             MoodTrackrTheme(viewModel) {
                 HomeScreen(
                     navController,
-                    viewModel.profilePreferencesRepository,
-                    viewModel.moodEntriesRepository,
+                    viewModel,
                     DateUtilities.getLocalDateFromStringDate(
                         backStackEntry.arguments?.getString("date") ?: ""
                     )
@@ -52,7 +50,10 @@ fun Navigation(viewModel: MainViewModel) {
         }
         composable(Routes.EditProfile.toString()) {
             MoodTrackrTheme(viewModel) {
-                EditProfileScreen(navController, viewModel.profilePreferencesRepository)
+                EditProfileScreen(
+                    navController,
+                    viewModel
+                )
             }
         }
         composable(Routes.Settings.toString()) {
@@ -68,7 +69,7 @@ fun Navigation(viewModel: MainViewModel) {
             MoodTrackrTheme(viewModel) {
                 EditMoodEntryScreen(
                     navController,
-                    viewModel.moodEntriesRepository,
+                    viewModel,
                     backStackEntry.arguments?.getString("date")
                         ?: DateUtilities.getStringDateFromLocalDate(
                             LocalDate.now()
@@ -78,7 +79,7 @@ fun Navigation(viewModel: MainViewModel) {
         }
         composable(Routes.MoodEntriesHistory.toString()) {
             MoodTrackrTheme(viewModel) {
-                MoodEntriesHistoryScreen(navController, viewModel.moodEntriesRepository)
+                MoodEntriesHistoryScreen(navController, viewModel)
             }
         }
         composable(
@@ -89,7 +90,7 @@ fun Navigation(viewModel: MainViewModel) {
             MoodTrackrTheme(viewModel) {
                 ViewMoodEntryScreen(
                     navController,
-                    viewModel.moodEntriesRepository,
+                    viewModel,
                     backStackEntry.arguments?.getString("date")
                         ?: DateUtilities.getStringDateFromLocalDate(
                             LocalDate.now()
