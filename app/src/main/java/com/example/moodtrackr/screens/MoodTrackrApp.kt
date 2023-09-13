@@ -29,10 +29,8 @@ private fun init(
         sqlDatabaseHelper.writableDatabase
     }
 
-    if(viewModel.mainActivity != null) {
-        viewModel.mainActivity!!.requestedOrientation = if(viewModel.themePreferences.lockOrientationEnabled)
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        else
-            ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
-    }
+    viewModel.mainActivity?.requestedOrientation = if(viewModel.themePreferences.lockOrientationEnabled)
+        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    else
+        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
 }
