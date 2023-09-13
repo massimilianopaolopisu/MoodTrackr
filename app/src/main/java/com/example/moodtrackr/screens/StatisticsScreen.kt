@@ -42,7 +42,7 @@ fun StatisticsScreen(
     navController: NavController,
     viewModel: MainViewModel
 ) {
-    var selectedTimeFrame by remember { mutableStateOf(TimeFrame.LastWeek) }
+    var selectedTimeFrame by remember { mutableStateOf(TimeFrame.AllTime) }
     var statistics by remember { mutableStateOf(emptyList<IndicatorStats>()) }
     var isDropdownOpen by remember { mutableStateOf(false) }
 
