@@ -34,7 +34,6 @@ import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
-import com.example.moodtrackr.models.ThemePreferences
 import com.example.moodtrackr.viewModels.MainViewModel
 
 @Composable
@@ -134,15 +133,11 @@ fun SettingsScreen(
                                 onOptionSelected = { themeMode ->
                                     selectedTheme = themeMode
 
-                                    viewModel.themePreferences = ThemePreferences(
-                                        selectedTheme,
-                                        dynamicColorsEnabled,
-                                        lockOrientationEnabled
-                                    )
-
+                                    viewModel.themePreferences.themeMode = themeMode
                                     viewModel.themePreferencesRepository.save(
                                         viewModel.themePreferences
                                     )
+
                                     navController.navigate(route)
                                 }
                             )
@@ -177,15 +172,12 @@ fun SettingsScreen(
                             checked = dynamicColorsEnabled,
                             onCheckedChange = { enabled ->
                                 dynamicColorsEnabled = enabled
-                                viewModel.themePreferences = ThemePreferences(
-                                    selectedTheme,
-                                    dynamicColorsEnabled,
-                                    lockOrientationEnabled
-                                )
 
+                                viewModel.themePreferences.dynamicColorsEnabled = enabled
                                 viewModel.themePreferencesRepository.save(
                                     viewModel.themePreferences
                                 )
+
                                 navController.navigate(route)
                             }
                         )
@@ -219,15 +211,12 @@ fun SettingsScreen(
                             checked = lockOrientationEnabled,
                             onCheckedChange = { enabled ->
                                 lockOrientationEnabled = enabled
-                                viewModel.themePreferences = ThemePreferences(
-                                    selectedTheme,
-                                    dynamicColorsEnabled,
-                                    lockOrientationEnabled
-                                )
 
+                                viewModel.themePreferences.lockOrientationEnabled = enabled
                                 viewModel.themePreferencesRepository.save(
                                     viewModel.themePreferences
                                 )
+
                                 navController.navigate(route)
                             }
                         )
