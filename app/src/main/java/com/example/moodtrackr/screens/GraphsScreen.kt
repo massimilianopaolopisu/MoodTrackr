@@ -58,7 +58,7 @@ fun GraphsScreen(
 ) {
     var isTimeFrameMenuExpanded by remember { mutableStateOf(false) }
     var isPropertiesMenuExpanded by remember { mutableStateOf(false) }
-    var selectedTimeFrame by remember { mutableStateOf(TimeFrame.LastWeek) }
+    var selectedTimeFrame by remember { mutableStateOf(TimeFrame.AllTime) }
     var selectedProperty by remember { mutableStateOf("overall") }
 
     val moodEntries = viewModel.moodEntriesRepository.getMoodEntriesInRange(
@@ -174,7 +174,7 @@ fun GraphsScreen(
                     yAxisMinimum = 0f,
                     yAxisEnabled = false,
                     xAxisConvertMillisToDate = true,
-                    xAxisLabelCount = 5
+                    xAxisLabelCount = 4
                     )
 
                 Spacer(modifier = Modifier.height(16.dp))

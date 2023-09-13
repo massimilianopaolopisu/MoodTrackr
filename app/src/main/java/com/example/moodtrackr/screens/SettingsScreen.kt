@@ -1,7 +1,7 @@
 package com.example.moodtrackr.screens
 
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +35,6 @@ import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
-import com.example.moodtrackr.models.ThemePreferences
 import com.example.moodtrackr.viewModels.MainViewModel
 
 @Composable
@@ -43,13 +42,11 @@ fun SettingsScreen(
     navController: NavController,
     viewModel: MainViewModel
 ) {
-    val themePreferences = viewModel.themePreferencesRepository.load()
+    var selectedTheme by remember { mutableStateOf(viewModel.themePreferences.themeMode) }
+    var dynamicColorsEnabled by remember { mutableStateOf(viewModel.themePreferences.dynamicColorsEnabled) }
+    var lockOrientationEnabled by remember { mutableStateOf(viewModel.themePreferences.lockOrientationEnabled) }
 
-    var selectedTheme by remember { mutableStateOf(themePreferences.themeMode) }
-    var dynamicColorsEnabled by remember { mutableStateOf(themePreferences.dynamicColorsEnabled) }
-    val isSystemInDarkMode = isSystemInDarkTheme()
-    var darkMode by remember { mutableStateOf(isSystemInDarkMode) }
-    var lockOrientationEnabled by remember { mutableStateOf(themePreferences.lockOrientationEnabled) }
+    val route = "${Routes.Settings}"
 
     Box(
         modifier = Modifier
@@ -137,26 +134,12 @@ fun SettingsScreen(
                                 onOptionSelected = { themeMode ->
                                     selectedTheme = themeMode
 
-                                    darkMode = when (themeMode) {
-                                        ThemeMode.System -> {
-                                            isSystemInDarkMode
-                                        }
-
-                                        ThemeMode.Light -> {
-                                            false
-                                        }
-
-                                        ThemeMode.Dark -> {
-                                            true
-                                        }
-                                    }
+                                    viewModel.themePreferences.themeMode = themeMode
                                     viewModel.themePreferencesRepository.save(
-                                        ThemePreferences(
-                                            selectedTheme,
-                                            dynamicColorsEnabled,
-                                            lockOrientationEnabled
-                                        )
+                                        viewModel.themePreferences
                                     )
+
+                                    navController.navigate(route)
                                 }
                             )
                         }
@@ -190,13 +173,13 @@ fun SettingsScreen(
                             checked = dynamicColorsEnabled,
                             onCheckedChange = { enabled ->
                                 dynamicColorsEnabled = enabled
+
+                                viewModel.themePreferences.dynamicColorsEnabled = enabled
                                 viewModel.themePreferencesRepository.save(
-                                    ThemePreferences(
-                                        selectedTheme,
-                                        dynamicColorsEnabled,
-                                        lockOrientationEnabled
-                                    )
+                                    viewModel.themePreferences
                                 )
+
+                                navController.navigate(route)
                             }
                         )
                     }
@@ -229,13 +212,13 @@ fun SettingsScreen(
                             checked = lockOrientationEnabled,
                             onCheckedChange = { enabled ->
                                 lockOrientationEnabled = enabled
+
+                                viewModel.themePreferences.lockOrientationEnabled = enabled
                                 viewModel.themePreferencesRepository.save(
-                                    ThemePreferences(
-                                        selectedTheme,
-                                        dynamicColorsEnabled,
-                                        lockOrientationEnabled
-                                    )
+                                    viewModel.themePreferences
                                 )
+
+                                changeOrientationBasedOnCurrentPreferences(viewModel)
                             }
                         )
                     }
@@ -323,4 +306,11 @@ fun SettingsScreen(
             MainBottomBar(navController)
         }
     }
+}
+
+fun changeOrientationBasedOnCurrentPreferences(viewModel: MainViewModel) {
+    viewModel.mainActivity?.requestedOrientation = if(viewModel.themePreferences.lockOrientationEnabled)
+        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    else
+        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
 }

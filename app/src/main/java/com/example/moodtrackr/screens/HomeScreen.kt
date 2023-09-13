@@ -18,19 +18,17 @@ import com.example.moodtrackr.components.MoodEntrySummary
 import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
-import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
-import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
+import com.example.moodtrackr.viewModels.MainViewModel
 import java.time.LocalDate
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    profilePreferencesRepository: IProfilePreferencesRepository,
-    moodEntriesRepository: IMoodEntriesRepository,
+    viewModel: MainViewModel,
     date: LocalDate
 ) {
-    val name = getName(profilePreferencesRepository)
-    val moodEntry = moodEntriesRepository.getMoodEntry(date)
+    val name = viewModel.profile.name
+    val moodEntry = viewModel.moodEntriesRepository.getMoodEntry(date)
 
     Box(
         modifier = Modifier
@@ -70,7 +68,7 @@ fun HomeScreen(
             {
                 MoodEntrySummary(
                     navController = navController,
-                    moodEntriesRepository = moodEntriesRepository,
+                    moodEntriesRepository = viewModel.moodEntriesRepository,
                     moodEntry = moodEntry,
                     date = date,
                     origin = Routes.Home.toString(),
@@ -89,14 +87,4 @@ fun HomeScreen(
             )
         }
     }
-}
-
-fun getName(profilePreferencesRepository: IProfilePreferencesRepository): String {
-    val profile = profilePreferencesRepository.load()
-    var name = profile.name
-
-    if (name.isBlank())
-        name = "user"
-
-    return name
 }

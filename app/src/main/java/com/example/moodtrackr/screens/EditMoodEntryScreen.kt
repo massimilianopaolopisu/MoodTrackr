@@ -26,9 +26,9 @@ import com.example.moodtrackr.components.bars.SaveBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.models.MoodEntry
-import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.utilities.DateUtilities
+import com.example.moodtrackr.viewModels.MainViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -36,12 +36,12 @@ import java.time.LocalDate
 @Composable
 fun EditMoodEntryScreen(
     navController: NavController,
-    moodEntriesRepository: IMoodEntriesRepository,
+    viewModel: MainViewModel,
     date: String?
 ) {
     val dateParsed = if (date.isNullOrBlank()) DateUtilities.getStringDateFromLocalDate(LocalDate.now()) else date
     val moodEntryDate = DateUtilities.getLocalDateFromStringDate(dateParsed)
-    val moodEntry = moodEntriesRepository.getMoodEntry(moodEntryDate) ?: MoodEntry()
+    val moodEntry = viewModel.moodEntriesRepository.getMoodEntry(moodEntryDate) ?: MoodEntry()
     moodEntry.date = moodEntryDate
 
     var happiness by remember { mutableIntStateOf(moodEntry.happiness) }
@@ -159,7 +159,7 @@ fun EditMoodEntryScreen(
         ) {
             @Suppress("UNCHECKED_CAST")
             val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf(
-                moodEntriesRepository as ISave<Any> to MoodEntry(
+                viewModel.moodEntriesRepository as ISave<Any> to MoodEntry(
                     date = moodEntryDate,
                     happiness = happiness,
                     love = love,
