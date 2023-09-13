@@ -1,10 +1,8 @@
 package com.example.moodtrackr.screens
 
 import android.content.Context
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import com.example.moodtrackr.components.Navigation
-import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
 import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
 import com.example.moodtrackr.utilities.DateUtilities
@@ -17,24 +15,7 @@ fun MoodTrackrApp(
 ) {
     init(context, viewModel.applicationPreferencesRepository)
 
-    val themePreferences = viewModel.themePreferencesRepository.load()
-
-    viewModel.darkModeEnabled = when (themePreferences.themeMode) {
-        ThemeMode.System -> {
-            isSystemInDarkTheme()
-        }
-
-        ThemeMode.Light -> {
-            false
-        }
-
-        ThemeMode.Dark -> {
-            true
-        }
-    }
-
-    viewModel.dynamicColorsEnabled = themePreferences.dynamicColorsEnabled
-    viewModel.lockOrientationEnabled = themePreferences.lockOrientationEnabled
+    viewModel.themePreferences = viewModel.themePreferencesRepository.load()
 
     Navigation(viewModel)
 }

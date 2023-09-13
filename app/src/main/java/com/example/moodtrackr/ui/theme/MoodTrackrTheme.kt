@@ -3,6 +3,7 @@ package com.example.moodtrackr.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -74,11 +75,11 @@ fun MoodTrackrTheme(
     val context = LocalContext.current
 
     val colorScheme = when {
-        viewModel.dynamicColorsEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            if (viewModel.darkModeEnabled) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        viewModel.themePreferences.dynamicColorsEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            if (viewModel.themePreferences.darkMode || isSystemInDarkTheme()) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        viewModel.darkModeEnabled -> _darkColorScheme
+        (viewModel.themePreferences.darkMode || isSystemInDarkTheme()) -> _darkColorScheme
         else -> _lightColorScheme
     }
     val view = LocalView.current
@@ -91,7 +92,7 @@ fun MoodTrackrTheme(
             val controller = WindowCompat.getInsetsController(window, view)
             controller.systemBarsBehavior =
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            controller.isAppearanceLightStatusBars = !viewModel.darkModeEnabled
+            controller.isAppearanceLightStatusBars = !viewModel.themePreferences.darkMode
 
             window.navigationBarColor = colorScheme.primary.toArgb()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

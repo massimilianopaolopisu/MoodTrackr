@@ -1,7 +1,6 @@
 package com.example.moodtrackr.screens
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,8 +46,6 @@ fun SettingsScreen(
 
     var selectedTheme by remember { mutableStateOf(themePreferences.themeMode) }
     var dynamicColorsEnabled by remember { mutableStateOf(themePreferences.dynamicColorsEnabled) }
-    val isSystemInDarkMode = isSystemInDarkTheme()
-    var darkMode by remember { mutableStateOf(isSystemInDarkMode) }
     var lockOrientationEnabled by remember { mutableStateOf(themePreferences.lockOrientationEnabled) }
 
     val route = "${Routes.Settings}"
@@ -139,27 +136,15 @@ fun SettingsScreen(
                                 onOptionSelected = { themeMode ->
                                     selectedTheme = themeMode
 
-                                    darkMode = when (themeMode) {
-                                        ThemeMode.System -> {
-                                            isSystemInDarkMode
-                                        }
-
-                                        ThemeMode.Light -> {
-                                            false
-                                        }
-
-                                        ThemeMode.Dark -> {
-                                            true
-                                        }
-                                    }
-                                    viewModel.themePreferencesRepository.save(
-                                        ThemePreferences(
-                                            selectedTheme,
-                                            dynamicColorsEnabled,
-                                            lockOrientationEnabled
-                                        )
+                                    viewModel.themePreferences = ThemePreferences(
+                                        selectedTheme,
+                                        dynamicColorsEnabled,
+                                        lockOrientationEnabled
                                     )
-                                    viewModel.darkModeEnabled = darkMode
+
+                                    viewModel.themePreferencesRepository.save(
+                                        viewModel.themePreferences
+                                    )
                                     navController.navigate(route)
                                 }
                             )
@@ -194,14 +179,15 @@ fun SettingsScreen(
                             checked = dynamicColorsEnabled,
                             onCheckedChange = { enabled ->
                                 dynamicColorsEnabled = enabled
-                                viewModel.themePreferencesRepository.save(
-                                    ThemePreferences(
-                                        selectedTheme,
-                                        dynamicColorsEnabled,
-                                        lockOrientationEnabled
-                                    )
+                                viewModel.themePreferences = ThemePreferences(
+                                    selectedTheme,
+                                    dynamicColorsEnabled,
+                                    lockOrientationEnabled
                                 )
-                                viewModel.dynamicColorsEnabled = enabled
+
+                                viewModel.themePreferencesRepository.save(
+                                    viewModel.themePreferences
+                                )
                                 navController.navigate(route)
                             }
                         )
@@ -235,14 +221,15 @@ fun SettingsScreen(
                             checked = lockOrientationEnabled,
                             onCheckedChange = { enabled ->
                                 lockOrientationEnabled = enabled
-                                viewModel.themePreferencesRepository.save(
-                                    ThemePreferences(
-                                        selectedTheme,
-                                        dynamicColorsEnabled,
-                                        lockOrientationEnabled
-                                    )
+                                viewModel.themePreferences = ThemePreferences(
+                                    selectedTheme,
+                                    dynamicColorsEnabled,
+                                    lockOrientationEnabled
                                 )
-                                viewModel.lockOrientationEnabled = enabled
+
+                                viewModel.themePreferencesRepository.save(
+                                    viewModel.themePreferences
+                                )
                                 navController.navigate(route)
                             }
                         )
