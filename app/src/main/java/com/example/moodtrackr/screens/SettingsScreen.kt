@@ -42,11 +42,9 @@ fun SettingsScreen(
     navController: NavController,
     viewModel: MainViewModel
 ) {
-    val themePreferences = viewModel.themePreferencesRepository.load()
-
-    var selectedTheme by remember { mutableStateOf(themePreferences.themeMode) }
-    var dynamicColorsEnabled by remember { mutableStateOf(themePreferences.dynamicColorsEnabled) }
-    var lockOrientationEnabled by remember { mutableStateOf(themePreferences.lockOrientationEnabled) }
+    var selectedTheme by remember { mutableStateOf(viewModel.themePreferences.themeMode) }
+    var dynamicColorsEnabled by remember { mutableStateOf(viewModel.themePreferences.dynamicColorsEnabled) }
+    var lockOrientationEnabled by remember { mutableStateOf(viewModel.themePreferences.lockOrientationEnabled) }
 
     val route = "${Routes.Settings}"
 
