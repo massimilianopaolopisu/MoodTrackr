@@ -19,21 +19,19 @@ import androidx.navigation.NavController
 import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.models.Profile
-import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
 import com.example.moodtrackr.utilities.DateUtilities
+import com.example.moodtrackr.viewModels.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
     navController: NavController,
-    profilePreferencesRepository: IProfilePreferencesRepository
+    viewModel: MainViewModel
 ) {
-    val profile = profilePreferencesRepository.load()
-
-    var newName by remember { mutableStateOf(profile.name) }
-    var newSurname by remember { mutableStateOf(profile.surname) }
-    var newSex by remember { mutableStateOf(profile.sex) }
-    val birthday by remember { mutableStateOf(profile.birthday) }
+    var newName by remember { mutableStateOf(viewModel.profile.name) }
+    var newSurname by remember { mutableStateOf(viewModel.profile.surname) }
+    var newSex by remember { mutableStateOf(viewModel.profile.sex) }
+    val birthday by remember { mutableStateOf(viewModel.profile.birthday) }
 
     val datePicker = rememberDatePickerState(DateUtilities.getMillisFromLocalDate(birthday))
 
@@ -42,7 +40,8 @@ fun EditProfileScreen(
 
     fun saveProfile() {
         val newBirthday = DateUtilities.getLocalDateFromMillis(datePicker.selectedDateMillis?: 0)
-        profilePreferencesRepository.save(Profile(newName, newSurname, newSex, newBirthday))
+        viewModel.profile = Profile(newName, newSurname, newSex, newBirthday)
+        viewModel.profilePreferencesRepository.save(viewModel.profile)
     }
 
     LaunchedEffect(newSex, datePicker.selectedDateMillis) {

@@ -14,17 +14,17 @@ import com.example.moodtrackr.components.MoodEntrySummary
 import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
-import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.utilities.DateUtilities
+import com.example.moodtrackr.viewModels.MainViewModel
 
 @Composable
 fun ViewMoodEntryScreen(
     navController: NavController,
-    moodEntriesRepository: IMoodEntriesRepository,
+    viewModel: MainViewModel,
     date: String?
 ) {
     val dateParsed = DateUtilities.getLocalDateFromStringDate(date)
-    val moodEntry = moodEntriesRepository.getMoodEntry(dateParsed)
+    val moodEntry = viewModel.moodEntriesRepository.getMoodEntry(dateParsed)
 
     Box(
         modifier = Modifier
@@ -40,7 +40,7 @@ fun ViewMoodEntryScreen(
 
             MoodEntrySummary(
                 navController = navController,
-                moodEntriesRepository = moodEntriesRepository,
+                moodEntriesRepository = viewModel.moodEntriesRepository,
                 moodEntry = moodEntry,
                 date = dateParsed,
                 origin = Routes.ViewMoodEntry.toString(),
