@@ -1,8 +1,8 @@
 package com.example.moodtrackr.screens
 
-import android.content.pm.ActivityInfo
 import androidx.compose.runtime.Composable
 import com.example.moodtrackr.components.Navigation
+import com.example.moodtrackr.helpers.ActivityHelper
 import com.example.moodtrackr.helpers.SqlDatabaseHelper
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
@@ -29,8 +29,5 @@ private fun init(
         sqlDatabaseHelper.writableDatabase
     }
 
-    viewModel.mainActivity?.requestedOrientation = if(viewModel.themePreferences.lockOrientationEnabled)
-        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    else
-        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+    ActivityHelper.setOrientation(viewModel.mainActivity!!, viewModel.themePreferences.lockOrientationEnabled)
 }

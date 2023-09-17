@@ -16,12 +16,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.ISave
+import java.time.LocalDate
 
 @Composable
 fun SaveBottomBar(
     navController: NavController,
     saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>>,
     afterSaveRoute: Routes? = Routes.Home) {
+
+    val homeRoute = "${Routes.Home}/${ LocalDate.now()}"
+
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -32,7 +36,7 @@ fun SaveBottomBar(
                 Icons.Default.Home,
                 "Home"
             ) {
-                navController.navigate(Routes.Home.toString())
+                navController.navigate(homeRoute)
             },
             Triple(
                 Icons.Default.Done,

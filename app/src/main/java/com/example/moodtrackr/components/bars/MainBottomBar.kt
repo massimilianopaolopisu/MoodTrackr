@@ -17,6 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.navigation.NavController
 import com.example.moodtrackr.R
 import com.example.moodtrackr.enums.Routes
+import java.time.LocalDate
 
 @Composable
 fun MainBottomBar(
@@ -31,7 +32,7 @@ fun MainBottomBar(
         Triple(
             Icons.Default.Home,
             "Home",
-            Routes.Home.toString()
+            "${Routes.Home}/${LocalDate.now()}"
         ),
         Triple(
             ImageVector.vectorResource(id = R.drawable.ic_graph),
