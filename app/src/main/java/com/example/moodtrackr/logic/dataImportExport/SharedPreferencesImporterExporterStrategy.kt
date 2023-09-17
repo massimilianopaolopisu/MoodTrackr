@@ -46,7 +46,7 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
     override fun import(inputFilePath: String?, fileName: String?): Boolean {
         try {
             val gson = Gson()
-            val jsonData = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)
+            val jsonData = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)?.replace("}}}}", "}}")
 
             val type = object : TypeToken<Map<String, Map<String, Any>>>() {}.type
             val deserializedData: Map<String, Map<String, Any>> = gson.fromJson(jsonData, type)
