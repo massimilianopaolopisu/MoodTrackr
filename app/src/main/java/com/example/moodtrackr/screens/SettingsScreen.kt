@@ -1,6 +1,5 @@
 package com.example.moodtrackr.screens
 
-import android.content.pm.ActivityInfo
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +34,8 @@ import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
+import com.example.moodtrackr.helpers.ActivityHelper
+import com.example.moodtrackr.helpers.ToastNotificationHelper
 import com.example.moodtrackr.viewModels.MainViewModel
 
 @Composable
@@ -218,7 +219,7 @@ fun SettingsScreen(
                                     viewModel.themePreferences
                                 )
 
-                                changeOrientationBasedOnCurrentPreferences(viewModel)
+                                ActivityHelper.setOrientation(viewModel.mainActivity!!, viewModel.themePreferences.lockOrientationEnabled)
                             }
                         )
                     }
@@ -230,7 +231,9 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            viewModel.dataImporterExporterStrategy.export(null, null)
+                            val success = viewModel.dataImporterExporterStrategy.export(null, null)
+                            val toastMessage = if(success) "Export done" else "Error during export"
+                            ToastNotificationHelper.showShortToastNotification(viewModel.mainActivity!!, toastMessage)
                         }
                         .padding(top = 16.dp)
                 ) {
@@ -266,7 +269,9 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            viewModel.dataImporterExporterStrategy.import(null, null)
+                            val success = viewModel.dataImporterExporterStrategy.import(null, null)
+                            val toastMessage = if(success) "Import done" else "Error during import"
+                            ToastNotificationHelper.showShortToastNotification(viewModel.mainActivity!!, toastMessage)
                         }
                         .padding(top = 16.dp, bottom = 16.dp)
                 ) {
@@ -306,11 +311,4 @@ fun SettingsScreen(
             MainBottomBar(navController)
         }
     }
-}
-
-fun changeOrientationBasedOnCurrentPreferences(viewModel: MainViewModel) {
-    viewModel.mainActivity?.requestedOrientation = if(viewModel.themePreferences.lockOrientationEnabled)
-        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    else
-        ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
 }

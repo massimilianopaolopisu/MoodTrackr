@@ -24,15 +24,7 @@ import java.time.LocalDate
 fun Navigation(viewModel: MainViewModel) {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = Routes.Home.toString()) {
-        composable(Routes.Home.toString()) {
-            MoodTrackrTheme(viewModel) {
-                HomeScreen(
-                    navController,
-                    viewModel,
-                    LocalDate.now())
-            }
-        }
+    NavHost(navController, startDestination = "${Routes.Home}/${LocalDate.now()}") {
         composable(
             route = "${Routes.Home}/{date}",
             arguments = listOf(navArgument("date") { type = NavType.StringType })
@@ -42,9 +34,10 @@ fun Navigation(viewModel: MainViewModel) {
                 HomeScreen(
                     navController,
                     viewModel,
-                    DateUtilities.getLocalDateFromStringDate(
-                        backStackEntry.arguments?.getString("date") ?: ""
-                    )
+                    backStackEntry.arguments?.getString("date")
+                        ?: DateUtilities.getStringDateFromLocalDate(
+                            LocalDate.now()
+                        )
                 )
             }
         }

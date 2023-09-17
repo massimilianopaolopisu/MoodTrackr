@@ -18,17 +18,17 @@ import com.example.moodtrackr.components.MoodEntrySummary
 import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
+import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
-import java.time.LocalDate
 
 @Composable
 fun HomeScreen(
     navController: NavController,
     viewModel: MainViewModel,
-    date: LocalDate
+    date: String?
 ) {
     val name = viewModel.profile.name
-    val moodEntry = viewModel.moodEntriesRepository.getMoodEntry(date)
+    val moodEntry = viewModel.moodEntriesRepository.getMoodEntry(DateUtilities.getLocalDateFromStringDate(date))
 
     Box(
         modifier = Modifier
@@ -70,7 +70,7 @@ fun HomeScreen(
                     navController = navController,
                     moodEntriesRepository = viewModel.moodEntriesRepository,
                     moodEntry = moodEntry,
-                    date = date,
+                    date = DateUtilities.getLocalDateFromStringDate(date),
                     origin = Routes.Home.toString(),
                     allowChangeDate = true
                 )
