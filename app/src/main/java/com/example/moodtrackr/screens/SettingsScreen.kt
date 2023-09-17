@@ -219,7 +219,7 @@ fun SettingsScreen(
                                     viewModel.themePreferences
                                 )
 
-                                ActivityHelper.setOrientation(viewModel.mainActivity!!, viewModel.themePreferences.lockOrientationEnabled)
+                                ActivityHelper.setOrientation(viewModel.mainActivity, viewModel.themePreferences.lockOrientationEnabled)
                             }
                         )
                     }
@@ -233,7 +233,7 @@ fun SettingsScreen(
                         .clickable {
                             val success = viewModel.dataImporterExporterStrategy.export(null, null)
                             val toastMessage = if(success) "Export done" else "Error during export"
-                            ToastNotificationHelper.showShortToastNotification(viewModel.mainActivity!!, toastMessage)
+                            ToastNotificationHelper.showShortToastNotification(viewModel.mainActivity, toastMessage)
                         }
                         .padding(top = 16.dp)
                 ) {
@@ -271,7 +271,7 @@ fun SettingsScreen(
                         .clickable {
                             val success = viewModel.dataImporterExporterStrategy.import(null, null)
                             val toastMessage = if(success) "Import done" else "Error during import"
-                            ToastNotificationHelper.showShortToastNotification(viewModel.mainActivity!!, toastMessage)
+                            ToastNotificationHelper.showShortToastNotification(viewModel.mainActivity, toastMessage)
                         }
                         .padding(top = 16.dp, bottom = 16.dp)
                 ) {

@@ -17,10 +17,6 @@ class MainActivity @Inject constructor() : ComponentActivity() {
         super.onCreate(savedInstanceState)
         viewModel.mainActivity = this
 
-        window.decorView.post {
-            window.setBackgroundDrawableResource(android.R.color.transparent)
-        }
-
         setContent {
             MoodTrackrApp(viewModel)
         }
