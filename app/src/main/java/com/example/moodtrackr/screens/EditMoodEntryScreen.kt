@@ -64,7 +64,7 @@ fun EditMoodEntryScreen(
         snapshotFlow { lazyListState.firstVisibleItemIndex }
             .distinctUntilChanged()
             .collect { visibleItemIndex ->
-                isButtonVisible = visibleItemIndex < lazyListState.layoutInfo.visibleItemsInfo.size - 1
+               isButtonVisible = visibleItemIndex < lazyListState.layoutInfo.visibleItemsInfo.size - 1
             }
     }
 
@@ -196,7 +196,9 @@ fun EditMoodEntryScreen(
 
             SaveBottomBar(
                 navController = navController,
-                saveHandlerAndObjectPairList = saveHandlerAndObjectPairList
+                viewModel = viewModel,
+                saveHandlerAndObjectPairList = saveHandlerAndObjectPairList,
+                afterSaveRoute = null
             )
         }
     }

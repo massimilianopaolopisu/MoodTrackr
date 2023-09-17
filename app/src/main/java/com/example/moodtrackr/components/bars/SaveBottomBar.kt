@@ -15,14 +15,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moodtrackr.enums.Routes
+import com.example.moodtrackr.helpers.ToastNotificationHelper
 import com.example.moodtrackr.repositories.interfaces.ISave
+import com.example.moodtrackr.viewModels.MainViewModel
 import java.time.LocalDate
 
 @Composable
 fun SaveBottomBar(
     navController: NavController,
+    viewModel: MainViewModel,
     saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>>,
-    afterSaveRoute: Routes? = Routes.Home) {
+    afterSaveRoute: String?) {
 
     val homeRoute = "${Routes.Home}/${ LocalDate.now()}"
 
@@ -45,8 +48,10 @@ fun SaveBottomBar(
                 saveHandlerAndObjectPairList.forEach { (saveHandler, obj) ->
                     saveHandler.save(obj)
                 }
+                ToastNotificationHelper.showShortToastNotification(viewModel.mainActivity, "Saved")
+
                 afterSaveRoute?.let {
-                    navController.navigate(it.toString())
+                    navController.navigate(it)
                 }
             }
         )
