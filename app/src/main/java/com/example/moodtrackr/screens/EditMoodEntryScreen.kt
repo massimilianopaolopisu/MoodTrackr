@@ -15,7 +15,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.FloatingScrollButton
@@ -43,6 +45,11 @@ fun EditMoodEntryScreen(
     val moodEntryDate = DateUtilities.getLocalDateFromStringDate(dateParsed)
     val moodEntry = viewModel.moodEntriesRepository.getMoodEntry(moodEntryDate) ?: MoodEntry()
     moodEntry.date = moodEntryDate
+    val coroutineScope = rememberCoroutineScope()
+    val localDensityCurrent = LocalDensity.current
+    val lazyListState = rememberLazyListState()
+    val focusRequester = FocusRequester()
+    val focusManager = LocalFocusManager.current
 
     var happiness by remember { mutableIntStateOf(moodEntry.happiness) }
     var love by remember { mutableIntStateOf(moodEntry.love) }
@@ -56,16 +63,13 @@ fun EditMoodEntryScreen(
 
     var isButtonVisible by remember { mutableStateOf(true) }
 
-    val coroutineScope = rememberCoroutineScope()
-    val localDensityCurrent = LocalDensity.current
-    val lazyListState = rememberLazyListState()
-
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.firstVisibleItemIndex }
             .distinctUntilChanged()
             .collect { visibleItemIndex ->
                 isButtonVisible = visibleItemIndex < lazyListState.layoutInfo.visibleItemsInfo.size - 1
             }
+
     }
 
     Box(
@@ -146,7 +150,12 @@ fun EditMoodEntryScreen(
             }
 
             item {
-                MoodEntryNoteEditCard(label = "Notes", value = notes) { newValue ->
+                MoodEntryNoteEditCard(
+                    focusRequester = focusRequester,
+                    focusManager = focusManager,
+                    label = "Notes",
+                    value = notes
+                ) { newValue ->
                     notes = newValue
                 }
             }
