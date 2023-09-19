@@ -3,6 +3,7 @@ package com.example.moodtrackr.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -11,11 +12,19 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MoodEntryNoteEditCard(label: String, value: String, onValueChange: (String) -> Unit) {
+fun MoodEntryNoteEditCard(
+    focusRequester: FocusRequester,
+    focusManager: FocusManager,
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,7 +49,13 @@ fun MoodEntryNoteEditCard(label: String, value: String, onValueChange: (String) 
                     .padding(vertical = 8.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
-                )
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusRequester.requestFocus() },
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
+                ),
             )
         }
     }
