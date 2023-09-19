@@ -64,12 +64,16 @@ fun EditMoodEntryScreen(
     var isButtonVisible by remember { mutableStateOf(true) }
 
     LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.isScrollInProgress }
+            .collect {
+                focusManager.clearFocus()
+            }
+
         snapshotFlow { lazyListState.firstVisibleItemIndex }
             .distinctUntilChanged()
             .collect { visibleItemIndex ->
                isButtonVisible = visibleItemIndex < lazyListState.layoutInfo.visibleItemsInfo.size - 1
             }
-
     }
 
     Box(
