@@ -1,11 +1,13 @@
 package com.example.moodtrackr.screens
 
+import android.R.color
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,6 +27,12 @@ fun ViewMoodEntryScreen(
 ) {
     val dateParsed = DateUtilities.getLocalDateFromStringDate(date)
     val moodEntry = viewModel.moodEntriesRepository.getMoodEntry(dateParsed)
+
+    LaunchedEffect(Unit) {
+        viewModel.mainActivity?.window?.decorView?.post {
+            viewModel.mainActivity?.window?.setBackgroundDrawableResource(color.transparent)
+        }
+    }
 
     Box(
         modifier = Modifier

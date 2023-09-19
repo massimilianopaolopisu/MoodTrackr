@@ -44,6 +44,12 @@ fun EditProfileScreen(
         viewModel.profilePreferencesRepository.save(viewModel.profile)
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.mainActivity?.window?.decorView?.post {
+            viewModel.mainActivity?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        }
+    }
+
     LaunchedEffect(newSex, datePicker.selectedDateMillis) {
         saveProfile()
     }

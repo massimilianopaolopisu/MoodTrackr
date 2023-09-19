@@ -52,6 +52,12 @@ fun StatisticsScreen(
         statistics = viewModel.moodEntryStatisticsCalculator.calculateStats(moodEntriesInRange)
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.mainActivity?.window?.decorView?.post {
+            viewModel.mainActivity?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        }
+    }
+
     LaunchedEffect(selectedTimeFrame) {
         calculateStatistics()
     }
