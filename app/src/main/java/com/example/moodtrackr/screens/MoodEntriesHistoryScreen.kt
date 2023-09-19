@@ -40,6 +40,12 @@ fun MoodEntriesHistoryScreen(
         selectableDates = DatePickerAllSelectableDates()
     )
 
+    LaunchedEffect(Unit) {
+        viewModel.mainActivity?.window?.decorView?.post {
+            viewModel.mainActivity?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        }
+    }
+
     if (showOnlyInsertedDays && selectedDate != LocalDate.now()) {
         LaunchedEffect(selectedDate) {
             navController.navigate("${Routes.ViewMoodEntry}/$selectedDate")

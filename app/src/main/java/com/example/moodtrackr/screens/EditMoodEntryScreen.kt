@@ -63,6 +63,12 @@ fun EditMoodEntryScreen(
 
     var isButtonVisible by remember { mutableStateOf(true) }
 
+    LaunchedEffect(Unit) {
+        viewModel.mainActivity?.window?.decorView?.post {
+            viewModel.mainActivity?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        }
+    }
+
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.isScrollInProgress }
             .collect {
