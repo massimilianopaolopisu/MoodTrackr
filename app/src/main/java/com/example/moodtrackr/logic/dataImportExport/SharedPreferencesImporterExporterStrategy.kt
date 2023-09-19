@@ -8,6 +8,7 @@ import com.example.moodtrackr.dataAccess.SharedPreferencesConnector
 import com.example.moodtrackr.dataAccess.interfaces.IFileSystemIO
 import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import javax.inject.Inject
 
@@ -45,7 +46,7 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
 
     override fun import(inputFilePath: String?, fileName: String?): Boolean {
         try {
-            val gson = Gson()
+            val gson = GsonBuilder().setLenient().create()
             val jsonData = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)?.replace("}}}}", "}}")
 
             val type = object : TypeToken<Map<String, Map<String, Any>>>() {}.type

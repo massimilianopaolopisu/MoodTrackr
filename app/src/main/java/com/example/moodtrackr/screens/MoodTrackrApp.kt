@@ -29,5 +29,11 @@ private fun init(
         sqlDatabaseHelper.writableDatabase
     }
 
-    ActivityHelper.setOrientation(viewModel.mainActivity!!, viewModel.themePreferences.lockOrientationEnabled)
+    if(viewModel.mainActivity != null) {
+        viewModel.mainActivity?.window?.decorView?.post {
+            viewModel.mainActivity?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        }
+
+        ActivityHelper.setOrientation(viewModel.mainActivity!!, viewModel.themePreferences.lockOrientationEnabled)
+    }
 }
