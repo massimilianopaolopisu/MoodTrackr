@@ -1,5 +1,6 @@
 package com.example.moodtrackr.logic.dataImportExport
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
@@ -7,6 +8,7 @@ import com.example.moodtrackr.R
 import com.example.moodtrackr.dataAccess.SharedPreferencesConnector
 import com.example.moodtrackr.dataAccess.interfaces.IFileSystemIO
 import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
+import com.example.moodtrackr.utilities.JsonUtilities
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -18,6 +20,7 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
 
     private val _appName = context.getString(R.string.app_name)
     private val _fileName = "$_appName-sharedPreferences.json"
+    private var _activity: Activity? = null
 
     override fun export(outputFilePath: String?, fileName: String?): Boolean {
         try {
@@ -35,6 +38,11 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
             }
 
             val jsonData: String = gson.toJson(allData)
+
+            if(_activity != null) {
+                fileSystemIO.setActivity(_activity!!)
+            }
+
             fileSystemIO.write(context, outputFilePath, fileName?: _fileName, jsonData)
 
             return true
@@ -47,7 +55,13 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
     override fun import(inputFilePath: String?, fileName: String?): Boolean {
         try {
             val gson = GsonBuilder().setLenient().create()
-            val jsonData = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)?.replace("}}}}", "}}")
+
+            if(_activity != null) {
+                fileSystemIO.setActivity(_activity!!)
+            }
+
+            val jsonRaw = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)
+            val jsonData = JsonUtilities.fixJsonEnd(jsonRaw, 2)
 
             val type = object : TypeToken<Map<String, Map<String, Any>>>() {}.type
             val deserializedData: Map<String, Map<String, Any>> = gson.fromJson(jsonData, type)
@@ -75,5 +89,9 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
             Log.e("SharedPreferencesImporterExporter.import", ex.stackTraceToString())
             return false
         }
+    }
+
+    override fun setActivity(activity: Activity) {
+        _activity = activity
     }
 }

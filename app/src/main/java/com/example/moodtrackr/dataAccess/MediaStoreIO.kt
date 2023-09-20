@@ -1,5 +1,6 @@
 package com.example.moodtrackr.dataAccess
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.os.Build
@@ -92,6 +93,10 @@ class MediaStoreIO : IFileSystemIO {
         }
 
         return null
+    }
+
+    override fun setActivity(activity: Activity) {
+
     }
 }
 
