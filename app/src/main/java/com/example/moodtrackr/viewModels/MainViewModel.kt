@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
+import com.example.moodtrackr.logic.graphs.interfaces.IGraphManager
 import com.example.moodtrackr.logic.statistics.interfaces.IStatisticsCalculator
 import com.example.moodtrackr.models.ApplicationPreferences
 import com.example.moodtrackr.models.MoodEntry
@@ -24,7 +25,8 @@ class MainViewModel @Inject constructor(
     val moodEntriesRepository: IMoodEntriesRepository,
     val themePreferencesRepository: IThemePreferencesRepository,
     val dataImporterExporterStrategy: IDataImporterExporterStrategy,
-    val moodEntryStatisticsCalculator: IStatisticsCalculator<MoodEntry>
+    val moodEntryStatisticsCalculator: IStatisticsCalculator<MoodEntry>,
+    val graphManager: IGraphManager
 ) : ViewModel() {
     var themePreferences: ThemePreferences = ThemePreferences()
     var applicationPreferences: ApplicationPreferences = ApplicationPreferences()
