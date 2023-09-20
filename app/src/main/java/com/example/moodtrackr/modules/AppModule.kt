@@ -1,7 +1,7 @@
 package com.example.moodtrackr.modules
 
 import android.content.Context
-import com.example.moodtrackr.dataAccess.MediaStoreIO
+import com.example.moodtrackr.dataAccess.CustomFileSystemIO
 import com.example.moodtrackr.dataAccess.interfaces.IFileSystemIO
 import com.example.moodtrackr.logic.dataImportExport.DataImporterExporterStrategy
 import com.example.moodtrackr.logic.dataImportExport.SharedPreferencesImporterExporterStrategy
@@ -80,7 +80,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideIFileSystemIO(): IFileSystemIO {
-        return MediaStoreIO()
+        return CustomFileSystemIO()
     }
 
     @Provides
