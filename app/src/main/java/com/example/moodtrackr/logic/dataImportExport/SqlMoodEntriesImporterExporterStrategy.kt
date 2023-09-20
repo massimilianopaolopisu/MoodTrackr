@@ -1,5 +1,6 @@
 package com.example.moodtrackr.logic.dataImportExport
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.example.moodtrackr.R
@@ -20,6 +21,7 @@ class SqlMoodEntriesImporterExporterStrategy @Inject constructor(private val con
 
     private val _appName = context.getString(R.string.app_name)
     private val _fileName = "$_appName-sql-mood_entries-data.json"
+    private var _activity: Activity? = null
 
     override fun export(outputFilePath: String?, fileName: String?): Boolean {
         return try {
@@ -27,6 +29,10 @@ class SqlMoodEntriesImporterExporterStrategy @Inject constructor(private val con
 
             val gson = Gson()
             val jsonData: String = gson.toJson(moodEntries)
+
+            if(_activity != null) {
+                fileSystemIO.setActivity(_activity!!)
+            }
 
             fileSystemIO.write(context, outputFilePath, fileName?: _fileName, jsonData)
         } catch (ex: Exception) {
@@ -40,6 +46,10 @@ class SqlMoodEntriesImporterExporterStrategy @Inject constructor(private val con
             val gson = GsonBuilder()
                 .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
                 .create()
+
+            if(_activity != null) {
+                fileSystemIO.setActivity(_activity!!)
+            }
 
             val jsonData = fileSystemIO.read(context, inputFilePath, fileName?: _fileName)
 
@@ -55,5 +65,9 @@ class SqlMoodEntriesImporterExporterStrategy @Inject constructor(private val con
             Log.e("SqliteImporterExporter.import", ex.stackTraceToString())
             return false
         }
+    }
+
+    override fun setActivity(activity: Activity) {
+        _activity = activity
     }
 }

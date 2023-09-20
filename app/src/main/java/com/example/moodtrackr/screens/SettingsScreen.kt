@@ -49,7 +49,10 @@ fun SettingsScreen(
 
     val route = "${Routes.Settings}"
 
-    ActivityHelper.resetWindowBackground(viewModel.mainActivity)
+    if(viewModel.mainActivity != null) {
+        ActivityHelper.resetWindowBackground(viewModel.mainActivity)
+        viewModel.dataImporterExporterStrategy.setActivity(viewModel.mainActivity!!)
+    }
 
     Box(
         modifier = Modifier
