@@ -7,6 +7,7 @@ import com.example.moodtrackr.models.interfaces.IDatabaseModel
 import com.example.moodtrackr.utilities.DateUtilities
 import com.google.gson.annotations.JsonAdapter
 import java.time.LocalDate
+import kotlin.reflect.full.declaredMemberProperties
 
 class MoodEntry() : IDatabaseModel<MoodEntry> {
     constructor(
@@ -241,5 +242,10 @@ class MoodEntry() : IDatabaseModel<MoodEntry> {
 
     private fun getOpposite(value: Int): Int{
         return (_maxValue + 1) - value
+    }
+
+    fun getValueFromPropertyName(fieldName: String): Int? {
+        val getter = MoodEntry::class.declaredMemberProperties.find { it.name == fieldName }?.getter
+        return getter?.call(this) as? Int
     }
 }

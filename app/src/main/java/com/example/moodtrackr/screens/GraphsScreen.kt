@@ -39,7 +39,6 @@ import com.example.moodtrackr.viewModels.MainViewModel
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import java.time.LocalDate
 import kotlin.reflect.KProperty1
-import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.starProjectedType
 
@@ -190,9 +189,4 @@ fun GraphsScreen(
             MainBottomBar(navController)
         }
     }
-}
-
-fun getValueFromPropertyName(fieldName: String, moodEntry: MoodEntry): Int? {
-    val getter = MoodEntry::class.declaredMemberProperties.find { it.name == fieldName }?.getter
-    return getter?.call(moodEntry) as? Int
 }

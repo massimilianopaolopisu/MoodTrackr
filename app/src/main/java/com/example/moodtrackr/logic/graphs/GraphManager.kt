@@ -5,7 +5,6 @@ import com.example.moodtrackr.extensions.capitalizeFirstLetter
 import com.example.moodtrackr.logic.graphs.interfaces.IGraphManager
 import com.example.moodtrackr.models.LineDataSetConfiguration
 import com.example.moodtrackr.models.MoodEntry
-import com.example.moodtrackr.screens.getValueFromPropertyName
 import com.example.moodtrackr.utilities.DateUtilities
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -20,7 +19,7 @@ class GraphManager: IGraphManager {
         val entries = mutableListOf<Entry>()
 
         moodEntryList.forEachIndexed { _, moodEntry ->
-            val value = getValueFromPropertyName(propertyName, moodEntry) ?: 0
+            val value = moodEntry.getValueFromPropertyName(propertyName) ?: 0
             val dateInMillis = DateUtilities.getMillisFromLocalDate(moodEntry.date)
             entries.add(Entry(dateInMillis.toFloat(), value.toFloat()))
         }
