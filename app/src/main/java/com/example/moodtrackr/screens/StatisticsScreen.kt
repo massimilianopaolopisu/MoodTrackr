@@ -32,6 +32,7 @@ import com.example.moodtrackr.components.IndicatorStatsCard
 import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.TimeFrame
+import com.example.moodtrackr.helpers.ActivityHelper
 import com.example.moodtrackr.models.IndicatorStats
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
@@ -52,11 +53,7 @@ fun StatisticsScreen(
         statistics = viewModel.moodEntryStatisticsCalculator.calculateStats(moodEntriesInRange)
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.mainActivity?.window?.decorView?.post {
-            viewModel.mainActivity?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        }
-    }
+    ActivityHelper.resetWindowBackground(viewModel.mainActivity)
 
     LaunchedEffect(selectedTimeFrame) {
         calculateStatistics()

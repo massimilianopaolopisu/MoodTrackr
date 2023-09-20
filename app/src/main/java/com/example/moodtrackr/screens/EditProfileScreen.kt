@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
+import com.example.moodtrackr.helpers.ActivityHelper
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
@@ -44,11 +45,7 @@ fun EditProfileScreen(
         viewModel.profilePreferencesRepository.save(viewModel.profile)
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.mainActivity?.window?.decorView?.post {
-            viewModel.mainActivity?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        }
-    }
+    ActivityHelper.resetWindowBackground(viewModel.mainActivity)
 
     LaunchedEffect(newSex, datePicker.selectedDateMillis) {
         saveProfile()

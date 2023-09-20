@@ -27,6 +27,7 @@ import com.example.moodtrackr.components.bars.DateBar
 import com.example.moodtrackr.components.bars.SaveBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
+import com.example.moodtrackr.helpers.ActivityHelper
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.utilities.DateUtilities
@@ -63,11 +64,7 @@ fun EditMoodEntryScreen(
 
     var isButtonVisible by remember { mutableStateOf(true) }
 
-    LaunchedEffect(Unit) {
-        viewModel.mainActivity?.window?.decorView?.post {
-            viewModel.mainActivity?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        }
-    }
+    ActivityHelper.resetWindowBackground(viewModel.mainActivity)
 
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.isScrollInProgress }

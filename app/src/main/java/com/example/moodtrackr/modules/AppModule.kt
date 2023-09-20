@@ -7,6 +7,8 @@ import com.example.moodtrackr.logic.dataImportExport.DataImporterExporterStrateg
 import com.example.moodtrackr.logic.dataImportExport.SharedPreferencesImporterExporterStrategy
 import com.example.moodtrackr.logic.dataImportExport.SqlMoodEntriesImporterExporterStrategy
 import com.example.moodtrackr.logic.dataImportExport.interfaces.IDataImporterExporterStrategy
+import com.example.moodtrackr.logic.graphs.GraphManager
+import com.example.moodtrackr.logic.graphs.interfaces.IGraphManager
 import com.example.moodtrackr.logic.statistics.MoodEntryStatisticsCalculator
 import com.example.moodtrackr.logic.statistics.interfaces.IStatisticsCalculator
 import com.example.moodtrackr.models.MoodEntry
@@ -79,5 +81,11 @@ object AppModule {
     @Singleton
     fun provideIFileSystemIO(): IFileSystemIO {
         return MediaStoreIO()
+    }
+
+    @Provides
+    @Singleton
+    fun provideIGraphManager(): IGraphManager {
+        return GraphManager()
     }
 }
