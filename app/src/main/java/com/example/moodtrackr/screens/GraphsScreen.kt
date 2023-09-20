@@ -1,6 +1,5 @@
 package com.example.moodtrackr.screens
 
-import android.R.color
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.LineChart
@@ -35,23 +32,15 @@ import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.TimeFrame
 import com.example.moodtrackr.extensions.capitalizeFirstLetter
+import com.example.moodtrackr.helpers.ActivityHelper
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
 import java.time.LocalDate
 import kotlin.reflect.KProperty1
-import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.starProjectedType
-
-private val indicatorListNames = MoodEntry::class.memberProperties
-    .filterIsInstance<KProperty1<MoodEntry, Int>>()
-    .filter { it.returnType == Int::class.starProjectedType && !it.name.startsWith("_") }
-    .map { it.name }
 
 @Composable
 fun GraphsScreen(
@@ -68,11 +57,12 @@ fun GraphsScreen(
         LocalDate.now()
     )
 
-    LaunchedEffect(Unit) {
-        viewModel.mainActivity?.window?.decorView?.post {
-            viewModel.mainActivity?.window?.setBackgroundDrawableResource(color.transparent)
-        }
-    }
+    val indicatorListNames = MoodEntry::class.memberProperties
+        .filterIsInstance<KProperty1<MoodEntry, Int>>()
+        .filter { it.returnType == Int::class.starProjectedType && !it.name.startsWith("_") }
+        .map { it.name }
+
+    ActivityHelper.resetWindowBackground(viewModel.mainActivity)
 
     Box(
         modifier = Modifier
@@ -174,7 +164,7 @@ fun GraphsScreen(
                     .height(300.dp)
                 LineChart(
                     modifier = chartModifier,
-                    data = createLineData(selectedProperty, moodEntries),
+                    data = viewModel.graphManager.getLineData(selectedProperty, moodEntries),
                     description = selectedTimeFrame.displayName,
                     backgroundColor = Color.White,
                     legendEnabled = true,
@@ -199,27 +189,4 @@ fun GraphsScreen(
             MainBottomBar(navController)
         }
     }
-}
-
-fun createLineData(propertyName: String, moodEntries: List<MoodEntry>): LineData {
-    val entries = mutableListOf<Entry>()
-
-    moodEntries.forEachIndexed { _, moodEntry ->
-        val value = getValueFromPropertyName(propertyName, moodEntry) ?: 0
-        val dateInMillis = DateUtilities.getMillisFromLocalDate(moodEntry.date)
-        entries.add(Entry(dateInMillis.toFloat(), value.toFloat()))
-    }
-
-    val dataSet = LineDataSet(entries, propertyName.capitalizeFirstLetter())
-    dataSet.color = Color.Blue.toArgb()
-    dataSet.lineWidth = 2f
-    dataSet.setCircleColor(Color.Blue.toArgb())
-    dataSet.setDrawValues(false)
-
-    return LineData(dataSet)
-}
-
-fun getValueFromPropertyName(fieldName: String, moodEntry: MoodEntry): Int? {
-    val getter = MoodEntry::class.declaredMemberProperties.find { it.name == fieldName }?.getter
-    return getter?.call(moodEntry) as? Int
 }
