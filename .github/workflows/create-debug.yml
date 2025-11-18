@@ -12,17 +12,17 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '16.x'
 
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
+          distribution: 'adoptium'
           java-version: '17'
 
       - name: Get version from build.gradle
@@ -30,7 +30,6 @@ jobs:
           VERSION_NAME=$(grep -oP "versionName = \"[^\"]+\"" app/build.gradle.kts | awk -F '"' '{print $2}')
           DEBUG_VERSION_NAME="${VERSION_NAME}-dev"
           echo "DEBUG_VERSION_NAME=$DEBUG_VERSION_NAME" >> $GITHUB_ENV
-        shell: bash
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
@@ -40,13 +39,14 @@ jobs:
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
+      - name: Create artifacts folder
+        run: mkdir -p artifacts
+
       - name: Move APK to artifact folder
         run: mv app/build/outputs/apk/debug/app-debug.apk artifacts/app-debug-${{ env.DEBUG_VERSION_NAME }}.apk
-        env:
-          DEBUG_VERSION_NAME: ${{ env.DEBUG_VERSION_NAME }}
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: debug-apk-${{ env.DEBUG_VERSION_NAME }}
           path: artifacts/app-debug-${{ env.DEBUG_VERSION_NAME }}.apk

@@ -12,23 +12,22 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Get version from build.gradle
         run: |
           VERSION_NAME=$(grep -oP "versionName = \"[^\"]+\"" app/build.gradle.kts | awk -F '"' '{print $2}')
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
-        shell: bash
 
       - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '16.x'
 
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
+          distribution: 'adoptium'
           java-version: '17'
 
       - name: Build AAB
@@ -39,13 +38,14 @@ jobs:
           RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
+      - name: Create artifacts folder
+        run: mkdir -p artifacts
+
       - name: Move AAB to artifact folder
         run: mv app/build/outputs/bundle/release/app-release.aab artifacts/app-release-${{ env.VERSION_NAME }}.aab
-        env:
-          VERSION_NAME: ${{ env.VERSION_NAME }}
 
       - name: Upload AAB artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: release-aab-${{ env.VERSION_NAME }}
           path: artifacts/app-release-${{ env.VERSION_NAME }}.aab
@@ -54,41 +54,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Get version from build.gradle
-      run: |
-        VERSION_NAME=$(grep -oP "versionName = \"[^\"]+\"" app/build.gradle.kts | awk -F '"' '{print $2}')
-        echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
-      shell: bash
+      - name: Get version from build.gradle
+        run: |
+          VERSION_NAME=$(grep -oP "versionName = \"[^\"]+\"" app/build.gradle.kts | awk -F '"' '{print $2}')
+          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
 
-    - name: Use Node.js 16.x
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16.x'
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16.x'
 
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: '17'
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adoptium'
+          java-version: '17'
 
-    - name: Build APK
-      run: ./gradlew assembleRelease
-      env:
-        RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
-        RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-        RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
-        RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+      - name: Build APK
+        run: ./gradlew assembleRelease
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
 
-    - name: Move APK to artifact folder
-      run: mv app/build/outputs/apk/release/app-release.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
-      env:
-        VERSION_NAME: ${{ env.VERSION_NAME }}
+      - name: Create artifacts folder
+        run: mkdir -p artifacts
 
-    - name: Upload APK artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: release-apk-${{ env.VERSION_NAME }}
-        path: artifacts/app-release-${{ env.VERSION_NAME }}.apk
+      - name: Move APK to artifact folder
+        run: mv app/build/outputs/apk/release/app-release.apk artifacts/app-release-${{ env.VERSION_NAME }}.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk-${{ env.VERSION_NAME }}
+          path: artifacts/app-release-${{ env.VERSION_NAME }}.apk
