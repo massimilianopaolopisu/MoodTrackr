@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.moodtrackr.components.dialogs.ExitConfirmDialog
 import com.example.moodtrackr.enums.Routes
+import com.example.moodtrackr.extensions.navigateTo
 
 @Composable
 fun TitleTopBar(
@@ -46,7 +47,7 @@ fun TitleTopBar(
             modifier = Modifier
                 .weight(1f)
                 .clickable {
-                    navController.navigate(Routes.Settings.toString())
+                    navController.navigateTo(Routes.Settings.toString())
                 }
         )
         Text(

@@ -23,6 +23,7 @@ import com.example.moodtrackr.components.dialogs.DeleteConfirmDialog
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import java.time.LocalDate
+import com.example.moodtrackr.extensions.navigateTo
 
 @Composable
 fun EditBar(
@@ -46,7 +47,7 @@ fun EditBar(
             tint = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .clickable {
-                    navController.navigate(editRoute)
+                    navController.navigateTo(editRoute)
                 }
                 .padding(horizontal = 10.dp)
         )
@@ -66,7 +67,7 @@ fun EditBar(
                 onDismiss = { showDeleteConfirmDialog = false },
                 moodEntriesRepository = moodEntriesRepository,
                 selectedDate = localDate,
-                onConfirm = { navController.navigate(Routes.Home.toString()) })
+                onConfirm = { navController.navigateTo(Routes.Home.toString()) })
         }
     }
 }

@@ -19,6 +19,7 @@ import com.example.moodtrackr.helpers.ToastNotificationHelper
 import com.example.moodtrackr.repositories.interfaces.ISave
 import com.example.moodtrackr.viewModels.MainViewModel
 import java.time.LocalDate
+import com.example.moodtrackr.extensions.navigateTo
 
 @Composable
 fun SaveBottomBar(
@@ -39,7 +40,7 @@ fun SaveBottomBar(
                 Icons.Default.Home,
                 "Home"
             ) {
-                navController.navigate(homeRoute)
+                navController.navigateTo(homeRoute)
             },
             Triple(
                 Icons.Default.Done,
@@ -51,7 +52,7 @@ fun SaveBottomBar(
                 ToastNotificationHelper.showShortToastNotification(viewModel.mainActivity, "Saved")
 
                 afterSaveRoute?.let {
-                    navController.navigate(it)
+                    navController.navigateTo(it)
                 }
             }
         )
