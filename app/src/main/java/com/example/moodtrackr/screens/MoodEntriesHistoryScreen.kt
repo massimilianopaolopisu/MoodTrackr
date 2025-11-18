@@ -17,6 +17,7 @@ import com.example.moodtrackr.models.DatePickerSelectableDates
 import com.example.moodtrackr.utilities.DateUtilities
 import com.example.moodtrackr.viewModels.MainViewModel
 import java.time.LocalDate
+import com.example.moodtrackr.extensions.navigateTo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +46,7 @@ fun MoodEntriesHistoryScreen(
 
     if (showOnlyInsertedDays && selectedDate != LocalDate.now()) {
         LaunchedEffect(selectedDate) {
-            navController.navigate("${Routes.ViewMoodEntry}/$selectedDate")
+            navController.navigateTo("${Routes.ViewMoodEntry}/$selectedDate")
         }
     }
 

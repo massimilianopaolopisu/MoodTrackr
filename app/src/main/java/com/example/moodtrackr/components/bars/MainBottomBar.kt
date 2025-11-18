@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.example.moodtrackr.R
 import com.example.moodtrackr.enums.Routes
 import java.time.LocalDate
+import com.example.moodtrackr.extensions.navigateTo
 
 @Composable
 fun MainBottomBar(
@@ -61,7 +62,7 @@ fun MainBottomBar(
                     tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate(route)
+                            navController.navigateTo(route)
                         }
                         .align(Alignment.CenterVertically)
                         .weight(1f)
