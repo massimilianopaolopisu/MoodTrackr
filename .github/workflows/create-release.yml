@@ -27,7 +27,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'adoptium'
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Build AAB
@@ -70,7 +70,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'adoptium'
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Build APK
