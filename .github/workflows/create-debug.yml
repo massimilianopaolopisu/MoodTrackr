@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: UAT
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,7 +22,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'adoptium'
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Get version from build.gradle
@@ -44,6 +44,8 @@ jobs:
 
       - name: Move APK to artifact folder
         run: mv app/build/outputs/apk/debug/app-debug.apk artifacts/app-debug-${{ env.DEBUG_VERSION_NAME }}.apk
+        env:
+          DEBUG_VERSION_NAME: ${{ env.DEBUG_VERSION_NAME }}
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
