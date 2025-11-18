@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.example.moodtrackr.components.bars.DateBar
 import com.example.moodtrackr.components.bars.EditBar
 import com.example.moodtrackr.enums.Routes
+import com.example.moodtrackr.extensions.navigateTo
 import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import java.time.LocalDate
@@ -63,7 +64,7 @@ fun MoodEntrySummary(
                     )
                 {
                     Button(
-                        onClick = { navController.navigate(editRoute) }
+                        onClick = { navController.navigateTo(editRoute) }
                     ) {
                         Text("Add Mood Entry")
                     }

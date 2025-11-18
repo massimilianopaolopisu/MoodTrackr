@@ -37,6 +37,7 @@ import com.example.moodtrackr.enums.ThemeMode
 import com.example.moodtrackr.helpers.ActivityHelper
 import com.example.moodtrackr.helpers.ToastNotificationHelper
 import com.example.moodtrackr.viewModels.MainViewModel
+import com.example.moodtrackr.extensions.navigateTo
 
 @Composable
 fun SettingsScreen(
@@ -79,7 +80,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate(Routes.EditProfile.toString())
+                            navController.navigateTo(Routes.EditProfile.toString())
                         }
                         .padding(top = 16.dp)
                 ) {
@@ -145,7 +146,7 @@ fun SettingsScreen(
                                         viewModel.themePreferences
                                     )
 
-                                    navController.navigate(route)
+                                    navController.navigateTo(route)
                                 }
                             )
                         }
@@ -185,7 +186,7 @@ fun SettingsScreen(
                                     viewModel.themePreferences
                                 )
 
-                                navController.navigate(route)
+                                navController.navigateTo(route)
                             }
                         )
                     }
