@@ -35,6 +35,10 @@ import com.example.moodtrackr.viewModels.MainViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import com.example.moodtrackr.models.CustomMood
+import com.example.moodtrackr.models.MoodEntryCustomMood
 
 @Composable
 fun EditMoodEntryScreen(
@@ -63,6 +67,18 @@ fun EditMoodEntryScreen(
     var notes by remember { mutableStateOf(moodEntry.notes) }
 
     var isButtonVisible by remember { mutableStateOf(true) }
+
+    val customMoodsList = remember { viewModel.customMoodsRepository.getAllCustomMoods().toMutableList() }
+    val existingCustomAssociations = remember { viewModel.moodEntryCustomMoodsRepository.getByDate(moodEntryDate) }
+    val customMoodValues = remember { mutableStateListOf<Triple<Long, String, androidx.compose.runtime.MutableState<Int>>>() }
+
+    if (customMoodValues.isEmpty()) {
+        for (cm in customMoodsList) {
+            val assoc = existingCustomAssociations.find { it.customMoodId == cm.id }
+            val v = assoc?.value ?: 50
+            customMoodValues.add(Triple(cm.id, cm.name, mutableStateOf(v)))
+        }
+    }
 
     ActivityHelper.resetWindowBackground(viewModel.mainActivity)
 
@@ -166,6 +182,28 @@ fun EditMoodEntryScreen(
                     notes = newValue
                 }
             }
+
+            if (customMoodValues.isNotEmpty()) {
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    androidx.compose.material3.Text(
+                        text = "Custom Moods",
+                        style = androidx.compose.material3.MaterialTheme.typography.titleMedium,
+                        color = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
+                    )
+                }
+
+                for (triple in customMoodValues) {
+                    item {
+                        val id = triple.first
+                        val name = triple.second
+                        val state = triple.third
+                        MoodEntryEditCard(label = name, value = state.value) { newValue ->
+                            state.value = newValue
+                        }
+                    }
+                }
+            }
         }
 
         Column(
@@ -174,6 +212,14 @@ fun EditMoodEntryScreen(
                 .align(Alignment.BottomCenter)
         ) {
             @Suppress("UNCHECKED_CAST")
+            val moodEntryCustomList = customMoodValues.map { triple ->
+                MoodEntryCustomMood(
+                    moodEntryDate,
+                    triple.first,
+                    triple.third.value
+                )
+            }
+
             val saveHandlerAndObjectPairList: List<Pair<ISave<Any>, Any>> = listOf(
                 viewModel.moodEntriesRepository as ISave<Any> to MoodEntry(
                     date = moodEntryDate,
@@ -186,7 +232,8 @@ fun EditMoodEntryScreen(
                     sleep = sleep,
                     depression = depression,
                     notes = notes
-                ) as Any
+                ) as Any,
+                viewModel.moodEntryCustomMoodsRepository as ISave<Any> to (moodEntryCustomList as Any)
             )
 
             Row(

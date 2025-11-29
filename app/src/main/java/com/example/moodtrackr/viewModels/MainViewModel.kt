@@ -11,6 +11,7 @@ import com.example.moodtrackr.models.MoodEntry
 import com.example.moodtrackr.models.Profile
 import com.example.moodtrackr.models.ThemePreferences
 import com.example.moodtrackr.repositories.interfaces.IApplicationPreferencesRepository
+import com.example.moodtrackr.repositories.interfaces.ICustomMoodsRepository
 import com.example.moodtrackr.repositories.interfaces.IMoodEntriesRepository
 import com.example.moodtrackr.repositories.interfaces.IProfilePreferencesRepository
 import com.example.moodtrackr.repositories.interfaces.IThemePreferencesRepository
@@ -23,6 +24,8 @@ class MainViewModel @Inject constructor(
     val applicationPreferencesRepository: IApplicationPreferencesRepository,
     val profilePreferencesRepository: IProfilePreferencesRepository,
     val moodEntriesRepository: IMoodEntriesRepository,
+    val customMoodsRepository: ICustomMoodsRepository,
+    val moodEntryCustomMoodsRepository: com.example.moodtrackr.repositories.MoodEntryCustomMoodsRepository,
     val themePreferencesRepository: IThemePreferencesRepository,
     val dataImporterExporterStrategy: IDataImporterExporterStrategy,
     val moodEntryStatisticsCalculator: IStatisticsCalculator<MoodEntry>,

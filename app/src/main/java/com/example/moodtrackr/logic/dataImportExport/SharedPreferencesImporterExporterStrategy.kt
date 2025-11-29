@@ -77,6 +77,20 @@ class SharedPreferencesImporterExporterStrategy @Inject constructor(context: Con
                             is Int -> editor.putInt(subKey, subValue)
                             is Long -> editor.putLong(subKey, subValue)
                             is Float -> editor.putFloat(subKey, subValue)
+                            is Double -> {
+                                val d = subValue as Double
+                                if (d % 1.0 == 0.0) {
+                                    // whole number - try Int if in range, otherwise Long
+                                    val longVal = d.toLong()
+                                    if (longVal in Int.MIN_VALUE..Int.MAX_VALUE) editor.putInt(subKey, longVal.toInt()) else editor.putLong(subKey, longVal)
+                                } else {
+                                    editor.putFloat(subKey, d.toFloat())
+                                }
+                            }
+                            is Number -> {
+                                val n = subValue.toLong()
+                                if (n in Int.MIN_VALUE..Int.MAX_VALUE) editor.putInt(subKey, n.toInt()) else editor.putLong(subKey, n)
+                            }
                             is String -> editor.putString(subKey, subValue)
                         }
                     }

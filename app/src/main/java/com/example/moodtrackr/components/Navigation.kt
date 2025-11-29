@@ -11,6 +11,7 @@ import com.example.moodtrackr.screens.EditMoodEntryScreen
 import com.example.moodtrackr.screens.EditProfileScreen
 import com.example.moodtrackr.screens.GraphsScreen
 import com.example.moodtrackr.screens.HomeScreen
+import com.example.moodtrackr.screens.ManageCustomMoodsScreen
 import com.example.moodtrackr.screens.MoodEntriesHistoryScreen
 import com.example.moodtrackr.screens.SettingsScreen
 import com.example.moodtrackr.screens.StatisticsScreen
@@ -99,6 +100,11 @@ fun Navigation(viewModel: MainViewModel) {
         composable(Routes.Graphs.toString()) {
             MoodTrackrTheme(viewModel) {
                 GraphsScreen(navController, viewModel)
+            }
+        }
+        composable(Routes.ManageCustomMoods.toString()) {
+            MoodTrackrTheme(viewModel) {
+                ManageCustomMoodsScreen(navController, viewModel)
             }
         }
     }

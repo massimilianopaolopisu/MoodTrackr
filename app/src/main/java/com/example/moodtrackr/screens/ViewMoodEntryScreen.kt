@@ -47,7 +47,9 @@ fun ViewMoodEntryScreen(
                 moodEntry = moodEntry,
                 date = dateParsed,
                 origin = Routes.ViewMoodEntry.toString(),
-                allowChangeDate = true
+                allowChangeDate = true,
+                customMoodsRepository = viewModel.customMoodsRepository,
+                moodEntryCustomMoodsRepository = viewModel.moodEntryCustomMoodsRepository
             )
         }
 

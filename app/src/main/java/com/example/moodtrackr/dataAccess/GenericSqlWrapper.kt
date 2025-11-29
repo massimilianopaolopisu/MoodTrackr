@@ -23,14 +23,37 @@ open class GenericSqlWrapper<T: IDatabaseModel<T>>(context: Context, private val
                 SQLiteDatabase.CONFLICT_REPLACE
             )
 
-            val cursor = getCursor(item.getPrimaryKeyColumnName(), newRowId)
-
-            if (!cursor.moveToFirst())
+            if (newRowId == -1L) {
+                db.close()
                 return null
+            }
 
-            val insertedItem = item.getItemFromCursor(cursor)
+            val pkValue = try { item.getPrimaryKeyValue(item) } catch (ex: Exception) { null }
+            val hasPrimaryKeySet = when (pkValue) {
+                is Number -> pkValue.toLong() > 0L
+                is String -> pkValue.isNotEmpty()
+                else -> false
+            }
+
+            val insertedItem: T? = if (pkValue != null && hasPrimaryKeySet) {
+                getByPrimaryKey(pkValue)
+            } else {
+                val cursor = db.query(
+                    item.getTableName(),
+                    null,
+                    "rowid = ?",
+                    arrayOf(newRowId.toString()),
+                    null,
+                    null,
+                    null
+                )
+
+                val result = if (cursor.moveToFirst()) item.getItemFromCursor(cursor) else null
+                cursor.close()
+                result
+            }
+
             db.close()
-
             insertedItem
         } catch (ex: Exception) {
             Log.e("GenericRepository.insert", ex.stackTraceToString())
@@ -148,12 +171,18 @@ open class GenericSqlWrapper<T: IDatabaseModel<T>>(context: Context, private val
                 selectionArgs
             )
 
-            if(updatedRows <= 0)
+            if (updatedRows <= 0) {
+                db.close()
                 return null
+            }
 
-            val updatedItem = item.getItemFromCursor(
-                getCursor(item.getPrimaryKeyColumnName(), item.getPrimaryKeyValue(item))
-            )
+            val cursor = getCursor(item.getPrimaryKeyColumnName(), item.getPrimaryKeyValue(item))
+            val updatedItem = if (cursor.moveToFirst()) {
+                item.getItemFromCursor(cursor)
+            } else {
+                null
+            }
+            cursor.close()
 
             db.close()
             updatedItem

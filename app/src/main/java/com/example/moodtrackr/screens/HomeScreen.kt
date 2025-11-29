@@ -75,7 +75,9 @@ fun HomeScreen(
                     moodEntry = moodEntry,
                     date = DateUtilities.getLocalDateFromStringDate(date),
                     origin = Routes.Home.toString(),
-                    allowChangeDate = true
+                    allowChangeDate = true,
+                    customMoodsRepository = viewModel.customMoodsRepository,
+                    moodEntryCustomMoodsRepository = viewModel.moodEntryCustomMoodsRepository
                 )
             }
         }

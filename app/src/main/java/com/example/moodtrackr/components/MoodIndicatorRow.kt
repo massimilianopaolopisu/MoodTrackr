@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,13 +19,15 @@ fun MoodIndicatorRow(
     label: String,
     value: Int,
     max: Int = 100,
-    useDynamicColors: Boolean = false) {
+    useDynamicColors: Boolean = false,
+    progressColor: Color? = null
+) {
 
     val progress = value.toFloat() / max
-    var color = MaterialTheme.colorScheme.onBackground
+    var color = progressColor ?: MaterialTheme.colorScheme.onBackground
 
-    if(useDynamicColors){
-        color = if(value < 50) Color.Red else Color.Green
+    if (progressColor == null && useDynamicColors) {
+        color = if (value < 50) Color.Red else Color.Green
     }
 
     Row(
@@ -36,6 +39,8 @@ fun MoodIndicatorRow(
         Text(
             text = label,
             color = MaterialTheme.colorScheme.onBackground,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .weight(3f)
                 .padding(end = 8.dp)

@@ -34,10 +34,10 @@ import com.example.moodtrackr.components.bars.MainBottomBar
 import com.example.moodtrackr.components.bars.TitleTopBar
 import com.example.moodtrackr.enums.Routes
 import com.example.moodtrackr.enums.ThemeMode
+import com.example.moodtrackr.extensions.navigateTo
 import com.example.moodtrackr.helpers.ActivityHelper
 import com.example.moodtrackr.helpers.ToastNotificationHelper
 import com.example.moodtrackr.viewModels.MainViewModel
-import com.example.moodtrackr.extensions.navigateTo
 
 @Composable
 fun SettingsScreen(
@@ -103,6 +103,42 @@ fun SettingsScreen(
                             )
                             Icon(
                                 imageVector = Icons.Default.Face,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
+                }
+            }
+
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigateTo(Routes.ManageCustomMoods.toString())
+                        }
+                        .padding(top = 16.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Manage Custom Moods",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(end = 16.dp),
+                                fontSize = 16.sp
+                            )
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onBackground
                             )
