@@ -177,14 +177,10 @@ open class GenericSqlWrapper<T: IDatabaseModel<T>>(context: Context, private val
             }
 
             val cursor = getCursor(item.getPrimaryKeyColumnName(), item.getPrimaryKeyValue(item))
-            val updatedItem = if (cursor.moveToFirst()) {
-                item.getItemFromCursor(cursor)
-            } else {
-                null
-            }
+            val updatedItem = if (cursor.moveToFirst()) item.getItemFromCursor(cursor) else null
             cursor.close()
-
             db.close()
+
             updatedItem
         } catch (ex: Exception) {
             Log.e("GenericRepository.update", ex.stackTraceToString())
